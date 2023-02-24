@@ -28,7 +28,7 @@
     <div id="app" class="app app-header-fixed app-sidebar-fixed">
         <div id="header" class="app-header">
             <div class="navbar-header">
-                <a href="index.html" class="navbar-brand"><span class="navbar-logo"><i class="ion-ios-browsers"></i></span> <b class="me-1">E</b> Ticket</a>
+                <a href="index.html" class="navbar-brand"><span class="navbar-logo"><i class="ion-ios-browsers"></i></span> <b class="me-1">Jewelry</b> App</a>
                 <button type="button" class="navbar-mobile-toggler" data-toggle="app-sidebar-mobile">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -104,7 +104,15 @@
                     </div>
 
                     <div class="menu-header">Navigation</div>
-                    <div class="menu-item has-sub active">
+                    <div class="menu-item">
+                        <a href="/dashboard" class="menu-link">
+                            <div class="menu-icon">
+                                <i class="ion-ios-home bg-blue"></i>
+                            </div>
+                            <div class="menu-text">Dashboard</div>
+                        </a>
+                    </div>
+                    <div class="menu-item has-sub">
                         <a href="javascript:;" class="menu-link">
                             <div class="menu-icon">
                                 <i class="ion-ios-pulse"></i>
@@ -117,22 +125,25 @@
                                 <a href="{{ route('users.index') }}" class="menu-link">
                                     <div class="menu-text">Data User</div>
                                 </a>
-                                <a href="{{ route('tickets.index') }}" class="menu-link">
-                                    <div class="menu-text">Data Ticket</div>
+                                <a href="{{ route('locators.index') }}" class="menu-link">
+                                    <div class="menu-text">Data Locator</div>
                                 </a>
-                                <a href="{{ route('transactions.index') }}" class="menu-link">
-                                    <div class="menu-text">Data Transaction</div>
+                                <a href="{{ route('satuan.index') }}" class="menu-link">
+                                    <div class="menu-text">Data Satuan</div>
+                                </a>
+                                <a href="{{ route('tipe-barang.index') }}" class="menu-link">
+                                    <div class="menu-text">Data Tipe Barang</div>
                                 </a>
                             </div>
                         </div>
                     </div>
 
                     <div class="menu-item">
-                        <a href="widget.html" class="menu-link">
+                        <a href="{{ route('barang.index') }}" class="menu-link">
                             <div class="menu-icon">
                                 <i class="ion-ios-nutrition bg-blue"></i>
                             </div>
-                            <div class="menu-text">Widgets <span class="menu-label">NEW</span></div>
+                            <div class="menu-text">Data Barang</div>
                         </a>
                     </div>
 
