@@ -28,7 +28,7 @@
     <div id="app" class="app app-header-fixed app-sidebar-fixed">
         <div id="header" class="app-header">
             <div class="navbar-header">
-                <a href="index.html" class="navbar-brand"><span class="navbar-logo"><i class="ion-ios-browsers"></i></span> <b class="me-1">Jewelry</b> App</a>
+                <a href="/dashboard" class="navbar-brand"><span class="navbar-logo"><i class="ion-ios-browsers"></i></span> <b class="me-1">Jewelry</b> App</a>
                 <button type="button" class="navbar-mobile-toggler" data-toggle="app-sidebar-mobile">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -104,7 +104,7 @@
                     </div>
 
                     <div class="menu-header">Navigation</div>
-                    <div class="menu-item">
+                    <div class="menu-item {{ request()->is('dashboard') ? 'active' : '' }}">
                         <a href="/dashboard" class="menu-link">
                             <div class="menu-icon">
                                 <i class="ion-ios-home bg-blue"></i>
@@ -115,7 +115,7 @@
                     <div class="menu-item has-sub">
                         <a href="javascript:;" class="menu-link">
                             <div class="menu-icon">
-                                <i class="ion-ios-pulse"></i>
+                                <i class="ion-ios-apps bg-indigo"></i>
                             </div>
                             <div class="menu-text">Data Master</div>
                             <div class="menu-caret"></div>
@@ -141,9 +141,18 @@
                     <div class="menu-item">
                         <a href="{{ route('barang.index') }}" class="menu-link">
                             <div class="menu-icon">
-                                <i class="ion-ios-nutrition bg-blue"></i>
+                                <i class="ion-ios-cube bg-green"></i>
                             </div>
                             <div class="menu-text">Data Barang</div>
+                        </a>
+                    </div>
+
+                    <div class="menu-item">
+                        <a href="{{ route('stok-opname.index') }}" class="menu-link">
+                            <div class="menu-icon">
+                                <i class="ion-ios-folder-open bg-red"></i>
+                            </div>
+                            <div class="menu-text">Stok Opname</div>
                         </a>
                     </div>
 

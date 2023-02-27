@@ -1,9 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\TicketController;
-use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\ApiController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\StokOpnameController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,3 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/cek-tag', [ApiController::class, 'cekTag']);
 Route::get('/master', [ApiController::class, 'getMaster']);
 Route::post('/create', [ApiController::class, 'create']);
+Route::post('/input-stok', [ApiController::class, 'stok']);
+Route::get('stok-opname/{stokOpname:id}/stok', [StokOpnameController::class, 'stok'])->name('stok-opname.stok');
+Route::get('stok-opname/{stokOpname:id}/unstock', [StokOpnameController::class, 'unstock'])->name('stok-opname.unstock');

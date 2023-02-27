@@ -18,18 +18,14 @@
     </div>
 
     <div class="panel-body">
-        <a href="#modal-dialog" id="btn-add" class="btn btn-primary mb-3" data-route="{{ route('barang.store') }}" data-bs-toggle="modal"><i class="ion-ios-add"></i> Add Barang</a>
+        <a href="#modal-dialog" id="btn-add" class="btn btn-primary mb-3" data-route="{{ route('stok-opname.store') }}" data-bs-toggle="modal"><i class="ion-ios-add"></i> Add Stok Opname</a>
 
         <table id="datatable" class="table table-striped table-bordered align-middle">
             <thead>
                 <tr>
                     <th class="text-nowrap">No</th>
-                    <th class="text-nowrap">Tag Barang</th>
-                    <th class="text-nowrap">Nama Barang</th>
+                    <th class="text-nowrap">Tanggal</th>
                     <th class="text-nowrap">Locator</th>
-                    <th class="text-nowrap">Tipe</th>
-                    <th class="text-nowrap">Berat</th>
-                    <th class="text-nowrap">Harga</th>
                     <th class="text-nowrap">Action</th>
                 </tr>
             </thead>
@@ -37,59 +33,24 @@
         </table>
     </div>
 
+
+
     <div class="modal fade" id="modal-dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Form Barang</h4>
+                    <h4 class="modal-title">Form Stok Opname</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                 </div>
-                <form action="" method="post" id="form-barang">
+                <form action="" method="post" id="form-stok-opname">
                     @csrf
 
                     <div class="modal-body">
                         <div class="form-group mb-3">
-                            <label for="rfid">Tag Barang</label>
-                            <input type="text" name="rfid" id="rfid" class="form-control" value="" disabled>
+                            <label for="tanggal">Tanggal</label>
+                            <input type="date" name="tanggal" id="tanggal" class="form-control" value="">
 
-                            @error('rfid')
-                            <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="nama_barang">Nama Barang</label>
-                            <input type="text" name="nama_barang" id="nama_barang" class="form-control" value="">
-
-                            @error('nama_barang')
-                            <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="satuan">Satuan</label>
-                            <select name="satuan" id="satuan" class="form-control">
-                                <option disabled selected>-- Pilih Satuan --</option>
-                                @foreach($satuan as $sat)
-                                <option value="{{ $sat->id }}">{{ $sat->nama_satuan }}</option>
-                                @endforeach
-                            </select>
-
-                            @error('satuan')
-                            <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="tipe">Tipe Barang</label>
-                            <select name="tipe" id="tipe" class="form-control">
-                                <option disabled selected>-- Pilih Tipe --</option>
-                                @foreach($tipe as $tip)
-                                <option value="{{ $tip->id }}">{{ $tip->nama_tipe }}</option>
-                                @endforeach
-                            </select>
-
-                            @error('tipe')
+                            @error('tanggal')
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
@@ -104,24 +65,6 @@
                             </select>
 
                             @error('locator')
-                            <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="berat">Berat</label>
-                            <input type="number" step=any name="berat" id="berat" class="form-control" value="">
-
-                            @error('berat')
-                            <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="harga">Harga</label>
-                            <input type="number" name="harga" id="harga" class="form-control" value="">
-
-                            @error('harga')
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
@@ -154,7 +97,7 @@
             processing: true,
             serverSide: true,
             responsive: true,
-            ajax: "{{ route('barang.list') }}",
+            ajax: "{{ route('stok-opname.list') }}",
             deferRender: true,
             pagination: true,
             columns: [{
@@ -162,28 +105,12 @@
                     name: 'DT_RowIndex'
                 },
                 {
-                    data: 'rfid',
-                    name: 'rfid'
-                },
-                {
-                    data: 'nama_barang',
-                    name: 'nama_barang'
+                    data: 'tanggal',
+                    name: 'tanggal'
                 },
                 {
                     data: 'locator',
                     name: 'locator'
-                },
-                {
-                    data: 'tipe',
-                    name: 'tipe'
-                },
-                {
-                    data: 'berat',
-                    name: 'berat'
-                },
-                {
-                    data: 'harga',
-                    name: 'harga'
                 },
                 {
                     data: 'action',
@@ -194,50 +121,28 @@
 
         $("#btn-add").on('click', function() {
             let route = $(this).attr('data-route')
-            $("#form-barang").attr('action', route)
+            $("#form-locator").attr('action', route)
         })
 
         $("#btn-close").on('click', function() {
-            $("#form-barang").removeAttr('action')
+            $("#form-locator").removeAttr('action')
         })
 
         $("#datatable").on('click', '.btn-edit', function() {
             let route = $(this).attr('data-route')
             let id = $(this).attr('id')
-            // alert(route)
 
-            $("#form-barang").attr('action', route)
-            $("#form-barang").append(`<input type="hidden" name="_method" value="PUT">`);
+            $("#form-locator").attr('action', route)
+            $("#form-locator").append(`<input type="hidden" name="_method" value="PUT">`);
 
             $.ajax({
-                url: "/barang/" + id,
+                url: "/locators/" + id,
                 type: 'GET',
                 method: 'GET',
                 success: function(response) {
-                    let barang = response.barang;
+                    let locator = response.locator;
 
-                    $.each($("#satuan option"), function() {
-                        if ($(this).val() == barang.satuan_id) {
-                            $(this).attr("selected", "selected");
-                        }
-                    });
-
-                    $.each($("#tipe option"), function() {
-                        if ($(this).val() == barang.tipe_barang_id) {
-                            $(this).attr("selected", "selected");
-                        }
-                    });
-
-                    $.each($("#locator option"), function() {
-                        if ($(this).val() == barang.locator_id) {
-                            $(this).attr("selected", "selected");
-                        }
-                    });
-
-                    $("#rfid").val(barang.rfid)
-                    $("#nama_barang").val(barang.nama_barang)
-                    $("#berat").val(barang.berat)
-                    $("#harga").val(barang.harga)
+                    $("#nama_locator").val(locator.nama_locator)
                 }
             })
         })
@@ -248,8 +153,8 @@
             $("#form-delete").attr('action', route)
 
             swal({
-                title: 'Hapus data barang?',
-                text: 'Menghapus barang bersifat permanen.',
+                title: 'Hapus data locator?',
+                text: 'Menghapus locator bersifat permanen.',
                 icon: 'error',
                 buttons: {
                     cancel: {

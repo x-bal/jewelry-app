@@ -4,6 +4,7 @@ use App\Http\Controllers\BarangController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LocatorController;
 use App\Http\Controllers\SatuanController;
+use App\Http\Controllers\StokOpnameController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TipeBarangController;
 use App\Http\Controllers\TransactionController;
@@ -23,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Auth::routes();
@@ -45,4 +46,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('barang/get', [BarangController::class, 'get'])->name('barang.list');
     Route::resource('barang', BarangController::class);
+
+    Route::get('stok-opname/get', [StokOpnameController::class, 'get'])->name('stok-opname.list');
+    Route::get('stok-opname/change', [StokOpnameController::class, 'change'])->name('stok-opname.change');
+    Route::resource('stok-opname', StokOpnameController::class);
 });
