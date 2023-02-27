@@ -38,7 +38,7 @@ class StokOpnameController extends Controller
                     } else {
                         $checked = '';
                     }
-                    return '<div class="form-check form-switch"><input class="form-check-input running" type="checkbox" id="switch" data-id="' . $row->id . '" ' . $checked . '></div>';
+                    return '<div class="form-check form-switch"><input class="form-check-input check-running" type="checkbox" id="switch" data-id="' . $row->id . '" ' . $checked . '></div>';
                 })
                 ->editColumn('tanggal', function ($row) {
                     return Carbon::parse($row->tanggal)->format('d/m/Y');
@@ -82,17 +82,17 @@ class StokOpnameController extends Controller
         try {
             DB::beginTransaction();
 
-            $stok = StokOpname::find($request->id);
+            $stock = StokOpname::find($request->id);
 
-            $stocks = StokOpname::get();
+            $stocks = StokOpname::where('id', '!=', $stock->id)->get();
 
             foreach ($stocks as $stok) {
                 $stok->update(['status' => 0]);
             }
 
-            $stok->update(['status' => $request->status]);
+            $stock->update(['status' => $request->status]);
 
-            if ($stok->status == 1) {
+            if ($stock->status == 1) {
                 $status = 'On';
             } else {
                 $status = 'Off';

@@ -82,14 +82,21 @@
 <script src="{{ asset('/') }}plugins/sweetalert/dist/sweetalert.min.js"></script>
 
 <script>
+    var interv = null;
+
     $("#switch").on('click', function() {
         let id = "{{ $stokOpname->id }}";
         let status = 0;
 
         if ($(this).is(":checked")) {
             status = 1;
+            interv = setInterval(function() {
+                list()
+                listNo()
+            }, 2000)
         } else {
             status = 0;
+            clearInterval(interv)
         }
 
         $.ajax({
@@ -158,10 +165,14 @@
         });
     }
 
-    setInterval(function() {
-        list()
-        listNo()
-    }, 5000)
+    if ($("#switch").is(':checked')) {
+        setInterval(function() {
+            list()
+            listNo()
+        }, 5000)
+    } else {
+        clearInterval()
+    }
 
     list()
     listNo()

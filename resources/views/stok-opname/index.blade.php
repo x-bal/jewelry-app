@@ -152,7 +152,7 @@
             })
         })
 
-        $("#datatable").on('click', '.running', function() {
+        $("#datatable").on('click', '.check-running', function() {
             let id = $(this).attr('data-id');
             let status = 0;
 
