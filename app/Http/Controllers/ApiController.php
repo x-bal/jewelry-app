@@ -107,14 +107,14 @@ class ApiController extends Controller
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Tidak ada stok yg aktif'
-                ], 500);
+                ], 200);
             }
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json([
                 'status' => 'error',
                 'message' => $th->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 }
