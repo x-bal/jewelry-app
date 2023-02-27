@@ -89,7 +89,7 @@ class ApiController extends Controller
                 foreach ($request->tag as $key => $val) {
                     $barang = Barang::where('rfid', $val)->first();
 
-                    if ($barang->locator_id == $stokOn->locator_id) {
+                    if ($barang && $barang->locator_id == $stokOn->locator_id) {
                         DetailStokOpname::updateOrCreate([
                             'stok_opname_id' => $stokOn->id,
                             'barang_id' => $barang->id

@@ -26,6 +26,7 @@
                     <th class="text-nowrap">No</th>
                     <th class="text-nowrap">Tanggal</th>
                     <th class="text-nowrap">Locator</th>
+                    <th class="text-nowrap">On Running</th>
                     <th class="text-nowrap">Action</th>
                 </tr>
             </thead>
@@ -113,6 +114,10 @@
                     name: 'locator'
                 },
                 {
+                    data: 'status',
+                    name: 'status'
+                },
+                {
                     data: 'action',
                     name: 'action',
                 },
@@ -144,6 +149,31 @@
 
                     $("#nama_locator").val(locator.nama_locator)
                 }
+            })
+        })
+
+        $("#datatable").on('click', '.running', function() {
+            let id = $(this).attr('data-id');
+            let status = 0;
+
+            if ($(this).is(":checked")) {
+                status = 1;
+            } else {
+                status = 0;
+            }
+
+            $.ajax({
+                url: '{{ route("stok-opname.change") }}',
+                type: 'GET',
+                method: "GET",
+                data: {
+                    id: id,
+                    status: status
+                },
+                success: function(response) {
+                    // $(".switch").empty().append(response.status)
+                }
+
             })
         })
 

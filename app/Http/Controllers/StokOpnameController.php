@@ -32,13 +32,21 @@ class StokOpnameController extends Controller
                     $actionBtn = '<a href="' . route('stok-opname.show', $row->id) . '" id="' . $row->id . '" class="btn btn-sm btn-info">Input Stok</a> <a href="#modal-dialog" id="' . $row->id . '" class="btn btn-sm btn-success btn-edit" data-route="' . route('stok-opname.update', $row->id) . '" data-bs-toggle="modal">Edit</a> <button type="button" data-route="' . route('stok-opname.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Delete</button>';
                     return $actionBtn;
                 })
+                ->editColumn('status', function ($row) {
+                    if ($row->status == 1) {
+                        $checked = 'checked';
+                    } else {
+                        $checked = '';
+                    }
+                    return '<div class="form-check form-switch"><input class="form-check-input running" type="checkbox" id="switch" data-id="' . $row->id . '" ' . $checked . '></div>';
+                })
                 ->editColumn('tanggal', function ($row) {
                     return Carbon::parse($row->tanggal)->format('d/m/Y');
                 })
                 ->addColumn('locator', function ($row) {
                     return $row->locator->nama_locator;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action', 'status'])
                 ->make(true);
         }
     }
@@ -75,6 +83,12 @@ class StokOpnameController extends Controller
             DB::beginTransaction();
 
             $stok = StokOpname::find($request->id);
+
+            $stocks = StokOpname::get();
+
+            foreach ($stocks as $stok) {
+                $stok->update(['status' => 0]);
+            }
 
             $stok->update(['status' => $request->status]);
 
