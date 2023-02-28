@@ -25,6 +25,7 @@
                 <tr>
                     <th class="text-nowrap">No</th>
                     <th class="text-nowrap">Tag Barang</th>
+                    <th class="text-nowrap">Kode Barang</th>
                     <th class="text-nowrap">Nama Barang</th>
                     <th class="text-nowrap">Locator</th>
                     <th class="text-nowrap">Tipe</th>
@@ -53,6 +54,15 @@
                             <input type="text" name="rfid" id="rfid" class="form-control" value="" disabled>
 
                             @error('rfid')
+                            <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="kode_barang">Kode Barang</label>
+                            <input type="text" name="kode_barang" id="kode_barang" class="form-control" value="">
+
+                            @error('kode_barang')
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
@@ -166,6 +176,10 @@
                     name: 'rfid'
                 },
                 {
+                    data: 'kode_barang',
+                    name: 'kode_barang'
+                },
+                {
                     data: 'nama_barang',
                     name: 'nama_barang'
                 },
@@ -235,6 +249,7 @@
                     });
 
                     $("#rfid").val(barang.rfid)
+                    $("#kode_barang").val(barang.kode_barang)
                     $("#nama_barang").val(barang.nama_barang)
                     $("#berat").val(barang.berat)
                     $("#harga").val(barang.harga)

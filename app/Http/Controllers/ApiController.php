@@ -51,6 +51,7 @@ class ApiController extends Controller
 
             $barang = Barang::create([
                 'rfid' => $request->tag,
+                'kode_barang' => $request->kode_barang,
                 'nama_barang' => $request->nama_barang,
                 'harga' => $request->harga,
                 'berat' => $request->berat,

@@ -112,6 +112,7 @@
                             <div class="menu-text">Dashboard</div>
                         </a>
                     </div>
+
                     <div class="menu-item has-sub">
                         <a href="javascript:;" class="menu-link">
                             <div class="menu-icon">
@@ -134,25 +135,39 @@
                                 <a href="{{ route('tipe-barang.index') }}" class="menu-link">
                                     <div class="menu-text">Data Tipe Barang</div>
                                 </a>
+                                <a href="{{ route('barang.index') }}" class="menu-link">
+                                    <div class="menu-text">Data Barang</div>
+                                </a>
                             </div>
                         </div>
                     </div>
 
-                    <div class="menu-item">
-                        <a href="{{ route('barang.index') }}" class="menu-link">
+                    <div class="menu-item has-sub">
+                        <a href="javascript:;" class="menu-link">
                             <div class="menu-icon">
                                 <i class="ion-ios-cube bg-green"></i>
                             </div>
-                            <div class="menu-text">Data Barang</div>
+                            <div class="menu-text">Inventory</div>
+                            <div class="menu-caret"></div>
                         </a>
+                        <div class="menu-submenu">
+                            <div class="menu-item">
+                                <a href="{{ route('stok-opname.index') }}" class="menu-link">
+                                    <div class="menu-text">Stok Opname</div>
+                                </a>
+                                <a href="{{ route('lost-stok.index') }}" class="menu-link">
+                                    <div class="menu-text">Lost Stok</div>
+                                </a>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="menu-item">
-                        <a href="{{ route('stok-opname.index') }}" class="menu-link">
+                    <div class="menu-item {{ request()->is('dashboard') ? 'active' : '' }}">
+                        <a href="/dashboard" class="menu-link">
                             <div class="menu-icon">
-                                <i class="ion-ios-folder-open bg-red"></i>
+                                <i class="ion-ios-home bg-blue"></i>
                             </div>
-                            <div class="menu-text">Stok Opname</div>
+                            <div class="menu-text">Penjualan</div>
                         </a>
                     </div>
 

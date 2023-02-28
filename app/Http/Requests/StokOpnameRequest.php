@@ -24,7 +24,7 @@ class StokOpnameRequest extends FormRequest
     public function rules()
     {
         return [
-            'tanggal' => 'required|unique:stok_opnames',
+            'tanggal' => 'required',
             'locator' => 'required|numeric'
         ];
     }

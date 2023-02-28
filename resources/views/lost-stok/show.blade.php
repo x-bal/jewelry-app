@@ -22,53 +22,26 @@
             <div class="col-md-3">
                 <div class="form-group mb-3">
                     <label for="tanggal">Tanggal</label>
-                    <input type="date" name="tanggal" id="tanggal" class="form-control" value="{{ $stokOpname->tanggal }}" disabled>
+                    <input type="date" name="tanggal" id="tanggal" class="form-control" value="{{ $lostStok->tanggal }}" disabled>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group mb-3">
                     <label for="locator">Locator</label>
-                    <input type="text" name="locator" id="locator" class="form-control" value="{{ $stokOpname->locator->nama_locator }}" disabled>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group mt-4">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="switch" {{ $stokOpname->status == 1 ? 'checked' : '' }}>
-                        <label class="form-check-label switch" for="switch">{{ $stokOpname->status == 1 ? 'On' : 'Off' }}</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-2">
-                <div class="form-group">
-                    <a href="{{ route('stok-opname.save', $stokOpname->id) }}" class="btn btn-sm btn-primary"><i class="ion-ios-save"></i> Save</a>
+                    <input type="text" name="locator" id="locator" class="form-control" value="{{ $lostStok->locator->nama_locator }}" disabled>
                 </div>
             </div>
         </form>
 
         <div class="row mt-3">
-            <div class="col-md-8">
-                <h3>Data Stok Masuk</h3>
+            <div class="col-md-12">
+                <h3>Data Lost Stok</h3>
                 <table id="datatable" class="table table-striped table-bordered align-middle">
                     <thead>
                         <tr>
                             <th class="text-nowrap">No</th>
                             <th class="text-nowrap">Tag</th>
-                            <th class="text-nowrap">Nama Barang</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-
-            <div class="col-md-4">
-                <h3>Data Unstock</h3>
-                <table id="datatable-locator" class="table table-striped table-bordered align-middle">
-                    <thead>
-                        <tr>
-                            <th class="text-nowrap">No</th>
-                            <th class="text-nowrap">Tag</th>
+                            <th class="text-nowrap">Kode Barang</th>
                             <th class="text-nowrap">Nama Barang</th>
                         </tr>
                     </thead>
@@ -91,7 +64,7 @@
     var interv = null;
 
     $("#switch").on('click', function() {
-        let id = "{{ $stokOpname->id }}";
+        let id = "{{ $lostStok->id }}";
         let status = 0;
 
         if ($(this).is(":checked")) {
@@ -125,7 +98,7 @@
             processing: true,
             serverSide: true,
             responsive: true,
-            ajax: "{{ route('stok-opname.stok', $stokOpname->id) }}",
+            ajax: "{{ route('lost-stok.lost', $lostStok->id) }}",
             deferRender: true,
             pagination: true,
             bDestroy: true,
@@ -138,30 +111,8 @@
                     name: 'rfid'
                 },
                 {
-                    data: 'barang',
-                    name: 'barang'
-                },
-            ]
-        });
-    }
-
-    function listNo() {
-        $('#datatable-locator').DataTable({
-            searching: false,
-            processing: true,
-            serverSide: true,
-            responsive: true,
-            ajax: "{{ route('stok-opname.unstock', $stokOpname->id) }}",
-            deferRender: true,
-            pagination: true,
-            bDestroy: true,
-            columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'DT_RowIndex'
-                },
-                {
-                    data: 'rfid',
-                    name: 'rfid'
+                    data: 'kode_barang',
+                    name: 'kode_barang'
                 },
                 {
                     data: 'nama_barang',
@@ -172,6 +123,5 @@
     }
 
     list()
-    listNo()
 </script>
 @endpush

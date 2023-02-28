@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StokOpnameRequest;
+use App\Models\DetailLostStok;
 use App\Models\Locator;
+use App\Models\LostStok;
 use App\Models\StokOpname;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -77,6 +79,14 @@ class StokOpnameController extends Controller
         return view('stok-opname.show', compact('title', 'breadcrumbs', 'stokOpname'));
     }
 
+    public function find(StokOpname $stokOpname)
+    {
+        return response()->json([
+            'status' => 'success',
+            'stok' => $stokOpname
+        ], 200);
+    }
+
     public function change(Request $request)
     {
         try {
@@ -140,6 +150,42 @@ class StokOpnameController extends Controller
                 ->addIndexColumn()
                 ->rawColumns(['barang'])
                 ->make(true);
+        }
+    }
+
+    public function save(StokOpname $stokOpname)
+    {
+        try {
+            DB::beginTransaction();
+
+            $locator = Locator::find($stokOpname->locator_id);
+            $stokBarang = array_column($stokOpname->details()->get()->toArray(), 'barang_id');
+
+            $barangs = $locator->barangs()->whereNotIn('id', $stokBarang)->get();
+
+            $lost = LostStok::create([
+                'tanggal' => $stokOpname->tanggal,
+                'locator_id' => $stokOpname->locator_id
+            ]);
+
+            foreach ($barangs as $barang) {
+                DetailLostStok::updateOrCreate(
+                    [
+                        'lost_stok_id' => $lost->id
+                    ],
+                    [
+                        'barang_id' => $barang->id
+                    ]
+                );
+            }
+
+            DB::commit();
+
+            return redirect()->route('stok-opname.index')->with('success', "Stok opname tanggal {$stokOpname->tanggal} berhasil disimpan");
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $th->getMessage();
+            return back()->with('error', $th->getMessage());
         }
     }
 }

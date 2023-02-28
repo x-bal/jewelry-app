@@ -3,11 +3,10 @@
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LocatorController;
+use App\Http\Controllers\LostStokController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\StokOpnameController;
-use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TipeBarangController;
-use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +47,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('barang', BarangController::class);
 
     Route::get('stok-opname/get', [StokOpnameController::class, 'get'])->name('stok-opname.list');
+    Route::get('stok-opname/{stokOpname:id}/find', [StokOpnameController::class, 'find'])->name('stok-opname.find');
     Route::get('stok-opname/change', [StokOpnameController::class, 'change'])->name('stok-opname.change');
+    Route::get('stok-opname/{stokOpname:id}/save', [StokOpnameController::class, 'save'])->name('stok-opname.save');
     Route::resource('stok-opname', StokOpnameController::class);
+
+    Route::get('lost-stok/get', [LostStokController::class, 'get'])->name('lost-stok.list');
+    Route::get('lost-stok/{lostStok:id}/lost', [LostStokController::class, 'lost'])->name('lost-stok.lost');
+    Route::resource('lost-stok', LostStokController::class);
 });

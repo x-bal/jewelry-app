@@ -18,15 +18,12 @@
     </div>
 
     <div class="panel-body">
-        <a href="#modal-dialog" id="btn-add" class="btn btn-primary mb-3" data-route="{{ route('stok-opname.store') }}" data-bs-toggle="modal"><i class="ion-ios-add"></i> Add Stok Opname</a>
-
         <table id="datatable" class="table table-striped table-bordered align-middle">
             <thead>
                 <tr>
                     <th class="text-nowrap">No</th>
                     <th class="text-nowrap">Tanggal</th>
                     <th class="text-nowrap">Locator</th>
-                    <th class="text-nowrap">On Running</th>
                     <th class="text-nowrap">Action</th>
                 </tr>
             </thead>
@@ -52,20 +49,6 @@
                             <input type="date" name="tanggal" id="tanggal" class="form-control" value="">
 
                             @error('tanggal')
-                            <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="locator">Locator</label>
-                            <select name="locator" id="locator" class="form-control">
-                                <option disabled selected>-- Pilih Locator --</option>
-                                @foreach($locator as $loc)
-                                <option value="{{ $loc->id }}">{{ $loc->nama_locator }}</option>
-                                @endforeach
-                            </select>
-
-                            @error('locator')
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
@@ -98,7 +81,7 @@
             processing: true,
             serverSide: true,
             responsive: true,
-            ajax: "{{ route('stok-opname.list') }}",
+            ajax: "{{ route('lost-stok.list') }}",
             deferRender: true,
             pagination: true,
             columns: [{
@@ -114,10 +97,6 @@
                     name: 'locator'
                 },
                 {
-                    data: 'status',
-                    name: 'status'
-                },
-                {
                     data: 'action',
                     name: 'action',
                 },
@@ -126,33 +105,28 @@
 
         $("#btn-add").on('click', function() {
             let route = $(this).attr('data-route')
-            $("#form-stok-opname").attr('action', route)
+            $("#form-locator").attr('action', route)
         })
 
         $("#btn-close").on('click', function() {
-            $("#form-stok-opname").removeAttr('action')
+            $("#form-locator").removeAttr('action')
         })
 
         $("#datatable").on('click', '.btn-edit', function() {
             let route = $(this).attr('data-route')
             let id = $(this).attr('id')
 
-            $("#form-stok-opname").attr('action', route)
-            $("#form-stok-opname").append(`<input type="hidden" name="_method" value="PUT">`);
+            $("#form-locator").attr('action', route)
+            $("#form-locator").append(`<input type="hidden" name="_method" value="PUT">`);
 
             $.ajax({
-                url: "/stok-opname/" + id + '/find',
+                url: "/locators/" + id,
                 type: 'GET',
                 method: 'GET',
                 success: function(response) {
-                    let stok = response.stok;
+                    let locator = response.locator;
 
-                    $("#tanggal").val(stok.tanggal)
-                    $.each($("#locator option"), function() {
-                        if ($(this).val() == stok.locator_id) {
-                            $(this).attr("selected", "selected");
-                        }
-                    });
+                    $("#nama_locator").val(locator.nama_locator)
                 }
             })
         })
@@ -188,8 +162,8 @@
             $("#form-delete").attr('action', route)
 
             swal({
-                title: 'Hapus data stok opname?',
-                text: 'Menghapus stok opname bersifat permanen.',
+                title: 'Hapus data locator?',
+                text: 'Menghapus locator bersifat permanen.',
                 icon: 'error',
                 buttons: {
                     cancel: {
