@@ -169,6 +169,8 @@ class StokOpnameController extends Controller
             ]);
 
             foreach ($barangs as $barang) {
+                $barang->update(['status' => 'Loss']);
+
                 DetailLostStok::updateOrCreate(
                     [
                         'lost_stok_id' => $lost->id

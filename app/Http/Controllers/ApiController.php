@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
+use App\Models\DetailPenjualan;
 use App\Models\DetailStokOpname;
 use App\Models\Locator;
+use App\Models\Penjualan;
 use App\Models\Satuan;
 use App\Models\StokOpname;
 use App\Models\TipeBarang;
@@ -15,17 +17,17 @@ class ApiController extends Controller
 {
     public function cekTag(Request $request)
     {
-        $barang = Barang::where('rfid', $request->tag)->first();
+        $barang = Barang::where(['rfid' => $request->tag, 'status' => 'Tersedia'])->first();
 
         if ($barang) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'not available'
+                'message' => 'Not available'
             ]);
         } else {
             return response()->json([
                 'status' => 'success',
-                'message' => 'available'
+                'message' => 'Available'
             ]);
         }
     }
@@ -88,7 +90,7 @@ class ApiController extends Controller
 
             if ($stokOn) {
                 foreach ($request->tag as $key => $val) {
-                    $barang = Barang::where('rfid', $val)->first();
+                    $barang = Barang::where(['rfid' => $val, 'status' => 'Tersedia'])->first();
 
                     if ($barang && $barang->locator_id == $stokOn->locator_id) {
                         DetailStokOpname::updateOrCreate([
@@ -110,6 +112,52 @@ class ApiController extends Controller
                     'message' => 'Tidak ada stok yg aktif'
                 ], 200);
             }
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 200);
+        }
+    }
+
+    public function sale(Request $request)
+    {
+        $request->validate([
+            'iddev' => 'required|numeric',
+            'tag' => 'required|array'
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $device = DB::table('device_user')->where('device_id', $request->iddev)->first();
+            $penjualan = Penjualan::where(['user_id' => $device->user_id, 'status' => 'Input'])->latest()->first();
+
+            foreach ($request->tag as $key => $val) {
+                $barang = Barang::where(['rfid' => $val, 'status' => 'Tersedia'])->first();
+
+                if ($barang) {
+                    DetailPenjualan::create([
+                        'penjualan_id' => $penjualan->id,
+                        'barang_id' => $barang->id
+                    ]);
+
+                    $barang->update(['status' => 'Terjual']);
+                } else {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Barang tidak tersedia'
+                    ], 200);
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'berhasil' => 'Barang success dijual'
+            ], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json([

@@ -145,6 +145,23 @@
                     <div class="menu-item has-sub">
                         <a href="javascript:;" class="menu-link">
                             <div class="menu-icon">
+                                <i class="ion-ios-apps bg-indigo"></i>
+                            </div>
+                            <div class="menu-text">Master Device</div>
+                            <div class="menu-caret"></div>
+                        </a>
+                        <div class="menu-submenu">
+                            <div class="menu-item">
+                                <a href="{{ route('devices.index') }}" class="menu-link">
+                                    <div class="menu-text">Data Device</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="menu-item has-sub">
+                        <a href="javascript:;" class="menu-link">
+                            <div class="menu-icon">
                                 <i class="ion-ios-cube bg-green"></i>
                             </div>
                             <div class="menu-text">Inventory</div>
@@ -162,8 +179,8 @@
                         </div>
                     </div>
 
-                    <div class="menu-item {{ request()->is('dashboard') ? 'active' : '' }}">
-                        <a href="/dashboard" class="menu-link">
+                    <div class="menu-item {{ request()->is('penjualan') ? 'active' : '' }}">
+                        <a href="/penjualan" class="menu-link">
                             <div class="menu-icon">
                                 <i class="ion-ios-home bg-blue"></i>
                             </div>

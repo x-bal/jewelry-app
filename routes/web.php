@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\LocatorController;
 use App\Http\Controllers\LostStokController;
+use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\StokOpnameController;
 use App\Http\Controllers\TipeBarangController;
@@ -28,7 +30,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('users/get', [UserController::class, 'get'])->name('users.list');
@@ -55,4 +57,12 @@ Route::middleware('auth')->group(function () {
     Route::get('lost-stok/get', [LostStokController::class, 'get'])->name('lost-stok.list');
     Route::get('lost-stok/{lostStok:id}/lost', [LostStokController::class, 'lost'])->name('lost-stok.lost');
     Route::resource('lost-stok', LostStokController::class);
+
+    Route::get('penjualan/get', [PenjualanController::class, 'get'])->name('penjualan.list');
+    Route::get('penjualan/get-list/{penjualan:id}', [PenjualanController::class, 'getList'])->name('penjualan.get');
+    Route::resource('penjualan', PenjualanController::class);
+
+    Route::get('devices/get', [DeviceController::class, 'get'])->name('devices.list');
+    Route::post('devices/{device:id}/pairing', [DeviceController::class, 'pairing'])->name('devices.pairing');
+    Route::resource('devices', DeviceController::class);
 });
