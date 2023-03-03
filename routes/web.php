@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\LocatorController;
 use App\Http\Controllers\LostStokController;
+use App\Http\Controllers\PenarikanController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\StokOpnameController;
@@ -65,4 +66,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('devices/get', [DeviceController::class, 'get'])->name('devices.list');
     Route::post('devices/{device:id}/pairing', [DeviceController::class, 'pairing'])->name('devices.pairing');
     Route::resource('devices', DeviceController::class);
+
+    Route::get('penarikan/get', [PenarikanController::class, 'get'])->name('penarikan.list');
+    Route::resource('penarikan', PenarikanController::class);
 });

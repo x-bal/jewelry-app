@@ -15,8 +15,8 @@ class StokOpname extends Model
         return $this->belongsTo(Locator::class);
     }
 
-    public function details()
+    public function barangs()
     {
-        return $this->hasMany(DetailStokOpname::class);
+        return $this->belongsToMany(Barang::class, 'barang_stok_opname');
     }
 }

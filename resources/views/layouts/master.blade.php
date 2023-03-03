@@ -145,7 +145,7 @@
                     <div class="menu-item has-sub">
                         <a href="javascript:;" class="menu-link">
                             <div class="menu-icon">
-                                <i class="ion-ios-apps bg-indigo"></i>
+                                <i class="ion-ios-briefcase bg-orange"></i>
                             </div>
                             <div class="menu-text">Master Device</div>
                             <div class="menu-caret"></div>
@@ -175,14 +175,17 @@
                                 <a href="{{ route('lost-stok.index') }}" class="menu-link">
                                     <div class="menu-text">Lost Stok</div>
                                 </a>
+                                <a href="{{ route('penarikan.index') }}" class="menu-link">
+                                    <div class="menu-text">Penarikan Barang</div>
+                                </a>
                             </div>
                         </div>
                     </div>
 
                     <div class="menu-item {{ request()->is('penjualan') ? 'active' : '' }}">
-                        <a href="/penjualan" class="menu-link">
+                        <a href="{{ route('penjualan.index') }}" class="menu-link">
                             <div class="menu-icon">
-                                <i class="ion-ios-home bg-blue"></i>
+                                <i class="ion-ios-filing bg-pink"></i>
                             </div>
                             <div class="menu-text">Penjualan</div>
                         </a>

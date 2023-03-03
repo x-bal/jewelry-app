@@ -31,6 +31,9 @@ class DeviceController extends Controller
                     $actionBtn = '<a href="#modal-pairing" id="' . $row->id . '" class="btn btn-sm btn-info btn-pairing" data-route="' . route('devices.pairing', $row->id) . '" data-bs-toggle="modal">Pairing</a> <a href="#modal-dialog" id="' . $row->id . '" class="btn btn-sm btn-success btn-edit" data-route="' . route('devices.update', $row->id) . '" data-bs-toggle="modal">Edit</a> <button type="button" data-route="' . route('devices.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Delete</button>';
                     return $actionBtn;
                 })
+                ->addColumn('pair_to', function ($row) {
+                    return $row->user()->first()->name ?? '-';
+                })
                 ->rawColumns(['action'])
                 ->make(true);
         }
@@ -107,8 +110,6 @@ class DeviceController extends Controller
             if ($pairingDev || $pairingUser) {
                 return back()->with('error', 'Device sudah dipairing');
             } else {
-
-                return "no";
                 DB::table('device_user')->insert(['device_id' => $device->id, 'user_id' => $request->user]);
             }
 

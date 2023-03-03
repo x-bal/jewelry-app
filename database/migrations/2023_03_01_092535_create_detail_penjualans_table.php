@@ -13,11 +13,9 @@ class CreateDetailPenjualansTable extends Migration
      */
     public function up()
     {
-        Schema::create('detail_penjualans', function (Blueprint $table) {
-            $table->id();
+        Schema::create('barang_penjualan', function (Blueprint $table) {
             $table->foreignId('penjualan_id')->constrained('penjualans')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('barang_id')->constrained('barangs')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->timestamps();
         });
     }
 
@@ -28,6 +26,6 @@ class CreateDetailPenjualansTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('detail_penjualans');
+        Schema::dropIfExists('barang_penjualan');
     }
 }

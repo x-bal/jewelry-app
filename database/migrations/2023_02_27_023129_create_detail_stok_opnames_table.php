@@ -13,11 +13,9 @@ class CreateDetailStokOpnamesTable extends Migration
      */
     public function up()
     {
-        Schema::create('detail_stok_opnames', function (Blueprint $table) {
-            $table->id();
+        Schema::create('barang_stok_opname', function (Blueprint $table) {
             $table->foreignId('stok_opname_id')->constrained('stok_opnames')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('barang_id')->constrained('barangs')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->timestamps();
         });
     }
 
@@ -28,6 +26,6 @@ class CreateDetailStokOpnamesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('detail_stok_opnames');
+        Schema::dropIfExists('barang_stok_opname');
     }
 }

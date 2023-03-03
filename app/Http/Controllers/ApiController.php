@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
-use App\Models\DetailPenjualan;
-use App\Models\DetailStokOpname;
 use App\Models\Locator;
 use App\Models\Penjualan;
 use App\Models\Satuan;
@@ -93,7 +91,7 @@ class ApiController extends Controller
                     $barang = Barang::where(['rfid' => $val, 'status' => 'Tersedia'])->first();
 
                     if ($barang && $barang->locator_id == $stokOn->locator_id) {
-                        DetailStokOpname::updateOrCreate([
+                        DB::table('barang_stok_opname')->updateOrInsert([
                             'stok_opname_id' => $stokOn->id,
                             'barang_id' => $barang->id
                         ]);
@@ -138,12 +136,17 @@ class ApiController extends Controller
                 $barang = Barang::where(['rfid' => $val, 'status' => 'Tersedia'])->first();
 
                 if ($barang) {
-                    DetailPenjualan::create([
+                    DB::table('barang_penjualan')->updateOrInsert([
                         'penjualan_id' => $penjualan->id,
                         'barang_id' => $barang->id
                     ]);
 
-                    $barang->update(['status' => 'Terjual']);
+                    $barang->update([
+                        'status' => 'Terjual',
+                        'old_rfid' => $barang->rfid,
+                    ]);
+
+                    $barang->update(['rfid' => null]);
                 } else {
                     return response()->json([
                         'status' => 'error',

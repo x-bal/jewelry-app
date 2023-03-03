@@ -22,7 +22,7 @@ class CreateBarangsTable extends Migration
             $table->string('nama_barang');
             $table->float('berat');
             $table->integer('harga');
-            $table->enum('status', ['Tersedia', 'Terjual', 'Loss'])->default('Tersedia');
+            $table->enum('status', ['Tersedia', 'Terjual', 'Loss', 'Ditarik'])->default('Tersedia');
             $table->string('old_rfid')->nullable();
             $table->timestamps();
         });

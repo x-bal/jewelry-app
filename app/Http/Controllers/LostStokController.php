@@ -51,16 +51,16 @@ class LostStokController extends Controller
     {
         if (request()->ajax()) {
 
-            return DataTables::of($lostStok->details)
+            return DataTables::of($lostStok->barangs)
                 ->addIndexColumn()
                 ->addColumn('nama_barang', function ($row) {
-                    return $row->barang->nama_barang;
+                    return $row->nama_barang;
                 })
                 ->addColumn('rfid', function ($row) {
-                    return $row->barang->rfid;
+                    return $row->old_rfid;
                 })
                 ->addColumn('kode_barang', function ($row) {
-                    return $row->barang->kode_barang;
+                    return $row->kode_barang;
                 })
                 ->rawColumns(['nama_barang', 'rfid', 'kode_barang'])
                 ->make(true);

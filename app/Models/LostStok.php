@@ -15,8 +15,8 @@ class LostStok extends Model
         return $this->belongsTo(Locator::class);
     }
 
-    public function details()
+    public function barangs()
     {
-        return $this->hasMany(DetailLostStok::class);
+        return $this->belongsToMany(Barang::class);
     }
 }

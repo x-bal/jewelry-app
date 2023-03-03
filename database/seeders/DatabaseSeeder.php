@@ -19,6 +19,12 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('secret'),
             'name' => 'Developer'
         ]);
-        // \App\Models\User::factory(500)->create();
+
+        $this->call([
+            LocatorSeeder::class,
+            SatuanSeeder::class,
+            TipeBarangSeeder::class,
+            DeviceSeeder::class
+        ]);
     }
 }

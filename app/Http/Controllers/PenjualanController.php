@@ -107,24 +107,24 @@ class PenjualanController extends Controller
     public function getList(Request $request, Penjualan $penjualan)
     {
         if ($request->ajax()) {
-            $data = $penjualan->details;
+            $data = $penjualan->barangs;
 
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('rfid', function ($row) {
-                    return $row->barang->rfid;
+                    return $row->rfid;
                 })
                 ->addColumn('kode_barang', function ($row) {
-                    return $row->barang->kode_barang;
+                    return $row->kode_barang;
                 })
                 ->addColumn('nama_barang', function ($row) {
-                    return $row->barang->nama_barang;
+                    return $row->nama_barang;
                 })
                 ->addColumn('berat', function ($row) {
-                    return $row->barang->berat . ' ' . $row->barang->satuan->nama_satuan;
+                    return $row->berat . ' ' . $row->satuan->nama_satuan;
                 })
                 ->addColumn('harga', function ($row) {
-                    return 'Rp. ' . number_format($row->barang->harga, 0, ',', '.');
+                    return 'Rp. ' . number_format($row->harga, 0, ',', '.');
                 })
                 ->rawColumns(['rfid', 'kode_barang', 'nama_barang', 'harga', 'berat'])
                 ->make(true);

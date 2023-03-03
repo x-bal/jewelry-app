@@ -10,9 +10,9 @@ class Penjualan extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function details()
+    public function barangs()
     {
-        return $this->hasMany(DetailPenjualan::class);
+        return $this->belongsToMany(Barang::class);
     }
 
     public function user()
