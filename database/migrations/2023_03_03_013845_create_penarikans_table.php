@@ -15,6 +15,7 @@ class CreatePenarikansTable extends Migration
     {
         Schema::create('penarikans', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('locator_id')->constrained('locators')->cascadeOnUpdate()->cascadeOnDelete();
             $table->date('tanggal');
             $table->timestamps();
         });

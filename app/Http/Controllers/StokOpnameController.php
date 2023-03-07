@@ -170,27 +170,34 @@ class StokOpnameController extends Controller
 
             $barangs = $locator->barangs()->whereNotIn('id', $stokBarang)->get();
 
-            $lost = LostStok::create([
+            $lostStok = LostStok::where([
                 'tanggal' => $stokOpname->tanggal,
                 'locator_id' => $stokOpname->locator_id
-            ]);
+            ])->first();
 
-            foreach ($barangs as $barang) {
-                $barang->update([
-                    'status' => 'Loss',
-                    'old_rfid' => $barang->rfid,
+            if (!$lostStok) {
+                $lost = LostStok::create([
+                    'tanggal' => $stokOpname->tanggal,
+                    'locator_id' => $stokOpname->locator_id
                 ]);
 
-                $barang->update(['rfid' => null,]);
+                foreach ($barangs as $barang) {
+                    $barang->update([
+                        'status' => 'Loss',
+                        'old_rfid' => $barang->rfid,
+                    ]);
 
-                DB::table('barang_lost_stok')->updateOrInsert(
-                    [
-                        'lost_stok_id' => $lost->id
-                    ],
-                    [
-                        'barang_id' => $barang->id
-                    ]
-                );
+                    $barang->update(['rfid' => null,]);
+
+                    DB::table('barang_lost_stok')->updateOrInsert(
+                        [
+                            'lost_stok_id' => $lost->id
+                        ],
+                        [
+                            'barang_id' => $barang->id
+                        ]
+                    );
+                }
             }
 
             DB::commit();

@@ -3,6 +3,7 @@
 @push('style')
 <link href="{{ asset('/') }}plugins/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
 <link href="{{ asset('/') }}plugins/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+<link href="{{ asset('/') }}plugins/select2/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
 
 @section('content')
@@ -35,6 +36,8 @@
 
         <div class="row mt-3">
             <div class="col-md-12">
+                <a href="#modal-dialog" id="btn-add" class="btn btn-primary mb-3" data-route="{{ route('detail-lost.add') }}" data-bs-toggle="modal"><i class="ion-ios-add"></i> Add Barang</a>
+
                 <h3>Data Lost Stok</h3>
                 <table id="datatable" class="table table-striped table-bordered align-middle">
                     <thead>
@@ -43,6 +46,7 @@
                             <th class="text-nowrap">Tag</th>
                             <th class="text-nowrap">Kode Barang</th>
                             <th class="text-nowrap">Nama Barang</th>
+                            <th class="text-nowrap">Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -51,6 +55,48 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modal-dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Form Lost Stok</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <form action="" method="post" id="form-lost-stok">
+                @csrf
+
+                <div class="modal-body">
+                    <input type="hidden" name="lost_id" value="{{ $lostStok->id }}">
+
+                    <div class="form-group mb-3">
+                        <label for="barang">Barang</label>
+                        <select name="barang[]" id="barang" class="form-control multiple-select2" multiple>
+                            @foreach($barangs as $barang)
+                            <option value="{{ $barang->id }}">{{ $barang->kode_barang }} - {{ $barang->nama_barang }}</option>
+                            @endforeach
+                        </select>
+
+                        @error('barang')
+                        <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <a href="javascript:;" id="btn-close" class="btn btn-white" data-bs-dismiss="modal">Close</a>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<form action="" class="d-none" id="form-delete" method="post">
+    @csrf
+    @method('DELETE')
+    <input type="hidden" name="lost_id" value="{{ $lostStok->id }}">
+</form>
 @endsection
 
 @push('script')
@@ -59,39 +105,53 @@
 <script src="{{ asset('/') }}plugins/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
 <script src="{{ asset('/') }}plugins/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 <script src="{{ asset('/') }}plugins/sweetalert/dist/sweetalert.min.js"></script>
+<script src="{{ asset('/') }}plugins/select2/dist/js/select2.min.js"></script>
 
 <script>
-    var interv = null;
+    $(".multiple-select2").select2({
+        dropdownParent: $('#modal-dialog'),
+        placeholder: "Pilih Barang",
+        allowClear: true
+    })
 
-    $("#switch").on('click', function() {
-        let id = "{{ $lostStok->id }}";
-        let status = 0;
+    $("#btn-add").on('click', function() {
+        let route = $(this).attr('data-route')
+        $("#form-lost-stok").attr('action', route)
+    })
 
-        if ($(this).is(":checked")) {
-            status = 1;
-            interv = setInterval(function() {
-                list()
-                listNo()
-            }, 2000)
-        } else {
-            status = 0;
-            clearInterval(interv)
-        }
+    $("#datatable").on('click', '.btn-delete', function(e) {
+        e.preventDefault();
+        let route = $(this).attr('data-route')
+        $("#form-delete").attr('action', route)
 
-        $.ajax({
-            url: '{{ route("stok-opname.change") }}',
-            type: 'GET',
-            method: "GET",
-            data: {
-                id: id,
-                status: status
-            },
-            success: function(response) {
-                $(".switch").empty().append(response.status)
+        swal({
+            title: 'Remove data barang?',
+            text: 'Remove data barang dari lost stok?',
+            icon: 'error',
+            buttons: {
+                cancel: {
+                    text: 'Cancel',
+                    value: null,
+                    visible: true,
+                    className: 'btn btn-default',
+                    closeModal: true,
+                },
+                confirm: {
+                    text: 'Yes',
+                    value: true,
+                    visible: true,
+                    className: 'btn btn-danger',
+                    closeModal: true
+                }
             }
-
-        })
-    });
+        }).then((result) => {
+            if (result) {
+                $("#form-delete").submit()
+            } else {
+                $("#form-delete").attr('action', '')
+            }
+        });
+    })
 
     function list() {
         $('#datatable').DataTable({
@@ -117,6 +177,10 @@
                 {
                     data: 'nama_barang',
                     name: 'nama_barang'
+                },
+                {
+                    data: 'action',
+                    name: 'action'
                 },
             ]
         });

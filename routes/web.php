@@ -7,6 +7,8 @@ use App\Http\Controllers\LocatorController;
 use App\Http\Controllers\LostStokController;
 use App\Http\Controllers\PenarikanController;
 use App\Http\Controllers\PenjualanController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\StokOpnameController;
 use App\Http\Controllers\TipeBarangController;
@@ -37,6 +39,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('users/get', [UserController::class, 'get'])->name('users.list');
     Route::resource('users', UserController::class);
 
+    Route::get('permissions/get', [PermissionController::class, 'get'])->name('permissions.list');
+    Route::resource('permissions', PermissionController::class);
+
+    Route::get('roles/get', [RoleController::class, 'get'])->name('roles.list');
+    Route::get('roles/{role:id}/find', [RoleController::class, 'find'])->name('roles.find');
+    Route::resource('roles', RoleController::class);
+
     Route::get('locators/get', [LocatorController::class, 'get'])->name('locators.list');
     Route::resource('locators', LocatorController::class);
 
@@ -57,6 +66,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('lost-stok/get', [LostStokController::class, 'get'])->name('lost-stok.list');
     Route::get('lost-stok/{lostStok:id}/lost', [LostStokController::class, 'lost'])->name('lost-stok.lost');
+    Route::post('detail-lost/add-barang', [LostStokController::class, 'addBarang'])->name('detail-lost.add');
+    Route::delete('detail-lost/{barang:id}/delete', [LostStokController::class, 'deleteBarang'])->name('detail-lost.destroy');
     Route::resource('lost-stok', LostStokController::class);
 
     Route::get('penjualan/get', [PenjualanController::class, 'get'])->name('penjualan.list');

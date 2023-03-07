@@ -3,6 +3,7 @@
 @push('style')
 <link href="{{ asset('/') }}plugins/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
 <link href="{{ asset('/') }}plugins/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+<link href="{{ asset('/') }}plugins/select2/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
 
 @section('content')
@@ -18,14 +19,13 @@
     </div>
 
     <div class="panel-body">
-        <a href="#modal-dialog" id="btn-add" class="btn btn-primary mb-3" data-route="{{ route('devices.store') }}" data-bs-toggle="modal"><i class="ion-ios-add"></i> Add Device</a>
+        <a href="#modal-dialog" id="btn-add" class="btn btn-primary mb-3" data-route="{{ route('roles.store') }}" data-bs-toggle="modal"><i class="ion-ios-add"></i> Add Role</a>
 
         <table id="datatable" class="table table-striped table-bordered align-middle">
             <thead>
                 <tr>
                     <th class="text-nowrap">No</th>
-                    <th class="text-nowrap">Nama Device</th>
-                    <th class="text-nowrap">Pair to</th>
+                    <th class="text-nowrap">Name</th>
                     <th class="text-nowrap">Action</th>
                 </tr>
             </thead>
@@ -37,18 +37,31 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Form Device</h4>
+                    <h4 class="modal-title">Form Role</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                 </div>
-                <form action="" method="post" id="form-device">
+                <form action="" method="post" id="form-role">
                     @csrf
 
                     <div class="modal-body">
                         <div class="form-group mb-3">
-                            <label for="nama_device">Nama Device</label>
-                            <input type="text" name="nama_device" id="nama_device" class="form-control" value="">
+                            <label for="name">Nama Role</label>
+                            <input type="text" name="name" id="name" class="form-control" value="">
 
-                            @error('nama_device')
+                            @error('name')
+                            <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="permission">Permission</label>
+                            <select name="permission[]" id="permission" class="form-control multiple-select2" multiple>
+                                @foreach($permissions as $permission)
+                                <option value="{{ $permission->id }}">{{ $permission->name }}</option>
+                                @endforeach
+                            </select>
+
+                            @error('permission')
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
@@ -63,37 +76,22 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modal-pairing">
+    <div class="modal fade" id="modal-detail">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Pairing Device</h4>
+                    <h4 class="modal-title">Detail Role</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                 </div>
-                <form action="" method="post" id="form-pairing">
-                    @csrf
 
-                    <div class="modal-body">
-                        <div class="form-group mb-3">
-                            <label for="user">User</label>
-                            <select name="user" id="user" class="form-control">
-                                <option disabled selected>-- Pilih User --</option>
-                                @foreach($users as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                @endforeach
-                            </select>
+                <div class="modal-body body-detail">
 
-                            @error('user')
-                            <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-                    </div>
+                </div>
 
-                    <div class="modal-footer">
-                        <a href="javascript:;" id="btn-close" class="btn btn-white" data-bs-dismiss="modal">Close</a>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
+                <div class="modal-footer">
+                    <a href="javascript:;" id="btn-close" class="btn btn-white" data-bs-dismiss="modal">Close</a>
+                    <button type="button" class="btn btn-primary">Submit</button>
+                </div>
             </div>
         </div>
     </div>
@@ -111,13 +109,20 @@
 <script src="{{ asset('/') }}plugins/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
 <script src="{{ asset('/') }}plugins/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 <script src="{{ asset('/') }}plugins/sweetalert/dist/sweetalert.min.js"></script>
+<script src="{{ asset('/') }}plugins/select2/dist/js/select2.min.js"></script>
 
 <script>
+    $(".multiple-select2").select2({
+        dropdownParent: $('#modal-dialog'),
+        placeholder: "Pilih Barang",
+        allowClear: true
+    })
+
     var table = $('#datatable').DataTable({
         processing: true,
         serverSide: true,
         responsive: true,
-        ajax: "{{ route('devices.list') }}",
+        ajax: "{{ route('roles.list') }}",
         deferRender: true,
         pagination: true,
         columns: [{
@@ -125,12 +130,8 @@
                 name: 'DT_RowIndex'
             },
             {
-                data: 'nama_device',
-                name: 'nama_device'
-            },
-            {
-                data: 'pair_to',
-                name: 'pair_to'
+                data: 'name',
+                name: 'name'
             },
             {
                 data: 'action',
@@ -141,49 +142,57 @@
 
     $("#btn-add").on('click', function() {
         let route = $(this).attr('data-route')
-        $("#form-device").attr('action', route)
+        $("#form-role").attr('action', route)
     })
 
     $("#btn-close").on('click', function() {
-        $("#form-device").removeAttr('action')
+        $("#form-role").removeAttr('action')
     })
 
     $("#datatable").on('click', '.btn-edit', function() {
         let route = $(this).attr('data-route')
         let id = $(this).attr('id')
 
-        $("#form-device").attr('action', route)
-        $("#form-device").append(`<input type="hidden" name="_method" value="PUT">`);
+        $("#form-role").attr('action', route)
+        $("#form-role").append(`<input type="hidden" name="_method" value="PUT">`);
 
         $.ajax({
-            url: "/devices/" + id,
+            url: "/roles/" + id,
             type: 'GET',
             method: 'GET',
             success: function(response) {
-                let device = response.device;
+                let role = response.role;
+                let permission = response.permission;
 
-                $("#nama_device").val(device.nama_device)
+                $("#name").val(role.name)
+                $('.multiple-select2').select2({
+                    dropdownParent: $('#modal-dialog'),
+                    placeholder: "Pilih Barang",
+                    allowClear: true,
+                }).val(permission).trigger('change')
             }
         })
     })
 
-    $("#datatable").on('click', '.btn-pairing', function() {
-        let route = $(this).attr('data-route')
+    $("#datatable").on('click', '.btn-detail', function() {
         let id = $(this).attr('id')
 
-        $("#form-pairing").attr('action', route)
-        $("#form-pairing").append(`<input type="hidden" name="_method" value="POST">`);
+        $.ajax({
+            url: "/roles/" + id,
+            type: 'GET',
+            method: 'GET',
+            success: function(response) {
+                let permissions = response.permissions;
+                let append = ``;
 
-        // $.ajax({
-        //     url: "/devices/" + id + '/pairing',
-        //     type: 'GET',
-        //     method: 'GET',
-        //     success: function(response) {
-        //         let device = response.device;
+                $.each(permissions, function(i, data) {
+                    append += `<span class="badge bg-orange">` + data.name + `</span> `
+                })
 
-        //         $("#nama_device").val(device.nama_device)
-        //     }
-        // })
+                $(".body-detail").empty().append(append)
+
+            }
+        })
     })
 
     $("#datatable").on('click', '.btn-delete', function(e) {
@@ -192,8 +201,8 @@
         $("#form-delete").attr('action', route)
 
         swal({
-            title: 'Hapus data device?',
-            text: 'Menghapus device bersifat permanen.',
+            title: 'Hapus data role?',
+            text: 'Menghapus role bersifat permanen.',
             icon: 'error',
             buttons: {
                 cancel: {

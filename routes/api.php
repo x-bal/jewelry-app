@@ -20,10 +20,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/cek-tag', [ApiController::class, 'cekTag']);
+Route::get('stok-opname/{stokOpname:id}/stok', [StokOpnameController::class, 'stok'])->name('stok-opname.stok');
+Route::get('stok-opname/{stokOpname:id}/unstock', [StokOpnameController::class, 'unstock'])->name('stok-opname.unstock');
+Route::get('/last-id', [ApiController::class, 'lastBarang']);
 Route::get('/master', [ApiController::class, 'getMaster']);
+Route::post('/cek-tag', [ApiController::class, 'cekTag']);
 Route::post('/create', [ApiController::class, 'create']);
 Route::post('/input-stok', [ApiController::class, 'stok']);
 Route::post('/sale', [ApiController::class, 'sale']);
-Route::get('stok-opname/{stokOpname:id}/stok', [StokOpnameController::class, 'stok'])->name('stok-opname.stok');
-Route::get('stok-opname/{stokOpname:id}/unstock', [StokOpnameController::class, 'unstock'])->name('stok-opname.unstock');

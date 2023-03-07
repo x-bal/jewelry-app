@@ -66,98 +66,99 @@
         @csrf
         @method('DELETE')
     </form>
-    @endsection
+</div>
+@endsection
 
-    @push('script')
-    <script src="{{ asset('/') }}plugins/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="{{ asset('/') }}plugins/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="{{ asset('/') }}plugins/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="{{ asset('/') }}plugins/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
-    <script src="{{ asset('/') }}plugins/sweetalert/dist/sweetalert.min.js"></script>
+@push('script')
+<script src="{{ asset('/') }}plugins/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{{ asset('/') }}plugins/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="{{ asset('/') }}plugins/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{{ asset('/') }}plugins/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+<script src="{{ asset('/') }}plugins/sweetalert/dist/sweetalert.min.js"></script>
 
-    <script>
-        var table = $('#datatable').DataTable({
-            processing: true,
-            serverSide: true,
-            responsive: true,
-            ajax: "{{ route('locators.list') }}",
-            deferRender: true,
-            pagination: true,
-            columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'DT_RowIndex'
+<script>
+    var table = $('#datatable').DataTable({
+        processing: true,
+        serverSide: true,
+        responsive: true,
+        ajax: "{{ route('locators.list') }}",
+        deferRender: true,
+        pagination: true,
+        columns: [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex'
+            },
+            {
+                data: 'nama_locator',
+                name: 'nama_locator'
+            },
+            {
+                data: 'action',
+                name: 'action',
+            },
+        ]
+    });
+
+    $("#btn-add").on('click', function() {
+        let route = $(this).attr('data-route')
+        $("#form-locator").attr('action', route)
+    })
+
+    $("#btn-close").on('click', function() {
+        $("#form-locator").removeAttr('action')
+    })
+
+    $("#datatable").on('click', '.btn-edit', function() {
+        let route = $(this).attr('data-route')
+        let id = $(this).attr('id')
+
+        $("#form-locator").attr('action', route)
+        $("#form-locator").append(`<input type="hidden" name="_method" value="PUT">`);
+
+        $.ajax({
+            url: "/locators/" + id,
+            type: 'GET',
+            method: 'GET',
+            success: function(response) {
+                let locator = response.locator;
+
+                $("#nama_locator").val(locator.nama_locator)
+            }
+        })
+    })
+
+    $("#datatable").on('click', '.btn-delete', function(e) {
+        e.preventDefault();
+        let route = $(this).attr('data-route')
+        $("#form-delete").attr('action', route)
+
+        swal({
+            title: 'Hapus data locator?',
+            text: 'Menghapus locator bersifat permanen.',
+            icon: 'error',
+            buttons: {
+                cancel: {
+                    text: 'Cancel',
+                    value: null,
+                    visible: true,
+                    className: 'btn btn-default',
+                    closeModal: true,
                 },
-                {
-                    data: 'nama_locator',
-                    name: 'nama_locator'
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                },
-            ]
+                confirm: {
+                    text: 'Yes',
+                    value: true,
+                    visible: true,
+                    className: 'btn btn-danger',
+                    closeModal: true
+                }
+            }
+        }).then((result) => {
+            if (result) {
+                $("#form-delete").submit()
+            } else {
+                $("#form-delete").attr('action', '')
+            }
         });
-
-        $("#btn-add").on('click', function() {
-            let route = $(this).attr('data-route')
-            $("#form-locator").attr('action', route)
-        })
-
-        $("#btn-close").on('click', function() {
-            $("#form-locator").removeAttr('action')
-        })
-
-        $("#datatable").on('click', '.btn-edit', function() {
-            let route = $(this).attr('data-route')
-            let id = $(this).attr('id')
-
-            $("#form-locator").attr('action', route)
-            $("#form-locator").append(`<input type="hidden" name="_method" value="PUT">`);
-
-            $.ajax({
-                url: "/locators/" + id,
-                type: 'GET',
-                method: 'GET',
-                success: function(response) {
-                    let locator = response.locator;
-
-                    $("#nama_locator").val(locator.nama_locator)
-                }
-            })
-        })
-
-        $("#datatable").on('click', '.btn-delete', function(e) {
-            e.preventDefault();
-            let route = $(this).attr('data-route')
-            $("#form-delete").attr('action', route)
-
-            swal({
-                title: 'Hapus data locator?',
-                text: 'Menghapus locator bersifat permanen.',
-                icon: 'error',
-                buttons: {
-                    cancel: {
-                        text: 'Cancel',
-                        value: null,
-                        visible: true,
-                        className: 'btn btn-default',
-                        closeModal: true,
-                    },
-                    confirm: {
-                        text: 'Yes',
-                        value: true,
-                        visible: true,
-                        className: 'btn btn-danger',
-                        closeModal: true
-                    }
-                }
-            }).then((result) => {
-                if (result) {
-                    $("#form-delete").submit()
-                } else {
-                    $("#form-delete").attr('action', '')
-                }
-            });
-        })
-    </script>
-    @endpush
+    })
+</script>
+@endpush

@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
             LocatorSeeder::class,
             SatuanSeeder::class,
             TipeBarangSeeder::class,
-            DeviceSeeder::class
+            DeviceSeeder::class,
+            PermissionSeeder::class
         ]);
     }
 }

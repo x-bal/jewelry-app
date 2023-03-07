@@ -55,8 +55,7 @@
 
                         <div class="form-group mb-3">
                             <label for="barang">Barang</label>
-                            <select name="barang" id="barang" class="form-control barang">
-                                <option disabled selected>-- Select Barang --</option>
+                            <select name="barang[]" id="barang" class="form-control multiple-select2" multiple>
                                 @foreach($barangs as $brg)
                                 <option value="{{ $brg->id }}">{{ $brg->kode_barang }} - {{ $brg->nama_barang }}</option>
                                 @endforeach
@@ -94,9 +93,11 @@
 
 
     <script>
-        // $(".barang").select2({
-        //     placeholder: "Select a state"
-        // });
+        $(".multiple-select2").select2({
+            dropdownParent: $('#modal-dialog'),
+            placeholder: "Pilih Barang",
+            allowClear: true
+        });
 
         var table = $('#datatable').DataTable({
             processing: true,

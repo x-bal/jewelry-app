@@ -44,6 +44,14 @@ class ApiController extends Controller
         ]);
     }
 
+    public function lastBarang()
+    {
+        return response()->json([
+            'status' => 'success',
+            'last_id' => Barang::latest()->first()->id ?? 0
+        ]);
+    }
+
     public function create(Request $request)
     {
         try {

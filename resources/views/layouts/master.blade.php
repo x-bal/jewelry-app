@@ -191,6 +191,29 @@
                         </a>
                     </div>
 
+                    <div class="menu-item has-sub">
+                        <a href="javascript:;" class="menu-link">
+                            <div class="menu-icon">
+                                <i class="ion-ios-cube bg-green"></i>
+                            </div>
+                            <div class="menu-text">Access</div>
+                            <div class="menu-caret"></div>
+                        </a>
+                        <div class="menu-submenu">
+                            <div class="menu-item">
+                                <a href="{{ route('permissions.index') }}" class="menu-link">
+                                    <div class="menu-text">Permission</div>
+                                </a>
+                                <a href="{{ route('roles.index') }}" class="menu-link">
+                                    <div class="menu-text">Role</div>
+                                </a>
+                                <a href="{{ route('penarikan.index') }}" class="menu-link">
+                                    <div class="menu-text">Penarikan Barang</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="menu-item d-flex">
                         <a href="javascript:;" class="app-sidebar-minify-btn ms-auto" data-toggle="app-sidebar-minify"><i class="ion-ios-arrow-back"></i>
                             <div class="menu-text">Collapse</div>

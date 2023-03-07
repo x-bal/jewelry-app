@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PenarikanRequest extends FormRequest
+class CreateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,11 @@ class PenarikanRequest extends FormRequest
     public function rules()
     {
         return [
-            'tanggal' => 'required',
-            'barang' => 'required|array'
+            'username' => 'required|string|unique:users',
+            'name' => 'required|string',
+            'password' => 'required|string|min:6',
+            'foto' => 'required|mimes:jpg,jpeg,png',
+            'role' => 'required|numeric',
         ];
     }
 }
