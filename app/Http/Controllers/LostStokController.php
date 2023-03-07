@@ -35,6 +35,9 @@ class LostStokController extends Controller
                 ->editColumn('tanggal', function ($row) {
                     return Carbon::parse($row->tanggal)->format('d/m/Y');
                 })
+                ->addColumn('total', function ($row) {
+                    return $row->barangs()->count() . ' Items';
+                })
                 ->addColumn('locator', function ($row) {
                     return $row->locator->nama_locator;
                 })
@@ -56,7 +59,7 @@ class LostStokController extends Controller
             $lost = LostStok::where([
                 'tanggal' => $request->tanggal,
                 'locator_id' => $request->locator,
-            ]);
+            ])->first();
 
             if ($lost) {
                 $tanggal = Carbon::parse($request->tanggal)->format('d/m/Y');

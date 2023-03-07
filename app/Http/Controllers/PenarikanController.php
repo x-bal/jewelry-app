@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PenarikanRequest;
 use App\Models\Barang;
+use App\Models\Locator;
 use App\Models\Penarikan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -16,9 +17,9 @@ class PenarikanController extends Controller
     {
         $title = 'Data Penarikan';
         $breadcrumbs = ['Penarikan', 'List Penarikan'];
-        $barangs = Barang::where('status', 'Tersedia')->get();
+        $locators = Locator::get();
 
-        return view('penarikan.index', compact('title', 'breadcrumbs', 'barangs'));
+        return view('penarikan.index', compact('title', 'breadcrumbs', 'locators'));
     }
 
     public function get(Request $request)
@@ -31,8 +32,14 @@ class PenarikanController extends Controller
                 ->editColumn('tanggal', function ($row) {
                     return Carbon::parse($row->tanggal)->format('d/m/Y');
                 })
+                ->addColumn('locator', function ($row) {
+                    return $row->locator->nama_locator;
+                })
+                ->addColumn('total', function ($row) {
+                    return $row->barangs()->count() . ' Items';
+                })
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<a href="' . route('penjualan.edit', $row->id) . '" id="' . $row->id . '" class="btn btn-sm btn-success ">Edit</a> <button type="button" data-route="' . route('penjualan.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Delete</button>';
+                    $actionBtn = '<a href="' . route('penarikan.show', $row->id) . '" id="' . $row->id . '" class="btn btn-sm btn-info ">Detail</a> <button type="button" data-route="' . route('penarikan.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Delete</button>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
@@ -45,23 +52,26 @@ class PenarikanController extends Controller
         try {
             DB::beginTransaction();
 
-            $penarikan = Penarikan::create(['tanggal' => $penarikanRequest->tanggal]);
+            $penarikan = Penarikan::where([
+                'tanggal' => $penarikanRequest->tanggal,
+                'locator_id' => $penarikanRequest->locator,
+            ])->first();
 
-            $barang = Barang::find($penarikanRequest->barang);
+            if ($penarikan) {
+                $tanggal = Carbon::parse($penarikanRequest->tanggal)->format('d/m/Y');
+                return back()->with('error', "Data penarikan tanggal {$tanggal} sudah ada");
+            } else {
+                Penarikan::create([
+                    'tanggal' => $penarikanRequest->tanggal,
+                    'locator_id' => $penarikanRequest->locator,
+                ]);
 
-            DB::table('barang_penarikan')->insert(['penarikan_id' => $penarikan->id, 'barang_id' => $barang->id]);
+                $tanggal = Carbon::parse($penarikanRequest->tanggal)->format('d/m/Y');
 
-            $barang->update([
-                'status' => 'Ditarik',
-                'old_rfid' => $barang->rfid,
-            ]);
+                DB::commit();
 
-            $barang->update(['rfid' => null]);
-
-
-            DB::commit();
-
-            return back()->with('success', "Penarikan barang berhasil");
+                return back()->with('success', "Data Penarikan tanggal {$tanggal} berhasil ditambahkan");
+            }
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with('error', $th->getMessage());
@@ -70,40 +80,117 @@ class PenarikanController extends Controller
 
     public function show(Penarikan $penarikan)
     {
-        //
+        $title = 'Detail Penarikan';
+        $breadcrumbs = ['Penarikan', 'Detail'];
+        $barangs = Barang::where(['status' => 'Tersedia', 'locator_id' => $penarikan->locator_id])->get();
+
+        return view('penarikan.show', compact('title', 'breadcrumbs', 'penarikan', 'barangs'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Penarikan  $penarikan
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Penarikan $penarikan)
+    public function getBarang(Penarikan $penarikan)
     {
-        //
+        if (request()->ajax()) {
+
+            return DataTables::of($penarikan->barangs)
+                ->addIndexColumn()
+                ->addColumn('nama_barang', function ($row) {
+                    return $row->nama_barang;
+                })
+                ->addColumn('rfid', function ($row) {
+                    return $row->old_rfid;
+                })
+                ->addColumn('kode_barang', function ($row) {
+                    return $row->kode_barang;
+                })
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<button type="button" data-route="' . route('detail-penarikan.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Delete</button>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['nama_barang', 'rfid', 'kode_barang', 'action'])
+                ->make(true);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Penarikan  $penarikan
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Penarikan $penarikan)
+    public function addBarang(Request $request)
     {
-        //
+        $request->validate([
+            'barang' => 'required|array'
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $penarikan = Penarikan::find($request->penarikan_id);
+
+            $penarikan->barangs()->attach($request->barang);
+
+            foreach ($request->barang as $key => $val) {
+                $barang = Barang::find($request->barang[$key]);
+                $barang->update([
+                    'status' => 'Ditarik',
+                    'old_rfid' => $barang->rfid,
+                ]);
+
+                $barang->update(['rfid' => null]);
+            }
+
+            DB::commit();
+
+            return back()->with('success', "Barang berhasil ditambahkan ke penarikan");
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with('error', $th->getMessage());
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Penarikan  $penarikan
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Penarikan $penarikan)
     {
-        //
+        try {
+            DB::beginTransaction();
+
+            foreach ($penarikan->barangs as $barang) {
+                $barang->update([
+                    'status' => 'Tersedia',
+                    'rfid' => $barang->old_rfid
+                ]);
+
+                $barang->update([
+                    'old_rfid' => null
+                ]);
+            }
+            $penarikan->barangs()->detach();
+
+            $penarikan->delete();
+
+            DB::commit();
+
+            return back()->with('success', 'Data penarikan berhasil dihapus');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with('error', $th->getMessage());
+        }
+    }
+
+    public function deleteBarang(Barang $barang)
+    {
+        try {
+            DB::beginTransaction();
+
+            $penarikan = Penarikan::find(request('penarikan_id'));
+            $penarikan->barangs()->detach([$barang->id]);
+
+            $barang->update([
+                'status' => 'Tersedia',
+                'rfid' => $barang->old_rfid,
+            ]);
+            $barang->update(['old_rfid' => null]);
+
+            DB::commit();
+
+            return back()->with('success', 'Barang berhasil diremove');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with('error', $th->getMessage());
+        }
     }
 }

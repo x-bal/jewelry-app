@@ -25,7 +25,7 @@ class PenarikanRequest extends FormRequest
     {
         return [
             'tanggal' => 'required',
-            'barang' => 'required|array'
+            'locator' => 'required|numeric'
         ];
     }
 }

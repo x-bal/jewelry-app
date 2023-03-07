@@ -14,4 +14,9 @@ class Penarikan extends Model
     {
         return $this->belongsToMany(Barang::class);
     }
+
+    public function locator()
+    {
+        return $this->belongsTo(Locator::class);
+    }
 }

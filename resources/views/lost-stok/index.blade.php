@@ -26,6 +26,7 @@
                     <th class="text-nowrap">No</th>
                     <th class="text-nowrap">Tanggal</th>
                     <th class="text-nowrap">Locator</th>
+                    <th class="text-nowrap">Total Barang</th>
                     <th class="text-nowrap">Action</th>
                 </tr>
             </thead>
@@ -112,6 +113,10 @@
             {
                 data: 'locator',
                 name: 'locator'
+            },
+            {
+                data: 'total',
+                name: 'total'
             },
             {
                 data: 'action',

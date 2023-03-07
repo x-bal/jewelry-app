@@ -79,5 +79,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('devices', DeviceController::class);
 
     Route::get('penarikan/get', [PenarikanController::class, 'get'])->name('penarikan.list');
+    Route::get('penarikan/{penarikan:id}/get', [PenarikanController::class, 'getBarang'])->name('penarikan.get');
+    Route::post('detail-penarikan/add-barang', [PenarikanController::class, 'addBarang'])->name('detail-penarikan.add');
+    Route::delete('detail-penarikan/{barang:id}/delete', [PenarikanController::class, 'deleteBarang'])->name('detail-penarikan.destroy');
     Route::resource('penarikan', PenarikanController::class);
 });

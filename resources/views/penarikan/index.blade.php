@@ -26,6 +26,8 @@
                 <tr>
                     <th class="text-nowrap">No</th>
                     <th class="text-nowrap">Tanggal</th>
+                    <th class="text-nowrap">Locator</th>
+                    <th class="text-nowrap">Total Barang</th>
                     <th class="text-nowrap">Action</th>
                 </tr>
             </thead>
@@ -54,14 +56,15 @@
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="barang">Barang</label>
-                            <select name="barang[]" id="barang" class="form-control multiple-select2" multiple>
-                                @foreach($barangs as $brg)
-                                <option value="{{ $brg->id }}">{{ $brg->kode_barang }} - {{ $brg->nama_barang }}</option>
+                            <label for="locator">Locator</label>
+                            <select name="locator" id="locator" class="form-control">
+                                <option disabled selected>-- Pilih Locator --</option>
+                                @foreach($locators as $locator)
+                                <option value="{{ $locator->id }}">{{ $locator->nama_locator }}</option>
                                 @endforeach
                             </select>
 
-                            @error('barang')
+                            @error('locator')
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
@@ -113,6 +116,14 @@
                 {
                     data: 'tanggal',
                     name: 'tanggal'
+                },
+                {
+                    data: 'locator',
+                    name: 'locator'
+                },
+                {
+                    data: 'total',
+                    name: 'total'
                 },
                 {
                     data: 'action',
