@@ -191,6 +191,15 @@
                         </a>
                     </div>
 
+                    <div class="menu-item {{ request()->is('setting') ? 'active' : '' }}">
+                        <a href="{{ route('setting.index') }}" class="menu-link">
+                            <div class="menu-icon">
+                                <i class="ion-ios-cog bg-default text-dark"></i>
+                            </div>
+                            <div class="menu-text">Setting</div>
+                        </a>
+                    </div>
+
                     <div class="menu-item has-sub {{ request()->is('permissions*') || request()->is('roles*') ? 'active' : '' }}">
                         <a href="javascript:;" class="menu-link">
                             <div class="menu-icon">
@@ -211,13 +220,27 @@
                         </div>
                     </div>
 
-                    <div class="menu-item {{ request()->is('setting') ? 'active' : '' }}">
-                        <a href="{{ route('setting.index') }}" class="menu-link">
+                    <div class="menu-item has-sub {{ request()->is('report*') || request()->is('roles*') ? 'active' : '' }}">
+                        <a href="javascript:;" class="menu-link">
                             <div class="menu-icon">
-                                <i class="ion-ios-cog bg-default text-dark"></i>
+                                <i class="ion-ios-journal bg-lime"></i>
                             </div>
-                            <div class="menu-text">Setting</div>
+                            <div class="menu-text">Report</div>
+                            <div class="menu-caret"></div>
                         </a>
+                        <div class="menu-submenu">
+                            <div class="menu-item">
+                                <a href="{{ route('report.opname') }}" class="menu-link">
+                                    <div class="menu-text">Stok Opname</div>
+                                </a>
+                                <a href="{{ route('report.loss') }}" class="menu-link">
+                                    <div class="menu-text">Loss Stok</div>
+                                </a>
+                                <a href="{{ route('report.penarikan') }}" class="menu-link">
+                                    <div class="menu-text">Penarikan Barang</div>
+                                </a>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="menu-item d-flex">

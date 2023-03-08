@@ -8,6 +8,7 @@ use App\Http\Controllers\LostStokController;
 use App\Http\Controllers\PenarikanController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\SettingController;
@@ -87,4 +88,11 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('penarikan', PenarikanController::class);
 
     Route::resource('setting', SettingController::class);
+
+    Route::get('report/stok-opname', [ReportController::class, 'opname'])->name('report.opname');
+    Route::get('report/list-opname', [ReportController::class, 'listOpname'])->name('report.opname.list');
+    Route::get('report/loss-stok', [ReportController::class, 'loss'])->name('report.loss');
+    Route::get('report/list-loss', [ReportController::class, 'listLoss'])->name('report.loss.list');
+    Route::get('report/penarikan', [ReportController::class, 'penarikan'])->name('report.penarikan');
+    Route::get('report/list-penarikan', [ReportController::class, 'listPenarikan'])->name('report.penarikan.list');
 });
