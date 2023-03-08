@@ -12,7 +12,7 @@ class Penarikan extends Model
 
     public function barangs()
     {
-        return $this->belongsToMany(Barang::class);
+        return $this->belongsToMany(Barang::class)->withPivot('ket');
     }
 
     public function locator()

@@ -10,6 +10,7 @@ use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SatuanController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StokOpnameController;
 use App\Http\Controllers\TipeBarangController;
 use App\Http\Controllers\UserController;
@@ -72,6 +73,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('penjualan/get', [PenjualanController::class, 'get'])->name('penjualan.list');
     Route::get('penjualan/get-list/{penjualan:id}', [PenjualanController::class, 'getList'])->name('penjualan.get');
+    Route::delete('detail-penjualan/{barang:id}/delete', [PenjualanController::class, 'deleteBarang'])->name('detail-penjualan.destroy');
     Route::resource('penjualan', PenjualanController::class);
 
     Route::get('devices/get', [DeviceController::class, 'get'])->name('devices.list');
@@ -83,4 +85,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('detail-penarikan/add-barang', [PenarikanController::class, 'addBarang'])->name('detail-penarikan.add');
     Route::delete('detail-penarikan/{barang:id}/delete', [PenarikanController::class, 'deleteBarang'])->name('detail-penarikan.destroy');
     Route::resource('penarikan', PenarikanController::class);
+
+    Route::resource('setting', SettingController::class);
 });

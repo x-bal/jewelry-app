@@ -57,6 +57,9 @@ class ApiController extends Controller
         try {
             DB::beginTransaction();
 
+            $foto = $request->file('foto');
+            $fotoUrl = $foto->storeAs('barang', date('dmy') . '-' . $request->kode_barang . '.' . $foto->extension());
+
             $barang = Barang::create([
                 'rfid' => $request->tag,
                 'kode_barang' => $request->kode_barang,
@@ -66,6 +69,7 @@ class ApiController extends Controller
                 'satuan_id' => $request->satuan,
                 'tipe_barang_id' => $request->tipe,
                 'locator_id' => $request->locator,
+                'foto' => $fotoUrl
             ]);
 
             DB::commit();
@@ -155,11 +159,6 @@ class ApiController extends Controller
                     ]);
 
                     $barang->update(['rfid' => null]);
-                } else {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Barang tidak tersedia'
-                    ], 200);
                 }
             }
 

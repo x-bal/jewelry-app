@@ -38,7 +38,7 @@
             <div class="col-md-12">
                 <a href="#modal-dialog" id="btn-add" class="btn btn-primary mb-3" data-route="{{ route('detail-penarikan.add') }}" data-bs-toggle="modal"><i class="ion-ios-add"></i> Add Barang</a>
 
-                <h3>Data Lost Stok</h3>
+                <h3>Data Penarikan Barang</h3>
                 <table id="datatable" class="table table-striped table-bordered align-middle">
                     <thead>
                         <tr>
@@ -46,6 +46,7 @@
                             <th class="text-nowrap">Tag</th>
                             <th class="text-nowrap">Kode Barang</th>
                             <th class="text-nowrap">Nama Barang</th>
+                            <th class="text-nowrap">Keterangan</th>
                             <th class="text-nowrap">Action</th>
                         </tr>
                     </thead>
@@ -78,6 +79,15 @@
                         </select>
 
                         @error('barang')
+                        <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="ket">Keterangan</label>
+                        <input type="text" name="ket" id="ket" class="form-control">
+
+                        @error('ket')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
@@ -177,6 +187,10 @@
                 {
                     data: 'nama_barang',
                     name: 'nama_barang'
+                },
+                {
+                    data: 'ket',
+                    name: 'ket'
                 },
                 {
                     data: 'action',

@@ -17,6 +17,6 @@ class LostStok extends Model
 
     public function barangs()
     {
-        return $this->belongsToMany(Barang::class);
+        return $this->belongsToMany(Barang::class)->withPivot('ket');
     }
 }

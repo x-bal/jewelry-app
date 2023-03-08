@@ -46,6 +46,7 @@
                             <th class="text-nowrap">Tag</th>
                             <th class="text-nowrap">Kode Barang</th>
                             <th class="text-nowrap">Nama Barang</th>
+                            <th class="text-nowrap">Keterangan</th>
                             <th class="text-nowrap">Action</th>
                         </tr>
                     </thead>
@@ -78,6 +79,15 @@
                         </select>
 
                         @error('barang')
+                        <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="ket">Keterangan</label>
+                        <input type="text" name="ket" id="ket" class="form-control">
+
+                        @error('ket')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
@@ -177,6 +187,10 @@
                 {
                     data: 'nama_barang',
                     name: 'nama_barang'
+                },
+                {
+                    data: 'ket',
+                    name: 'ket'
                 },
                 {
                     data: 'action',

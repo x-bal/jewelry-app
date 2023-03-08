@@ -30,9 +30,9 @@
             <div class="news-feed">
                 <div class="news-image" style="background-image: url({{ asset('/') }}img/login-bg/login-bg-11.jpg)"></div>
                 <div class="news-caption">
-                    <h4 class="caption-title"><b>Jewelry</b> App</h4>
+                    <h4 class="caption-title"><b>{{ App\Models\Setting::first()->val ?? config('app.name') }}</b></h4>
                     <p>
-                        Download the Color Admin app for iPhone®, iPad®, and Android™. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        <!-- Download the Color Admin app for iPhone®, iPad®, and Android™. Lorem ipsum dolor sit amet, consectetur adipiscing elit. -->
                     </p>
                 </div>
             </div>
@@ -47,7 +47,7 @@
                             <span class="logo"><i class="ion-ios-cloud"></i></span>
 
 
-                            <b>Jewelry</b> App
+                            <b>{{ App\Models\Setting::first()->val ?? config('app.name') }}</b>
                         </div>
                         <small>Login dengan akun anda.</small>
                     </div>

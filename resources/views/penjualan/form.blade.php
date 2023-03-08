@@ -33,11 +33,13 @@
                     <input type="text" name="invoice" id="invoice" class="form-control" value="{{ $penjualan->invoice  }}" readonly>
                 </div>
             </div>
+            @if($type == 'Add')
             <div class="col-md-6">
                 <div class="form-group mt-3">
                     <button type="submit" class="btn mt-1 btn-sm btn-primary">Submit</button>
                 </div>
             </div>
+            @endif
         </form>
 
         <div class="row mt-3">
@@ -52,6 +54,9 @@
                             <th class="text-nowrap">Nama Barang</th>
                             <th class="text-nowrap">Berat</th>
                             <th class="text-nowrap">Harga</th>
+                            @if($type != 'Add')
+                            <th class="text-nowrap">Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -60,6 +65,12 @@
         </div>
     </div>
 </div>
+
+<form action="" class="d-none" id="form-delete" method="post">
+    <input type="hidden" name="penjualan_id" value="{{ $penjualan->id }}">
+    @csrf
+    @method('DELETE')
+</form>
 @endsection
 
 @push('script')
@@ -109,12 +120,53 @@
         });
     }
 
+    function listEdit(route) {
+        $('#datatable').DataTable({
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            ajax: route,
+            deferRender: true,
+            pagination: true,
+            bDestroy: true,
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex'
+                },
+                {
+                    data: 'rfid',
+                    name: 'rfid'
+                },
+                {
+                    data: 'kode_barang',
+                    name: 'kode_barang'
+                },
+                {
+                    data: 'nama_barang',
+                    name: 'nama_barang'
+                },
+                {
+                    data: 'berat',
+                    name: 'berat'
+                },
+                {
+                    data: 'harga',
+                    name: 'harga'
+                },
+                {
+                    data: 'action',
+                    name: 'action'
+                },
+            ]
+        });
+    }
+
     if ("{{ $type }}" == 'Add') {
         setInterval(function() {
             list(route)
         }, 3000)
     } else {
-        list(route)
+        listEdit(route)
     }
 
     $("#btn-add").on('click', function() {
@@ -126,33 +178,14 @@
         $("#form-penjualan").removeAttr('action')
     })
 
-    $("#datatable").on('click', '.btn-edit', function() {
-        let route = $(this).attr('data-route')
-        let id = $(this).attr('id')
-
-        $("#form-penjualan").attr('action', route)
-        $("#form-penjualan").append(`<input type="hidden" name="_method" value="PUT">`);
-
-        $.ajax({
-            url: "/penjualan/" + id,
-            type: 'GET',
-            method: 'GET',
-            success: function(response) {
-                let penjualan = response.penjualan;
-
-                $("#nama_penjualan").val(penjualan.nama_penjualan)
-            }
-        })
-    })
-
     $("#datatable").on('click', '.btn-delete', function(e) {
         e.preventDefault();
         let route = $(this).attr('data-route')
         $("#form-delete").attr('action', route)
 
         swal({
-            title: 'Hapus data penjualan?',
-            text: 'Menghapus penjualan bersifat permanen.',
+            title: 'Hapus data barang?',
+            text: 'Menghapus barang dari penjualan.',
             icon: 'error',
             buttons: {
                 cancel: {

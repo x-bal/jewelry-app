@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barang;
 use App\Models\Penjualan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -94,14 +95,32 @@ class PenjualanController extends Controller
         return view('penjualan.form', compact('title', 'breadcrumbs', 'penjualan', 'type'));
     }
 
-    public function update(Request $request, Penjualan $penjualan)
-    {
-        //
-    }
-
     public function destroy(Penjualan $penjualan)
     {
-        //
+        try {
+            DB::beginTransaction();
+
+            foreach ($penjualan->barangs as $barang) {
+                $barang->update([
+                    'status' => 'Tersedia',
+                    'rfid' => $barang->old_rfid
+                ]);
+
+                $barang->update([
+                    'old_rfid' => null
+                ]);
+            }
+            $penjualan->barangs()->detach();
+
+            $penjualan->delete();
+
+            DB::commit();
+
+            return back()->with('success', 'Data penjualan berhasil dihapus');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with('error', $th->getMessage());
+        }
     }
 
     public function getList(Request $request, Penjualan $penjualan)
@@ -112,7 +131,7 @@ class PenjualanController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('rfid', function ($row) {
-                    return $row->rfid;
+                    return $row->status == 'Tersedia' ?  $row->rfid : $row->old_rfid;
                 })
                 ->addColumn('kode_barang', function ($row) {
                     return $row->kode_barang;
@@ -126,8 +145,35 @@ class PenjualanController extends Controller
                 ->addColumn('harga', function ($row) {
                     return 'Rp. ' . number_format($row->harga, 0, ',', '.');
                 })
-                ->rawColumns(['rfid', 'kode_barang', 'nama_barang', 'harga', 'berat'])
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<button type="button" data-route="' . route('detail-penjualan.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Delete</button>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['rfid', 'kode_barang', 'nama_barang', 'harga', 'berat', 'action'])
                 ->make(true);
+        }
+    }
+
+    public function deleteBarang(Barang $barang)
+    {
+        try {
+            DB::beginTransaction();
+
+            $penjualan = Penjualan::find(request('penjualan_id'));
+            $penjualan->barangs()->detach([$barang->id]);
+
+            $barang->update([
+                'status' => 'Tersedia',
+                'rfid' => $barang->old_rfid,
+            ]);
+            $barang->update(['old_rfid' => null]);
+
+            DB::commit();
+
+            return back()->with('success', 'Barang berhasil diremove');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with('error', $th->getMessage());
         }
     }
 }

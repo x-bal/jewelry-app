@@ -26,7 +26,7 @@ class StokOpnameController extends Controller
     public function get(Request $request)
     {
         if ($request->ajax()) {
-            $data = StokOpname::get();
+            $data = StokOpname::whereDate('created_at', $request->tanggal)->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()

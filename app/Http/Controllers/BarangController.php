@@ -27,7 +27,7 @@ class BarangController extends Controller
     public function get(Request $request)
     {
         if ($request->ajax()) {
-            $data = Barang::get();
+            $data = Barang::where('status', 'Tersedia')->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -47,7 +47,10 @@ class BarangController extends Controller
                 ->editColumn('harga', function ($row) {
                     return 'Rp. ' . number_format($row->harga, 0, ',', '.');
                 })
-                ->rawColumns(['action', 'satuan', 'tipe', 'locator'])
+                ->addColumn('foto', function ($row) {
+                    return $row->foto != null ? '<div class="menu-profile-image"><img src="' . asset('/storage/' . $row->foto) . '" alt="" width="35" class="rounded-circle"></div>' : '<div class="menu-profile-image"><img src="' . asset('/img/user/user-13.jpg') . '" alt="" width="35" class="rounded-circle"></div>';
+                })
+                ->rawColumns(['action', 'satuan', 'tipe', 'locator', 'foto'])
                 ->make(true);
         }
     }

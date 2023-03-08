@@ -28,7 +28,7 @@
     <div id="app" class="app app-header-fixed app-sidebar-fixed">
         <div id="header" class="app-header">
             <div class="navbar-header">
-                <a href="/dashboard" class="navbar-brand"><span class="navbar-logo"><i class="ion-ios-browsers"></i></span> <b class="me-1">Jewelry</b> App</a>
+                <a href="/dashboard" class="navbar-brand"><span class="navbar-logo"><i class="ion-ios-browsers"></i></span> <b class="me-1">{{ App\Models\Setting::first()->val ?? config('app.name') }}</b></a>
                 <button type="button" class="navbar-mobile-toggler" data-toggle="app-sidebar-mobile">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -113,7 +113,7 @@
                         </a>
                     </div>
 
-                    <div class="menu-item has-sub">
+                    <div class="menu-item has-sub {{ request()->is('users*') || request()->is('locators*') || request()->is('satuan*') || request()->is('tipe-barang*') || request()->is('barang*') ? 'active' : '' }}">
                         <a href="javascript:;" class="menu-link">
                             <div class="menu-icon">
                                 <i class="ion-ios-apps bg-indigo"></i>
@@ -142,7 +142,7 @@
                         </div>
                     </div>
 
-                    <div class="menu-item has-sub">
+                    <div class="menu-item has-sub {{ request()->is('devices*') ? 'active' : '' }}">
                         <a href="javascript:;" class="menu-link">
                             <div class="menu-icon">
                                 <i class="ion-ios-briefcase bg-orange"></i>
@@ -159,7 +159,7 @@
                         </div>
                     </div>
 
-                    <div class="menu-item has-sub">
+                    <div class="menu-item has-sub {{ request()->is('stok-opname*') || request()->is('lost-stok*') || request()->is('penarikan*') ? 'active' : '' }}">
                         <a href="javascript:;" class="menu-link">
                             <div class="menu-icon">
                                 <i class="ion-ios-cube bg-green"></i>
@@ -191,12 +191,12 @@
                         </a>
                     </div>
 
-                    <div class="menu-item has-sub">
+                    <div class="menu-item has-sub {{ request()->is('permissions*') || request()->is('roles*') ? 'active' : '' }}">
                         <a href="javascript:;" class="menu-link">
                             <div class="menu-icon">
-                                <i class="ion-ios-cube bg-green"></i>
+                                <i class="ion-ios-eye-off bg-secondary"></i>
                             </div>
-                            <div class="menu-text">Access</div>
+                            <div class="menu-text">Management Access</div>
                             <div class="menu-caret"></div>
                         </a>
                         <div class="menu-submenu">
@@ -207,11 +207,17 @@
                                 <a href="{{ route('roles.index') }}" class="menu-link">
                                     <div class="menu-text">Role</div>
                                 </a>
-                                <a href="{{ route('penarikan.index') }}" class="menu-link">
-                                    <div class="menu-text">Penarikan Barang</div>
-                                </a>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="menu-item {{ request()->is('setting') ? 'active' : '' }}">
+                        <a href="{{ route('setting.index') }}" class="menu-link">
+                            <div class="menu-icon">
+                                <i class="ion-ios-cog bg-default text-dark"></i>
+                            </div>
+                            <div class="menu-text">Setting</div>
+                        </a>
                     </div>
 
                     <div class="menu-item d-flex">

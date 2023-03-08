@@ -25,7 +25,7 @@ class PenarikanController extends Controller
     public function get(Request $request)
     {
         if ($request->ajax()) {
-            $data = Penarikan::get();
+            $data = Penarikan::whereDate('created_at', $request->tanggal)->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -102,6 +102,9 @@ class PenarikanController extends Controller
                 ->addColumn('kode_barang', function ($row) {
                     return $row->kode_barang;
                 })
+                ->addColumn('ket', function ($row) {
+                    return $row->pivot->ket ?? '-';
+                })
                 ->addColumn('action', function ($row) {
                     $actionBtn = '<button type="button" data-route="' . route('detail-penarikan.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Delete</button>';
                     return $actionBtn;
@@ -114,7 +117,8 @@ class PenarikanController extends Controller
     public function addBarang(Request $request)
     {
         $request->validate([
-            'barang' => 'required|array'
+            'barang' => 'required|array',
+            'ket' => 'required|string'
         ]);
 
         try {
@@ -122,7 +126,7 @@ class PenarikanController extends Controller
 
             $penarikan = Penarikan::find($request->penarikan_id);
 
-            $penarikan->barangs()->attach($request->barang);
+            $penarikan->barangs()->attach($request->barang, ['ket' => $request->ket]);
 
             foreach ($request->barang as $key => $val) {
                 $barang = Barang::find($request->barang[$key]);

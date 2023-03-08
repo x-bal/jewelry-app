@@ -18,7 +18,17 @@
     </div>
 
     <div class="panel-body">
-        <a href="{{ route('penjualan.create') }}" class="btn btn-primary mb-3"><i class="ion-ios-add"></i> Add Penjualan</a>
+        <form action="" class="form-inline row mb-3">
+            <div class="form-group col-md-3">
+                <label for="tanggal">Tanggal</label>
+                <input type="date" name="tanggal" id="tanggal" class="form-control" value="{{ request('tanggal') ?? Carbon\Carbon::now()->format('Y-m-d') }}">
+            </div>
+
+            <div class="form-group col-md-6 mt-3">
+                <button type="submit" class="btn btn-secondary mt-1"><i class="ion-ios-funnel"></i> Filter</button>
+                <a href="{{ route('penjualan.create') }}" class="btn btn-primary mt-1"><i class="ion-ios-add"></i> Add Penjualan</a>
+            </div>
+        </form>
 
         <table id="datatable" class="table table-striped table-bordered align-middle">
             <thead>
@@ -79,11 +89,19 @@
     <script src="{{ asset('/') }}plugins/sweetalert/dist/sweetalert.min.js"></script>
 
     <script>
+        let tanggal = $("#tanggal").val();
+
         var table = $('#datatable').DataTable({
             processing: true,
             serverSide: true,
             responsive: true,
-            ajax: "{{ route('penjualan.list') }}",
+            ajax: {
+                url: "{{ route('penjualan.list') }}",
+                type: "GET",
+                data: {
+                    "tanggal": tanggal
+                }
+            },
             deferRender: true,
             pagination: true,
             columns: [{

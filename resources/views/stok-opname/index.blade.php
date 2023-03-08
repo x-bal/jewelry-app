@@ -18,7 +18,17 @@
     </div>
 
     <div class="panel-body">
-        <a href="#modal-dialog" id="btn-add" class="btn btn-primary mb-3" data-route="{{ route('stok-opname.store') }}" data-bs-toggle="modal"><i class="ion-ios-add"></i> Add Stok Opname</a>
+        <form action="" class="form-inline row mb-3">
+            <div class="form-group col-md-3">
+                <label for="tanggal">Tanggal</label>
+                <input type="date" name="tanggal" id="tanggal" class="form-control" value="{{ request('tanggal') ?? Carbon\Carbon::now()->format('Y-m-d') }}">
+            </div>
+
+            <div class="form-group col-md-6 mt-3">
+                <button type="submit" class="btn btn-secondary mt-1"><i class="ion-ios-funnel"></i> Filter</button>
+                <a href="#modal-dialog" id="btn-add" class="btn btn-primary mt-1" data-route="{{ route('stok-opname.store') }}" data-bs-toggle="modal"><i class="ion-ios-add"></i> Add Stok Opname</a>
+            </div>
+        </form>
 
         <table id="datatable" class="table table-striped table-bordered align-middle">
             <thead>
@@ -94,11 +104,19 @@
     <script src="{{ asset('/') }}plugins/sweetalert/dist/sweetalert.min.js"></script>
 
     <script>
+        let tanggal = $("#tanggal").val();
+
         var table = $('#datatable').DataTable({
             processing: true,
             serverSide: true,
             responsive: true,
-            ajax: "{{ route('stok-opname.list') }}",
+            ajax: {
+                url: "{{ route('stok-opname.list') }}",
+                type: "GET",
+                data: {
+                    "tanggal": tanggal
+                }
+            },
             deferRender: true,
             pagination: true,
             columns: [{

@@ -24,7 +24,7 @@ class LostStokController extends Controller
     public function get(Request $request)
     {
         if ($request->ajax()) {
-            $data = LostStok::get();
+            $data = LostStok::whereDate('created_at', $request->tanggal)->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -133,6 +133,9 @@ class LostStokController extends Controller
                 ->addColumn('kode_barang', function ($row) {
                     return $row->kode_barang;
                 })
+                ->addColumn('ket', function ($row) {
+                    return $row->pivot->ket ?? '-';
+                })
                 ->addColumn('action', function ($row) {
                     $actionBtn = '<button type="button" data-route="' . route('detail-lost.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Delete</button>';
                     return $actionBtn;
@@ -145,7 +148,8 @@ class LostStokController extends Controller
     public function addBarang(Request $request)
     {
         $request->validate([
-            'barang' => 'required|array'
+            'barang' => 'required|array',
+            'ket' => 'required|string'
         ]);
 
         try {
@@ -153,7 +157,7 @@ class LostStokController extends Controller
 
             $lost = LostStok::find($request->lost_id);
 
-            $lost->barangs()->attach($request->barang);
+            $lost->barangs()->attach($request->barang, ['ket' => $request->ket]);
 
             foreach ($request->barang as $key => $val) {
                 $barang = Barang::find($request->barang[$key]);
