@@ -24,7 +24,8 @@ class TipeBarangRequest extends FormRequest
     public function rules()
     {
         return [
-            'nama_tipe' => 'required|string'
+            'nama_tipe' => 'required|string',
+            'kode' => 'required|string'
         ];
     }
 }

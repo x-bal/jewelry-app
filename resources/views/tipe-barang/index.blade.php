@@ -51,6 +51,15 @@
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
+
+                        <div class="form-group mb-3">
+                            <label for="kode">Kode Barang</label>
+                            <input type="text" name="kode" id="kode" class="form-control" value="">
+
+                            @error('kode')
+                            <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
                     </div>
 
                     <div class="modal-footer">
@@ -122,6 +131,7 @@
                     let tipe = response.tipeBarang;
 
                     $("#nama_tipe").val(tipe.nama_tipe)
+                    $("#kode").val(tipe.kode)
                 }
             })
         })

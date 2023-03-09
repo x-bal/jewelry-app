@@ -83,7 +83,7 @@ class TipeBarangController extends Controller
 
             DB::commit();
 
-            return redirect()->route('TipeBarang.index')->with('success', "{$tipeBarang->nama_tipe} berhasil dihapus");
+            return redirect()->route('tipe-barang.index')->with('success', "{$tipeBarang->nama_tipe} berhasil dihapus");
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with('error', $th->getMessage());
