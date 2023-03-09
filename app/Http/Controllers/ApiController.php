@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Barang;
 use App\Models\Device;
 use App\Models\Locator;
+use App\Models\LostStok;
+use App\Models\Penarikan;
 use App\Models\Penjualan;
 use App\Models\Satuan;
 use App\Models\Setting;
@@ -239,14 +241,72 @@ class ApiController extends Controller
             $status = Barang::where('is_sync', 0)->pluck('status');
             $old_rfid = Barang::where('is_sync', 0)->pluck('old_rfid');
 
+            // Data Stok Opname
+            $opnames = StokOpname::where('is_sync', 0)->get();
+            $opname_locator = StokOpname::where('is_sync', 0)->pluck('locator_id');
+            $opname_tanggal = StokOpname::where('is_sync', 0)->pluck('tanggal');
+            $opname_status = StokOpname::where('is_sync', 0)->pluck('status');
+
+            // Data Loss Stok
+            $loss = LostStok::where('is_sync', 0)->get();
+            $loss_locator = LostStok::where('is_sync', 0)->pluck('locator_id');
+            $loss_tanggal = LostStok::where('is_sync', 0)->pluck('tanggal');
+            $loss_status = LostStok::where('is_sync', 0)->pluck('status');
+
+            // Data Penarikan
+            $penarikans = Penarikan::where('is_sync', 0)->get();
+            $penarikan_locator = Penarikan::where('is_sync', 0)->pluck('locator_id');
+            $penarikan_tanggal = Penarikan::where('is_sync', 0)->pluck('tanggal');
+            $penarikan_status = Penarikan::where('is_sync', 0)->pluck('status');
+
+            // Data Penjualan
+            $penjualans = Penjualan::where('is_sync', 0)->get();
+            $penjualan_user = Penjualan::where('is_sync', 0)->pluck('user_id');
+            $penjualan_invoice = Penjualan::where('is_sync', 0)->pluck('invoice');
+            $penjualan_tanggal = Penjualan::where('is_sync', 0)->pluck('tanggal');
+            $penjualan_status = Penjualan::where('is_sync', 0)->pluck('status');
+
+            // Barang Stok Opname
+            $barangOpnames = DB::table('barang_stok_opname')->where('is_sync', 0)->get();
+            $opname_brg = DB::table('barang_stok_opname')->where('is_sync', 0)->pluck('barang_id');
+            $opname_id = DB::table('barang_stok_opname')->where('is_sync', 0)->pluck('stok_opname_id');
+
+            // Barang Loss Stok
+            $barangLoss = DB::table('barang_lost_stok')->where('is_sync', 0)->get();
+            $loss_brg = DB::table('barang_lost_stok')->where('is_sync', 0)->pluck('barang_id');
+            $loss_id = DB::table('barang_lost_stok')->where('is_sync', 0)->pluck('lost_stok_id');
+            $loss_ket = DB::table('barang_lost_stok')->where('is_sync', 0)->pluck('ket');
+
+            // Barang Penarikan
+            $barangPenarikan = DB::table('barang_penarikan')->where('is_sync', 0)->get();
+            $penarikan_brg = DB::table('barang_penarikan')->where('is_sync', 0)->pluck('barang_id');
+            $penarikan_id = DB::table('barang_penarikan')->where('is_sync', 0)->pluck('penarikan_id');
+            $penarikan_ket = DB::table('barang_penarikan')->where('is_sync', 0)->pluck('ket');
+
+            // Barang Stok Opname
+            $barangPenjualan = DB::table('barang_penjualan')->where('is_sync', 0)->get();
+            $penjualan_brg = DB::table('barang_penjualan')->where('is_sync', 0)->pluck('barang_id');
+            $penjualan_id = DB::table('barang_penjualan')->where('is_sync', 0)->pluck('penjualan_id');
+
+            // Device User
+            $deviceUser = DB::table('device_user')->where('is_sync', 0)->get();
+            $device_id = DB::table('device_user')->where('is_sync', 0)->pluck('device_id');
+            $user_id = DB::table('device_user')->where('is_sync', 0)->pluck('user_id');
+
             $dataSend = [
+                // User
                 'username' => $username,
                 'name' => $name,
                 'password' => $password,
+                // Locator
                 'nama_locator' => $nama_locator,
+                // Satuan
                 'nama_satuan' => $nama_satuan,
+                // Tipe
                 'nama_tipe' => $nama_tipe,
+                // Device
                 'nama_device' => $nama_device,
+                // Barang
                 'satuan_id' => $satuan_id,
                 'tipe_barang_id' => $tipe_barang_id,
                 'locator_id' => $locator_id,
@@ -257,6 +317,40 @@ class ApiController extends Controller
                 'harga' => $harga,
                 'status' => $status,
                 'old_rfid' => $old_rfid,
+                // Stok Opname
+                'opname_locator' => $opname_locator,
+                'opname_tanggal' => $opname_tanggal,
+                'opname_status' => $opname_status,
+                // Loss
+                'loss_locator' => $loss_locator,
+                'loss_tanggal' => $loss_tanggal,
+                'loss_status' => $loss_status,
+                // Penarikan
+                'penarikan_locator' => $penarikan_locator,
+                'penarikan_tanggal' => $penarikan_tanggal,
+                'penarikan_status' => $penarikan_status,
+                // Penjualan
+                'penjualan_user' => $penjualan_user,
+                'penjualan_invoice' => $penjualan_invoice,
+                'penjualan_tanggal' => $penjualan_tanggal,
+                'penjualan_status' => $penjualan_status,
+                // Barang Opname
+                'opname_brg' => $opname_brg,
+                'opname_id' => $opname_id,
+                // Barang Loss
+                'loss_brg' => $loss_brg,
+                'loss_id' => $loss_id,
+                'loss_ket' => $loss_ket,
+                // Barang Penarikan
+                'penarikan_brg' => $penarikan_brg,
+                'penarikan_id' => $penarikan_id,
+                'penarikan_ket' => $penarikan_ket,
+                // Barang Penjualan
+                'penjualan_brg' => $penjualan_brg,
+                'penjualan_id' => $penjualan_id,
+                // Device
+                'device_id' => $device_id,
+                'user_id' => $user_id,
             ];
 
             $send = Http::post($url, $dataSend);
@@ -297,6 +391,60 @@ class ApiController extends Controller
                 ]);
             }
 
+            foreach ($opnames as $opname) {
+                $opname->update([
+                    'is_sync' => 1
+                ]);
+            }
+
+            foreach ($loss as $los) {
+                $los->update([
+                    'is_sync' => 1
+                ]);
+            }
+
+            foreach ($penarikans as $penarikan) {
+                $penarikan->update([
+                    'is_sync' => 1
+                ]);
+            }
+
+            foreach ($penjualans as $penjualan) {
+                $penjualan->update([
+                    'is_sync' => 1
+                ]);
+            }
+
+            foreach ($barangOpnames as $brgOp) {
+                $brgOp->update([
+                    'is_sync' => 1
+                ]);
+            }
+
+            foreach ($barangLoss as $brgloss) {
+                $brgloss->update([
+                    'is_sync' => 1
+                ]);
+            }
+
+            foreach ($barangPenarikan as $brgpnrk) {
+                $brgpnrk->update([
+                    'is_sync' => 1
+                ]);
+            }
+
+            foreach ($barangPenjualan as $brgpnj) {
+                $brgpnj->update([
+                    'is_sync' => 1
+                ]);
+            }
+
+            foreach ($deviceUser as $devuser) {
+                $devuser->update([
+                    'is_sync' => 1
+                ]);
+            }
+
             DB::commit();
 
             return $send->body();
@@ -310,7 +458,6 @@ class ApiController extends Controller
 
     public function receiveSync(Request $request)
     {
-        return $request->all();
         foreach ($request->username as $key => $val) {
             User::create([
                 'username' => $request->username[$key],
