@@ -18,6 +18,7 @@ class CreateStokOpnamesTable extends Migration
             $table->foreignId('locator_id')->constrained('locators')->cascadeOnDelete()->cascadeOnUpdate();
             $table->date('tanggal');
             $table->integer('status')->default(0);
+            $table->integer('is_sync')->default(0);
             $table->timestamps();
         });
     }

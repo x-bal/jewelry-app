@@ -95,4 +95,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('report/list-loss', [ReportController::class, 'listLoss'])->name('report.loss.list');
     Route::get('report/penarikan', [ReportController::class, 'penarikan'])->name('report.penarikan');
     Route::get('report/list-penarikan', [ReportController::class, 'listPenarikan'])->name('report.penarikan.list');
+    Route::get('report/penjualan', [ReportController::class, 'penjualan'])->name('report.penjualan');
+    Route::get('report/list-penjualan', [ReportController::class, 'listPenjualan'])->name('report.penjualan.list');
 });

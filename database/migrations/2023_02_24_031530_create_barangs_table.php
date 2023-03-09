@@ -24,6 +24,7 @@ class CreateBarangsTable extends Migration
             $table->integer('harga');
             $table->enum('status', ['Tersedia', 'Terjual', 'Loss', 'Ditarik'])->default('Tersedia');
             $table->string('old_rfid')->nullable();
+            $table->integer('is_sync')->default(0);
             $table->timestamps();
         });
     }

@@ -191,6 +191,32 @@
                         </a>
                     </div>
 
+                    <div class="menu-item has-sub {{ request()->is('report*') || request()->is('roles*') ? 'active' : '' }}">
+                        <a href="javascript:;" class="menu-link">
+                            <div class="menu-icon">
+                                <i class="ion-ios-journal bg-lime"></i>
+                            </div>
+                            <div class="menu-text">Report</div>
+                            <div class="menu-caret"></div>
+                        </a>
+                        <div class="menu-submenu">
+                            <div class="menu-item">
+                                <a href="{{ route('report.opname') }}" class="menu-link">
+                                    <div class="menu-text">Stok Opname</div>
+                                </a>
+                                <a href="{{ route('report.loss') }}" class="menu-link">
+                                    <div class="menu-text">Loss Stok</div>
+                                </a>
+                                <a href="{{ route('report.penarikan') }}" class="menu-link">
+                                    <div class="menu-text">Penarikan Barang</div>
+                                </a>
+                                <a href="{{ route('report.penjualan') }}" class="menu-link">
+                                    <div class="menu-text">Penjualan</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="menu-item {{ request()->is('setting') ? 'active' : '' }}">
                         <a href="{{ route('setting.index') }}" class="menu-link">
                             <div class="menu-icon">
@@ -215,29 +241,6 @@
                                 </a>
                                 <a href="{{ route('roles.index') }}" class="menu-link">
                                     <div class="menu-text">Role</div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="menu-item has-sub {{ request()->is('report*') || request()->is('roles*') ? 'active' : '' }}">
-                        <a href="javascript:;" class="menu-link">
-                            <div class="menu-icon">
-                                <i class="ion-ios-journal bg-lime"></i>
-                            </div>
-                            <div class="menu-text">Report</div>
-                            <div class="menu-caret"></div>
-                        </a>
-                        <div class="menu-submenu">
-                            <div class="menu-item">
-                                <a href="{{ route('report.opname') }}" class="menu-link">
-                                    <div class="menu-text">Stok Opname</div>
-                                </a>
-                                <a href="{{ route('report.loss') }}" class="menu-link">
-                                    <div class="menu-text">Loss Stok</div>
-                                </a>
-                                <a href="{{ route('report.penarikan') }}" class="menu-link">
-                                    <div class="menu-text">Penarikan Barang</div>
                                 </a>
                             </div>
                         </div>

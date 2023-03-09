@@ -16,6 +16,7 @@ class CreateTipeBarangsTable extends Migration
         Schema::create('tipe_barangs', function (Blueprint $table) {
             $table->id();
             $table->string('nama_tipe');
+            $table->integer('is_sync')->default(0);
             $table->timestamps();
         });
     }

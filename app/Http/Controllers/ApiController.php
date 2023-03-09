@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
+use App\Models\Device;
 use App\Models\Locator;
 use App\Models\Penjualan;
 use App\Models\Satuan;
+use App\Models\Setting;
 use App\Models\StokOpname;
 use App\Models\TipeBarang;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class ApiController extends Controller
 {
@@ -174,6 +178,145 @@ class ApiController extends Controller
                 'status' => 'error',
                 'message' => $th->getMessage()
             ], 200);
+        }
+    }
+
+    public function sendSync(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $setting = Setting::where('name', 'url')->first()->val;
+            $url = $setting . '/api/receive-sync';
+
+            $send = $this->sendDataSync($url);
+
+            DB::commit();
+            return $send;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $th->getMessage();
+        }
+    }
+
+    public function sendDataSync($url)
+    {
+        try {
+            DB::beginTransaction();
+
+            // Data User
+            $users = User::where('is_sync', 0)->get();
+            $username = User::where('is_sync', 0)->pluck('username');
+            $name = User::where('is_sync', 0)->pluck('name');
+            $password = User::where('is_sync', 0)->pluck('password');
+
+            // Data Locator
+            $locators = Locator::where('is_sync', 0)->get();
+            $nama_locator = Locator::where('is_sync', 0)->pluck('nama_locator');
+
+            // Data Satuan
+            $satuans = Satuan::where('is_sync', 0)->get();
+            $nama_satuan = Satuan::where('is_sync', 0)->pluck('nama_satuan');
+
+            // Data Tipe
+            $types = TipeBarang::where('is_sync', 0)->get();
+            $nama_tipe = TipeBarang::where('is_sync', 0)->pluck('nama_tipe');
+
+            // Data Device
+            $devices = Device::where('is_sync', 0)->get();
+            $nama_device = Device::where('is_sync', 0)->pluck('nama_device');
+
+            // Data Barang
+            $barangs = Barang::where('is_sync', 0)->get();
+            $nama_barang = Barang::where('is_sync', 0)->pluck('nama_barang');
+            $satuan_id = Barang::where('is_sync', 0)->pluck('satuan_id');
+            $tipe_barang_id = Barang::where('is_sync', 0)->pluck('tipe_barang_id');
+            $locator_id = Barang::where('is_sync', 0)->pluck('locator_id');
+            $rfid = Barang::where('is_sync', 0)->pluck('rfid');
+            $kode_barang = Barang::where('is_sync', 0)->pluck('kode_barang');
+            $berat = Barang::where('is_sync', 0)->pluck('berat');
+            $harga = Barang::where('is_sync', 0)->pluck('harga');
+            $status = Barang::where('is_sync', 0)->pluck('status');
+            $old_rfid = Barang::where('is_sync', 0)->pluck('old_rfid');
+
+            $dataSend = [
+                'username' => $username,
+                'name' => $name,
+                'password' => $password,
+                'nama_locator' => $nama_locator,
+                'nama_satuan' => $nama_satuan,
+                'nama_tipe' => $nama_tipe,
+                'nama_device' => $nama_device,
+                'satuan_id' => $satuan_id,
+                'tipe_barang_id' => $tipe_barang_id,
+                'locator_id' => $locator_id,
+                'rfid' => $rfid,
+                'kode_barang' => $kode_barang,
+                'nama_barang' => $nama_barang,
+                'berat' => $berat,
+                'harga' => $harga,
+                'status' => $status,
+                'old_rfid' => $old_rfid,
+            ];
+
+            $send = Http::post($url, $dataSend);
+
+            foreach ($users as $user) {
+                $user->update([
+                    'is_sync' => 1
+                ]);
+            }
+
+            foreach ($locators as $locator) {
+                $locator->update([
+                    'is_sync' => 1
+                ]);
+            }
+
+            foreach ($satuans as $satuan) {
+                $satuan->update([
+                    'is_sync' => 1
+                ]);
+            }
+
+            foreach ($types as $type) {
+                $type->update([
+                    'is_sync' => 1
+                ]);
+            }
+
+            foreach ($devices as $device) {
+                $device->update([
+                    'is_sync' => 1
+                ]);
+            }
+
+            foreach ($barangs as $barang) {
+                $barang->update([
+                    'is_sync' => 1
+                ]);
+            }
+
+            DB::commit();
+
+            return $send->body();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json([
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+    public function receiveSync(Request $request)
+    {
+        return $request->all();
+        foreach ($request->username as $key => $val) {
+            User::create([
+                'username' => $request->username[$key],
+                'name' => $request->name[$key],
+                'password' => $request->password[$key],
+            ]);
         }
     }
 }

@@ -16,6 +16,7 @@ class CreateDetailStokOpnamesTable extends Migration
         Schema::create('barang_stok_opname', function (Blueprint $table) {
             $table->foreignId('stok_opname_id')->constrained('stok_opnames')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('barang_id')->constrained('barangs')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->integer('is_sync')->default(0);
         });
     }
 

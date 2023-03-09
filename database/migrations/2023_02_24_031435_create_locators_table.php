@@ -16,6 +16,7 @@ class CreateLocatorsTable extends Migration
         Schema::create('locators', function (Blueprint $table) {
             $table->id();
             $table->string('nama_locator');
+            $table->integer('is_sync')->default(0);
             $table->timestamps();
         });
     }

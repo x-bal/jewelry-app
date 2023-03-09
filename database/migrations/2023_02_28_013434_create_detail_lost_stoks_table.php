@@ -17,6 +17,7 @@ class CreateDetailLostStoksTable extends Migration
             $table->foreignId('lost_stok_id')->constrained('lost_stoks')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('barang_id')->constrained('barangs')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('ket')->nullable();
+            $table->integer('is_sync')->default(0);
         });
     }
 

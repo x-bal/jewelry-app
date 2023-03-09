@@ -16,6 +16,7 @@ class CreateDeviceUserTable extends Migration
         Schema::create('device_user', function (Blueprint $table) {
             $table->foreignId('device_id')->constrained('devices')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->integer('is_sync')->default(0);
         });
     }
 

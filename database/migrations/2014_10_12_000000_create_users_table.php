@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('username')->unique();
             $table->string('password');
             $table->string('foto')->nullable();
+            $table->integer('is_sync')->default(0);
             $table->timestamps();
         });
     }

@@ -17,6 +17,7 @@ class CreateBarangPenarikanTable extends Migration
             $table->foreignId('barang_id')->constrained('barangs')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('penarikan_id')->constrained('penarikans')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('ket')->nullable();
+            $table->integer('is_sync')->default(0);
         });
     }
 

@@ -17,6 +17,7 @@ class CreateLostStoksTable extends Migration
             $table->id();
             $table->foreignId('locator_id')->constrained('locators')->cascadeOnDelete()->cascadeOnUpdate();
             $table->date('tanggal');
+            $table->integer('is_sync')->default(0);
             $table->timestamps();
         });
     }

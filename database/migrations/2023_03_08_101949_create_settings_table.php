@@ -17,6 +17,7 @@ class CreateSettingsTable extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('val')->nullable();
+            $table->integer('is_sync')->default(0);
             $table->timestamps();
         });
     }

@@ -28,3 +28,5 @@ Route::post('/cek-tag', [ApiController::class, 'cekTag']);
 Route::post('/create', [ApiController::class, 'create']);
 Route::post('/input-stok', [ApiController::class, 'stok']);
 Route::post('/sale', [ApiController::class, 'sale']);
+Route::get('send-sync', [ApiController::class, 'sendSync']);
+Route::post('receive-sync', [ApiController::class, 'receiveSync']);

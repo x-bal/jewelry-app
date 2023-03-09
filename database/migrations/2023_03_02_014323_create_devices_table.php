@@ -17,6 +17,7 @@ class CreateDevicesTable extends Migration
             $table->id();
             $table->string('nama_device');
             $table->integer('status')->default(1);
+            $table->integer('is_sync')->default(0);
             $table->timestamps();
         });
     }

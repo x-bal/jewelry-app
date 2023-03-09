@@ -18,5 +18,9 @@ class SettingSeeder extends Seeder
             'name' => 'title',
             'val' => 'Toko Perhiasan Hade Putra Ciwidey'
         ]);
+        Setting::create([
+            'name' => 'url',
+            'val' => 'http://127.0.0.1:8002'
+        ]);
     }
 }

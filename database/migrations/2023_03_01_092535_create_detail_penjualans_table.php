@@ -16,6 +16,7 @@ class CreateDetailPenjualansTable extends Migration
         Schema::create('barang_penjualan', function (Blueprint $table) {
             $table->foreignId('penjualan_id')->constrained('penjualans')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('barang_id')->constrained('barangs')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->integer('is_sync')->default(0);
         });
     }
 

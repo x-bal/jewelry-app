@@ -19,6 +19,7 @@ class CreatePenjualansTable extends Migration
             $table->date('tanggal');
             $table->string('invoice');
             $table->enum('status', ['Input', 'Batal', 'Selesai'])->default('Input');
+            $table->integer('is_sync')->default(0);
             $table->timestamps();
         });
     }
