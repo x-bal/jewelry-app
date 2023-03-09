@@ -25,6 +25,7 @@
                 <tr>
                     <th class="text-nowrap">No</th>
                     <th class="text-nowrap">Nama Tipe Barang</th>
+                    <th class="text-nowrap">Kode Tipe Barang</th>
                     <th class="text-nowrap">Action</th>
                 </tr>
             </thead>
@@ -39,7 +40,7 @@
                     <h4 class="modal-title">Form Tipe Barang</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                 </div>
-                <form action="" method="post" id="form-locator">
+                <form action="" method="post" id="form-tipe">
                     @csrf
 
                     <div class="modal-body">
@@ -99,6 +100,10 @@
                 {
                     data: 'nama_tipe',
                     name: 'nama_tipe'
+                },
+                {
+                    data: 'kode',
+                    name: 'kode'
                 },
                 {
                     data: 'action',
