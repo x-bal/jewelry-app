@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
+        $dev = User::create([
             'username' => 'developer',
             'password' => bcrypt('secret'),
             'name' => 'Developer'
@@ -28,5 +28,7 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             SettingSeeder::class
         ]);
+
+        $dev->assignRole(1);
     }
 }

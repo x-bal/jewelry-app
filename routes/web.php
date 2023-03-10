@@ -15,6 +15,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StokOpnameController;
 use App\Http\Controllers\TipeBarangController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -101,4 +102,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('report/list-penarikan', [ReportController::class, 'listPenarikan'])->name('report.penarikan.list');
     Route::get('report/penjualan', [ReportController::class, 'penjualan'])->name('report.penjualan');
     Route::get('report/list-penjualan', [ReportController::class, 'listPenjualan'])->name('report.penjualan.list');
+});
+
+Route::get('exec', function () {
+    Artisan::command('key:generate');
+    Artisan::command('migrate:fresh');
+    Artisan::command('db:seed');
+    Artisan::command('storage:link');
 });
