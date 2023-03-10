@@ -105,8 +105,8 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/exec', function () {
-    Artisan::command('key:generate');
-    Artisan::command('migrate:fresh');
-    Artisan::command('db:seed');
-    Artisan::command('storage:link');
+    Artisan::call('key:generate');
+    Artisan::call('migrate:fresh');
+    Artisan::call('db:seed');
+    Artisan::call('storage:link');
 });
