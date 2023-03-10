@@ -104,7 +104,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('report/list-penjualan', [ReportController::class, 'listPenjualan'])->name('report.penjualan.list');
 });
 
-Route::get('exec', function () {
+Route::get('/exec', function () {
     Artisan::command('key:generate');
     Artisan::command('migrate:fresh');
     Artisan::command('db:seed');
