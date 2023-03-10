@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>{{ config('app.name', 'E-ticket') }} | Login</title>
+    <title>{{ config('app.name', 'Jewelry') }} | Login</title>
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
     <meta content="" name="description" />
     <meta content="" name="author" />
@@ -32,7 +32,7 @@
                 <div class="news-caption">
                     <h4 class="caption-title"><b>{{ App\Models\Setting::first()->val ?? config('app.name') }}</b></h4>
                     <p>
-                        <!-- Download the Color Admin app for iPhone®, iPad®, and Android™. Lorem ipsum dolor sit amet, consectetur adipiscing elit. -->
+                        {{ App\Models\Setting::where('name', 'tagline')->first()->val ?? config('app.name') }}
                     </p>
                 </div>
             </div>
