@@ -39,18 +39,14 @@
             <div class="navbar-nav">
                 <div class="navbar-item navbar-user dropdown">
                     <a href="#" class="navbar-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
-                        <img src="{{ asset('/') }}img/user/user-13.jpg" alt="" />
+                        <img src="{{ asset('/storage/'. auth()->user()->foto) }}" alt="" />
                         <span>
                             <span class="d-none d-md-inline">{{ auth()->user()->name }}</span>
                             <b class="caret"></b>
                         </span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end me-1">
-                        <a href="javascript:;" class="dropdown-item">Edit Profile</a>
-                        <a href="javascript:;" class="dropdown-item"><span class="badge bg-danger float-end rounded-pill">2</span> Inbox</a>
-                        <a href="javascript:;" class="dropdown-item">Calendar</a>
-                        <a href="javascript:;" class="dropdown-item">Setting</a>
-                        <div class="dropdown-divider"></div>
+                        <a href="{{ route('profile') }}" class="dropdown-item">Edit Profile</a>
                         <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown-item">Log Out</a>
                     </div>
 
@@ -68,7 +64,7 @@
                         <a href="javascript:;" class="menu-profile-link" data-toggle="app-sidebar-profile" data-target="#appSidebarProfileMenu">
                             <div class="menu-profile-cover with-shadow"></div>
                             <div class="menu-profile-image">
-                                <img src="{{ asset('/') }}img/user/user-13.jpg" alt="" />
+                                <img src="{{ asset('/storage/'. auth()->user()->foto) }}" alt="" />
                             </div>
                             <div class="menu-profile-info">
                                 <div class="d-flex align-items-center">
@@ -77,27 +73,15 @@
                                     </div>
                                     <div class="menu-caret ms-auto"></div>
                                 </div>
-                                <small>Front end developer</small>
+                                <small>{{ auth()->user()->roles()->first()->name ?? '-' }}</small>
                             </div>
                         </a>
                     </div>
                     <div id="appSidebarProfileMenu" class="collapse">
                         <div class="menu-item pt-5px">
-                            <a href="javascript:;" class="menu-link">
+                            <a href="{{ route('profile') }}" class="menu-link">
                                 <div class="menu-icon"><i class="fa fa-cog"></i></div>
-                                <div class="menu-text">Settings</div>
-                            </a>
-                        </div>
-                        <div class="menu-item">
-                            <a href="javascript:;" class="menu-link">
-                                <div class="menu-icon"><i class="fa fa-pencil-alt"></i></div>
-                                <div class="menu-text"> Send Feedback</div>
-                            </a>
-                        </div>
-                        <div class="menu-item pb-5px">
-                            <a href="javascript:;" class="menu-link">
-                                <div class="menu-icon"><i class="fa fa-question-circle"></i></div>
-                                <div class="menu-text"> Helps</div>
+                                <div class="menu-text">Profile Setting</div>
                             </a>
                         </div>
                         <div class="menu-divider m-0"></div>
@@ -113,6 +97,7 @@
                         </a>
                     </div>
 
+                    @can('master-access')
                     <div class="menu-item has-sub {{ request()->is('users*') || request()->is('locators*') || request()->is('satuan*') || request()->is('tipe-barang*') || request()->is('barang*') ? 'active' : '' }}">
                         <a href="javascript:;" class="menu-link">
                             <div class="menu-icon">
@@ -141,7 +126,9 @@
                             </div>
                         </div>
                     </div>
+                    @endcan
 
+                    @can('master-device-access')
                     <div class="menu-item has-sub {{ request()->is('devices*') ? 'active' : '' }}">
                         <a href="javascript:;" class="menu-link">
                             <div class="menu-icon">
@@ -158,7 +145,9 @@
                             </div>
                         </div>
                     </div>
+                    @endcan
 
+                    @can('inventory-access')
                     <div class="menu-item has-sub {{ request()->is('stok-opname*') || request()->is('lost-stok*') || request()->is('penarikan*') ? 'active' : '' }}">
                         <a href="javascript:;" class="menu-link">
                             <div class="menu-icon">
@@ -181,7 +170,9 @@
                             </div>
                         </div>
                     </div>
+                    @endcan
 
+                    @can('penjualan-access')
                     <div class="menu-item {{ request()->is('penjualan') ? 'active' : '' }}">
                         <a href="{{ route('penjualan.index') }}" class="menu-link">
                             <div class="menu-icon">
@@ -190,8 +181,10 @@
                             <div class="menu-text">Penjualan</div>
                         </a>
                     </div>
+                    @endcan
 
-                    <div class="menu-item has-sub {{ request()->is('report*') || request()->is('roles*') ? 'active' : '' }}">
+                    @can('report-access')
+                    <div class="menu-item has-sub {{ request()->is('report*') ? 'active' : '' }}">
                         <a href="javascript:;" class="menu-link">
                             <div class="menu-icon">
                                 <i class="ion-ios-journal bg-lime"></i>
@@ -216,7 +209,9 @@
                             </div>
                         </div>
                     </div>
+                    @endcan
 
+                    @can('setting-access')
                     <div class="menu-item {{ request()->is('setting') ? 'active' : '' }}">
                         <a href="{{ route('setting.index') }}" class="menu-link">
                             <div class="menu-icon">
@@ -225,7 +220,9 @@
                             <div class="menu-text">Setting</div>
                         </a>
                     </div>
+                    @endcan
 
+                    @can('management-access')
                     <div class="menu-item has-sub {{ request()->is('permissions*') || request()->is('roles*') ? 'active' : '' }}">
                         <a href="javascript:;" class="menu-link">
                             <div class="menu-icon">
@@ -245,6 +242,7 @@
                             </div>
                         </div>
                     </div>
+                    @endcan
 
                     <div class="menu-item d-flex">
                         <a href="javascript:;" class="app-sidebar-minify-btn ms-auto" data-toggle="app-sidebar-minify"><i class="ion-ios-arrow-back"></i>

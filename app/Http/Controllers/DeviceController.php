@@ -11,6 +11,11 @@ use Yajra\DataTables\DataTables;
 
 class DeviceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['can:master-device-access']);
+    }
+
     public function index()
     {
         $title = 'Data Device';

@@ -39,7 +39,7 @@
                     <h4 class="modal-title">Form Satuan</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                 </div>
-                <form action="" method="post" id="form-locator">
+                <form action="" method="post" id="form-satuan">
                     @csrf
 
                     <div class="modal-body">

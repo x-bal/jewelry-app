@@ -26,7 +26,7 @@ class UpdateUserRequest extends FormRequest
         return [
             'username' => 'required|string|unique:users,username,' . $this->user->id,
             'name' => 'required|string',
-            'foto' => 'mimes:jpg,jpeg,png',
+            'foto' => 'nullable|mimes:jpg,jpeg,png',
             'role' => 'required',
         ];
     }

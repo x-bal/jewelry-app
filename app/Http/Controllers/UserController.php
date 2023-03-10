@@ -14,6 +14,11 @@ use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['can:master-access']);
+    }
+
     public function index()
     {
         $title = 'Data User';

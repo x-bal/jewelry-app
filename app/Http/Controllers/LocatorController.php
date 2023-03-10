@@ -10,6 +10,11 @@ use Yajra\DataTables\Facades\DataTables;
 
 class LocatorController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['can:master-access']);
+    }
+
     public function index()
     {
         $title = 'Data Locator';

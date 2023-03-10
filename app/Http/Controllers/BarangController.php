@@ -9,10 +9,16 @@ use App\Models\Satuan;
 use App\Models\TipeBarang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 
 class BarangController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['can:master-access']);
+    }
+
     public function index()
     {
         $title = 'Data Barang';
@@ -67,6 +73,13 @@ class BarangController extends Controller
     {
         try {
             DB::beginTransaction();
+            if ($barangRequest->file('foto')) {
+                Storage::delete($barang->foto);
+                $foto = $barangRequest->file('foto');
+                $fotoUrl = $foto->storeAs('barang', date('dmy') . '-' . $barangRequest->kode_barang . '.' . $foto->extension());
+            } else {
+                $fotoUrl = $barang->foto;
+            }
 
             $barang->update([
                 'nama_barang' => $barangRequest->nama_barang,
@@ -75,6 +88,7 @@ class BarangController extends Controller
                 'tipe_barang_id' => $barangRequest->tipe,
                 'harga' => $barangRequest->harga,
                 'berat' => $barangRequest->berat,
+                'foto' => $fotoUrl
             ]);
 
             DB::commit();

@@ -12,6 +12,11 @@ use Yajra\DataTables\DataTables;
 
 class LostStokController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['can:inventory-access']);
+    }
+
     public function index()
     {
         $title = 'Data Lost Stok';

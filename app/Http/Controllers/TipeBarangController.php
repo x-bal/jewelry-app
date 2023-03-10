@@ -10,6 +10,11 @@ use Yajra\DataTables\DataTables;
 
 class TipeBarangController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['can:master-access']);
+    }
+
     public function index()
     {
         $title = 'Data Tipe Barang';

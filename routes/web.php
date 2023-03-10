@@ -37,6 +37,8 @@ Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
+    Route::put('profile/{user:id}', [DashboardController::class, 'update'])->name('profile.update');
 
     Route::get('users/get', [UserController::class, 'get'])->name('users.list');
     Route::resource('users', UserController::class);
@@ -87,7 +89,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('detail-penarikan/{barang:id}/delete', [PenarikanController::class, 'deleteBarang'])->name('detail-penarikan.destroy');
     Route::resource('penarikan', PenarikanController::class);
 
-    Route::resource('setting', SettingController::class);
+    Route::get('setting', [SettingController::class, 'index'])->name('setting.index');
+    Route::post('setting', [SettingController::class, 'update'])->name('setting.update');
+    Route::get('send-sync', [SettingController::class, 'sendSync'])->name('syncdb');
 
     Route::get('report/stok-opname', [ReportController::class, 'opname'])->name('report.opname');
     Route::get('report/list-opname', [ReportController::class, 'listOpname'])->name('report.opname.list');

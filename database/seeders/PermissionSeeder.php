@@ -14,7 +14,7 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        $permissions = ['master-access', 'master-device-access', 'inventory-access', 'penjualan-access', 'management-access'];
+        $permissions = ['master-access', 'master-device-access', 'inventory-access', 'penjualan-access', 'management-access', 'report-access', 'setting-access'];
 
         foreach ($permissions as $permission) {
             Permission::create([

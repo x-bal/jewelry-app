@@ -18,7 +18,7 @@
     </div>
 
     <div class="panel-body">
-        <a href="#modal-dialog" id="btn-add" class="btn btn-primary mb-3" data-route="{{ route('barang.store') }}" data-bs-toggle="modal"><i class="ion-ios-add"></i> Add Barang</a>
+        <!-- <a href="#modal-dialog" id="btn-add" class="btn btn-primary mb-3" data-route="{{ route('barang.store') }}" data-bs-toggle="modal"><i class="ion-ios-add"></i> Add Barang</a> -->
 
         <table id="datatable" class="table table-striped table-bordered align-middle">
             <thead>
@@ -133,6 +133,15 @@
                             <input type="number" name="harga" id="harga" class="form-control" value="">
 
                             @error('harga')
+                            <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="foto">Foto</label>
+                            <input type="file" name="foto" id="foto" class="form-control" value="">
+
+                            @error('foto')
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>

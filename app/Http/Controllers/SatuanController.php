@@ -10,6 +10,11 @@ use Yajra\DataTables\Facades\DataTables;
 
 class SatuanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['can:master-access']);
+    }
+
     public function index()
     {
         $title = 'Data Satuan';

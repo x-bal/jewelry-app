@@ -9,6 +9,11 @@ use Yajra\DataTables\DataTables;
 
 class PermissionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['can:management-access']);
+    }
+
     public function index()
     {
         $title = 'Data Permission';

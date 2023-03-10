@@ -18,9 +18,8 @@
     </div>
 
     <div class="panel-body row">
-        <div class="col-md-6">
-            <form action="{{ route('setting.update', $setting->id) }}" method="post">
-                @method('PUT')
+        <div class="col-md-12">
+            <form action="{{ route('setting.update') }}" method="post">
                 @csrf
 
                 <div class="form-group mb-3">
@@ -28,8 +27,19 @@
                     <input type="text" name="title" id="title" class="form-control" value="{{ $setting->val }}">
                 </div>
 
+                <div class="form-group mb-3">
+                    <label for="tagline">Tagline</label>
+                    <input type="text" name="tagline" id="tagline" class="form-control" value="{{ $tagline->val }}">
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="url">Url Server</label>
+                    <input type="text" name="url" id="url" class="form-control" value="{{ $url->val }}">
+                </div>
+
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Update</button>
+                    <a href="{{ route('syncdb') }}" class="btn btn-success"><i class="ion-ios-upload"></i> Sync to Server</a>
                 </div>
             </form>
         </div>

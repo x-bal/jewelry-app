@@ -15,6 +15,11 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ReportController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['can:report-access']);
+    }
+
     public function opname(Request $request)
     {
         $date = $request->from ? Carbon::parse($request->from)->format('d/m/Y') . ' s.d ' . Carbon::parse($request->to)->format('d/m/Y') : Carbon::now()->format('d/m/Y');

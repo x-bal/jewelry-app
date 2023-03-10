@@ -11,6 +11,11 @@ use Yajra\DataTables\DataTables;
 
 class PenjualanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['can:penjualan-access']);
+    }
+
     public function index()
     {
         $title = 'Data Penjualan';
