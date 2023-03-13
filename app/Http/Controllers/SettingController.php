@@ -16,6 +16,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class SettingController extends Controller
 {
@@ -57,6 +58,18 @@ class SettingController extends Controller
             $url->update([
                 'val' => $request->url
             ]);
+
+            $bg = Setting::where('name', 'bg')->first();
+
+            if ($request->file('foto')) {
+                $bg ? Storage::delete($bg->foto) : '';
+                $foto = $request->file('foto');
+                $fotoUrl = $foto->storeAs('background', 'login-bg.' . $foto->extension());
+            } else {
+                $fotoUrl = $bg->val;
+            }
+
+            $bg->update(['val' => $fotoUrl]);
 
             DB::commit();
 

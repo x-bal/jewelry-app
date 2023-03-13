@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             LocatorSeeder::class,
-            SatuanSeeder::class,
             TipeBarangSeeder::class,
             DeviceSeeder::class,
             PermissionSeeder::class,

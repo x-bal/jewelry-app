@@ -98,7 +98,7 @@
                     </div>
 
                     @can('master-access')
-                    <div class="menu-item has-sub {{ request()->is('users*') || request()->is('locators*') || request()->is('satuan*') || request()->is('tipe-barang*') || request()->is('barang*') ? 'active' : '' }}">
+                    <div class="menu-item has-sub {{ request()->is('users*') || request()->is('locators*') || request()->is('tipe-barang*') || request()->is('barang*') ? 'active' : '' }}">
                         <a href="javascript:;" class="menu-link">
                             <div class="menu-icon">
                                 <i class="ion-ios-apps bg-indigo"></i>
@@ -113,9 +113,6 @@
                                 </a>
                                 <a href="{{ route('locators.index') }}" class="menu-link">
                                     <div class="menu-text">Data Locator</div>
-                                </a>
-                                <a href="{{ route('satuan.index') }}" class="menu-link">
-                                    <div class="menu-text">Data Satuan</div>
                                 </a>
                                 <a href="{{ route('tipe-barang.index') }}" class="menu-link">
                                     <div class="menu-text">Data Tipe Barang</div>

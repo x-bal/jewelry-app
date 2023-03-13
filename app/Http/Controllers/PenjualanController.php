@@ -145,7 +145,7 @@ class PenjualanController extends Controller
                     return $row->nama_barang;
                 })
                 ->addColumn('berat', function ($row) {
-                    return $row->berat . ' ' . $row->satuan->nama_satuan;
+                    return $row->berat . ' ' . $row->satuan;
                 })
                 ->addColumn('harga', function ($row) {
                     return 'Rp. ' . number_format($row->harga, 0, ',', '.');

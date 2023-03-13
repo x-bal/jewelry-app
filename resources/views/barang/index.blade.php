@@ -78,20 +78,6 @@
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="satuan">Satuan</label>
-                            <select name="satuan" id="satuan" class="form-control">
-                                <option disabled selected>-- Pilih Satuan --</option>
-                                @foreach($satuan as $sat)
-                                <option value="{{ $sat->id }}">{{ $sat->nama_satuan }}</option>
-                                @endforeach
-                            </select>
-
-                            @error('satuan')
-                            <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        <div class="form-group mb-3">
                             <label for="tipe">Tipe Barang</label>
                             <select name="tipe" id="tipe" class="form-control">
                                 <option disabled selected>-- Pilih Tipe --</option>
@@ -124,6 +110,15 @@
                             <input type="number" step=any name="berat" id="berat" class="form-control" value="">
 
                             @error('berat')
+                            <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="satuan">Satuan</label>
+                            <input type="number" step=any name="satuan" id="satuan" class="form-control" value="Gram">
+
+                            @error('satuan')
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
@@ -244,12 +239,6 @@
                 success: function(response) {
                     let barang = response.barang;
 
-                    $.each($("#satuan option"), function() {
-                        if ($(this).val() == barang.satuan_id) {
-                            $(this).attr("selected", "selected");
-                        }
-                    });
-
                     $.each($("#tipe option"), function() {
                         if ($(this).val() == barang.tipe_barang_id) {
                             $(this).attr("selected", "selected");
@@ -266,6 +255,8 @@
                     $("#kode_barang").val(barang.kode_barang)
                     $("#nama_barang").val(barang.nama_barang)
                     $("#berat").val(barang.berat)
+                    $("#satuan").val()
+                    $("#satuan").val(barang.satuan)
                     $("#harga").val(barang.harga)
                 }
             })

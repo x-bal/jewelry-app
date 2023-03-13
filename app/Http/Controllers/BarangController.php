@@ -23,11 +23,10 @@ class BarangController extends Controller
     {
         $title = 'Data Barang';
         $breadcrumbs = ['Master', 'Data Barang'];
-        $satuan = Satuan::get();
         $tipe = TipeBarang::get();
         $locator = Locator::get();
 
-        return view('barang.index', compact('title', 'breadcrumbs', 'satuan', 'tipe', 'locator'));
+        return view('barang.index', compact('title', 'breadcrumbs', 'tipe', 'locator'));
     }
 
     public function get(Request $request)
@@ -48,7 +47,7 @@ class BarangController extends Controller
                     return $row->locator->nama_locator;
                 })
                 ->editColumn('berat', function ($row) {
-                    return $row->berat . ' ' . $row->satuan->nama_satuan;
+                    return $row->berat . ' ' . $row->satuan;
                 })
                 ->editColumn('harga', function ($row) {
                     return 'Rp. ' . number_format($row->harga, 0, ',', '.');
@@ -83,7 +82,7 @@ class BarangController extends Controller
 
             $barang->update([
                 'nama_barang' => $barangRequest->nama_barang,
-                'satuan_id' => $barangRequest->satuan,
+                'satuan' => $barangRequest->satuan,
                 'locator_id' => $barangRequest->locator,
                 'tipe_barang_id' => $barangRequest->tipe,
                 'harga' => $barangRequest->harga,

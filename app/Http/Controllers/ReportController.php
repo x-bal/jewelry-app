@@ -53,7 +53,7 @@ class ReportController extends Controller
                     return Barang::find($row->barang_id)->nama_barang ?? '-';
                 })
                 ->editColumn('berat', function ($row) {
-                    return Barang::find($row->barang_id)->berat . Barang::find($row->barang_id)->satuan->nama_satuan ?? '-';
+                    return Barang::find($row->barang_id)->berat . Barang::find($row->barang_id)->satuan ?? '-';
                 })
                 ->editColumn('harga', function ($row) {
                     return 'Rp. ' . number_format(Barang::find($row->barang_id)->harga, 0, ',', '.') ?? '-';
@@ -96,7 +96,7 @@ class ReportController extends Controller
                     return Barang::find($row->barang_id)->nama_barang ?? '-';
                 })
                 ->editColumn('berat', function ($row) {
-                    return Barang::find($row->barang_id)->berat . Barang::find($row->barang_id)->satuan->nama_satuan ?? '-';
+                    return Barang::find($row->barang_id)->berat . Barang::find($row->barang_id)->satuan ?? '-';
                 })
                 ->editColumn('harga', function ($row) {
                     return 'Rp. ' . number_format(Barang::find($row->barang_id)->harga, 0, ',', '.') ?? '-';
@@ -142,7 +142,7 @@ class ReportController extends Controller
                     return $row->ket ?? '-';
                 })
                 ->editColumn('berat', function ($row) {
-                    return Barang::find($row->barang_id)->berat . Barang::find($row->barang_id)->satuan->nama_satuan ?? '-';
+                    return Barang::find($row->barang_id)->berat . Barang::find($row->barang_id)->satuan ?? '-';
                 })
                 ->editColumn('harga', function ($row) {
                     return 'Rp. ' . number_format(Barang::find($row->barang_id)->harga, 0, ',', '.') ?? '-';
@@ -191,7 +191,7 @@ class ReportController extends Controller
                     return $row->ket ?? '-';
                 })
                 ->editColumn('berat', function ($row) {
-                    return Barang::find($row->barang_id)->berat . Barang::find($row->barang_id)->satuan->nama_satuan ?? '-';
+                    return Barang::find($row->barang_id)->berat . Barang::find($row->barang_id)->satuan ?? '-';
                 })
                 ->editColumn('harga', function ($row) {
                     return 'Rp. ' . number_format(Barang::find($row->barang_id)->harga, 0, ',', '.') ?? '-';

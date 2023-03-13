@@ -26,7 +26,7 @@ class BarangRequest extends FormRequest
         return [
             'nama_barang' => 'required|string',
             'locator' => 'required|numeric',
-            'satuan' => 'required|numeric',
+            'satuan' => 'required|string',
             'tipe' => 'required|numeric',
             'harga' => 'required|numeric',
             'berat' => 'required|numeric',

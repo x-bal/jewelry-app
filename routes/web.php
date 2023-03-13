@@ -10,7 +10,6 @@ use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StokOpnameController;
 use App\Http\Controllers\TipeBarangController;
@@ -53,9 +52,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('locators/get', [LocatorController::class, 'get'])->name('locators.list');
     Route::resource('locators', LocatorController::class);
-
-    Route::get('satuan/get', [SatuanController::class, 'get'])->name('satuan.list');
-    Route::resource('satuan', SatuanController::class);
 
     Route::get('tipe-barang/get', [TipeBarangController::class, 'get'])->name('tipe-barang.list');
     Route::resource('tipe-barang', TipeBarangController::class);
