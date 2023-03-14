@@ -84,6 +84,7 @@ class BarangController extends Controller
             }
 
             $barang->update([
+                'kode_barang' => $barangRequest->nama_barang,
                 'nama_barang' => $barangRequest->nama_barang,
                 'satuan' => $barangRequest->satuan,
                 'locator_id' => $barangRequest->locator,

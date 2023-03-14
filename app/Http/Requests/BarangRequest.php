@@ -24,6 +24,7 @@ class BarangRequest extends FormRequest
     public function rules()
     {
         return [
+            'kode_barang' => 'required|string',
             'nama_barang' => 'required|string',
             'locator' => 'required|numeric',
             'satuan' => 'required|string',
