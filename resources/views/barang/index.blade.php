@@ -26,6 +26,7 @@
                     <th class="text-nowrap">No</th>
                     <th class="text-nowrap">Foto</th>
                     <th class="text-nowrap">Tag Barang</th>
+                    <th class="text-nowrap">Kode Tipe Barang</th>
                     <th class="text-nowrap">Kode Barang</th>
                     <th class="text-nowrap">Nama Barang</th>
                     <th class="text-nowrap">Locator</th>
@@ -183,6 +184,10 @@
                 {
                     data: 'rfid',
                     name: 'rfid'
+                },
+                {
+                    data: 'kode_tipe',
+                    name: 'kode_tipe'
                 },
                 {
                     data: 'kode_barang',

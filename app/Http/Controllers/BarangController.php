@@ -43,6 +43,9 @@ class BarangController extends Controller
                 ->addColumn('tipe', function ($row) {
                     return $row->tipeBarang->nama_tipe;
                 })
+                ->addColumn('kode_tipe', function ($row) {
+                    return $row->tipeBarang->kode;
+                })
                 ->addColumn('locator', function ($row) {
                     return $row->locator->nama_locator;
                 })

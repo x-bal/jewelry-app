@@ -14,7 +14,7 @@ class AddKodeBarangToBarangsTable extends Migration
     public function up()
     {
         Schema::table('barangs', function (Blueprint $table) {
-            $table->string('kode_barang')->unique()->after('rfid')->nullable();
+            $table->string('kode_barang')->after('rfid')->nullable();
         });
     }
 
