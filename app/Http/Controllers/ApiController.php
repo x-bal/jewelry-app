@@ -62,8 +62,12 @@ class ApiController extends Controller
         try {
             DB::beginTransaction();
 
-            $foto = $request->file('foto');
-            $fotoUrl = $foto->storeAs('barang', date('dmy') . '-' . $request->kode_barang . '.' . $foto->extension());
+            if ($request->file('foto')) {
+                $foto = $request->file('foto');
+                $fotoUrl = $foto->storeAs('barang', date('dmy') . '-' . $request->kode_barang . '.' . $foto->extension());
+            } else {
+                $fotoUrl = null;
+            }
 
             $barang = Barang::create([
                 'rfid' => $request->tag,
