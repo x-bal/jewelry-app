@@ -13,7 +13,7 @@ class PenjualanController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['can:penjualan-access']);
+        $this->middleware(['can:penjualan-access'])->except('getList');
     }
 
     public function index()

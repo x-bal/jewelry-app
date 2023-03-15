@@ -145,22 +145,22 @@
 
     $("#btn-add").on('click', function() {
         let route = $(this).attr('data-route')
-        $("#form-locator").attr('action', route)
+        $("#form-lost-stok").attr('action', route)
     })
 
     $("#btn-close").on('click', function() {
-        $("#form-locator").removeAttr('action')
+        $("#form-lost-stok").removeAttr('action')
     })
 
     $("#datatable").on('click', '.btn-edit', function() {
         let route = $(this).attr('data-route')
         let id = $(this).attr('id')
 
-        $("#form-locator").attr('action', route)
-        $("#form-locator").append(`<input type="hidden" name="_method" value="PUT">`);
+        $("#form-lost-stok").attr('action', route)
+        $("#form-lost-stok").append(`<input type="hidden" name="_method" value="PUT">`);
 
         $.ajax({
-            url: "/locators/" + id,
+            url: "/lost-stok/" + id,
             type: 'GET',
             method: 'GET',
             success: function(response) {

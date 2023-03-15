@@ -14,7 +14,7 @@ class LostStokController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['can:inventory-access']);
+        $this->middleware(['can:inventory-access'])->except('lost');
     }
 
     public function index()
@@ -70,7 +70,7 @@ class LostStokController extends Controller
                 $tanggal = Carbon::parse($request->tanggal)->format('d/m/Y');
                 return back()->with('error', "Data lost locator tanggal {$tanggal} sudah ada");
             } else {
-                Locator::create([
+                LostStok::create([
                     'tanggal' => $request->tanggal,
                     'locator_id' => $request->locator,
                 ]);

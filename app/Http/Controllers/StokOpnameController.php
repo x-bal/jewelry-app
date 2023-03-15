@@ -16,7 +16,7 @@ class StokOpnameController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['can:inventory-access']);
+        $this->middleware(['can:inventory-access'])->except('stok', 'unstock');
     }
 
     public function index()

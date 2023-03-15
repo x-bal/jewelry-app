@@ -15,7 +15,7 @@ class PenarikanController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['can:inventory-access']);
+        $this->middleware(['can:inventory-access'])->except('getBarang');
     }
 
     public function index()
