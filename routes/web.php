@@ -3,6 +3,7 @@
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\DummyBarangController;
 use App\Http\Controllers\LocatorController;
 use App\Http\Controllers\LostStokController;
 use App\Http\Controllers\PenarikanController;
@@ -57,7 +58,11 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('tipe-barang', TipeBarangController::class);
 
     Route::get('barang/get', [BarangController::class, 'get'])->name('barang.list');
+    Route::post('barang/import', [BarangController::class, 'import'])->name('barang.import');
     Route::resource('barang', BarangController::class);
+
+    Route::get('dummy-barang/get', [DummyBarangController::class, 'get'])->name('dummy-barang.list');
+    Route::resource('dummy-barang', DummyBarangController::class);
 
     Route::get('stok-opname/get', [StokOpnameController::class, 'get'])->name('stok-opname.list');
     Route::get('stok-opname/{stokOpname:id}/find', [StokOpnameController::class, 'find'])->name('stok-opname.find');

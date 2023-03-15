@@ -48,13 +48,13 @@
                     <h4 class="modal-title">Form Barang</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                 </div>
-                <form action="" method="post" id="form-barang">
+                <form action="" method="post" id="form-barang" enctype="multipart/form-data">
                     @csrf
 
                     <div class="modal-body">
                         <div class="form-group mb-3">
                             <label for="rfid">Tag Barang</label>
-                            <input type="text" name="rfid" id="rfid" class="form-control" value="" disabled>
+                            <input type="text" name="rfid" id="rfid" class="form-control" value="">
 
                             @error('rfid')
                             <small class="text-danger">{{ $message }}</small>
@@ -118,7 +118,7 @@
 
                         <div class="form-group mb-3">
                             <label for="satuan">Satuan</label>
-                            <input type="number" step=any name="satuan" id="satuan" class="form-control" value="Gram">
+                            <input type="text" step=any name="satuan" id="satuan" class="form-control" value="Gram">
 
                             @error('satuan')
                             <small class="text-danger">{{ $message }}</small>
@@ -201,7 +201,7 @@
             processing: true,
             serverSide: true,
             responsive: true,
-            ajax: "{{ route('barang.list') }}",
+            ajax: "{{ route('dummy-barang.list') }}",
             deferRender: true,
             pagination: true,
             columns: [{
@@ -269,7 +269,7 @@
             $("#form-barang").append(`<input type="hidden" name="_method" value="PUT">`);
 
             $.ajax({
-                url: "/barang/" + id,
+                url: "/dummy-barang/" + id,
                 type: 'GET',
                 method: 'GET',
                 success: function(response) {
@@ -291,7 +291,7 @@
                     $("#kode_barang").val(barang.kode_barang)
                     $("#nama_barang").val(barang.nama_barang)
                     $("#berat").val(barang.berat)
-                    $("#satuan").val()
+                    $("#satuan").val('Gram')
                     $("#satuan").val(barang.satuan)
                     $("#harga").val(barang.harga)
                 }

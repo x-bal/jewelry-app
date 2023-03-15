@@ -3,18 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BarangRequest;
-use App\Imports\BarangImport;
 use App\Models\Barang;
+use App\Models\DummyBarang;
 use App\Models\Locator;
-use App\Models\Satuan;
 use App\Models\TipeBarang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Maatwebsite\Excel\Facades\Excel;
-use Yajra\DataTables\DataTables;
+use Yajra\DataTables\Facades\DataTables;
 
-class BarangController extends Controller
+class DummyBarangController extends Controller
 {
     public function __construct()
     {
@@ -23,33 +21,33 @@ class BarangController extends Controller
 
     public function index()
     {
-        $title = 'Data Barang';
-        $breadcrumbs = ['Master', 'Data Barang'];
+        $title = 'Data Dummy Barang';
+        $breadcrumbs = ['Master', 'Data Dummy Barang'];
         $tipe = TipeBarang::get();
         $locator = Locator::get();
 
-        return view('barang.index', compact('title', 'breadcrumbs', 'tipe', 'locator'));
+        return view('dummy-barang.index', compact('title', 'breadcrumbs', 'tipe', 'locator'));
     }
 
     public function get(Request $request)
     {
         if ($request->ajax()) {
-            $data = Barang::where('status', 'Tersedia')->get();
+            $data = DummyBarang::get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<a href="#modal-dialog" id="' . $row->id . '" class="btn btn-sm btn-success btn-edit" data-route="' . route('barang.update', $row->id) . '" data-bs-toggle="modal">Edit</a> <button type="button" data-route="' . route('barang.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Delete</button>';
+                    $actionBtn = '<a href="#modal-dialog" id="' . $row->id . '" class="btn btn-sm btn-success btn-edit" data-route="' . route('dummy-barang.update', $row->id) . '" data-bs-toggle="modal">Edit</a> <button type="button" data-route="' . route('dummy-barang.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Delete</button>';
                     return $actionBtn;
                 })
                 ->addColumn('tipe', function ($row) {
-                    return $row->tipeBarang->nama_tipe;
+                    return $row->tipe_barang_id;
                 })
                 ->addColumn('kode_tipe', function ($row) {
-                    return $row->tipeBarang->kode;
+                    return $row->tipe_barang_id;
                 })
                 ->addColumn('locator', function ($row) {
-                    return $row->locator->nama_locator;
+                    return $row->locator_id;
                 })
                 ->editColumn('berat', function ($row) {
                     return $row->berat . ' ' . $row->satuan;
@@ -65,27 +63,28 @@ class BarangController extends Controller
         }
     }
 
-    public function show(Barang $barang)
+    public function show(DummyBarang $dummyBarang)
     {
         return response()->json([
             'status' => 'success',
-            'barang' => $barang
+            'barang' => $dummyBarang
         ], 200);
     }
 
-    public function update(BarangRequest $barangRequest, Barang $barang)
+    public function update(BarangRequest $barangRequest, DummyBarang $dummyBarang)
     {
         try {
             DB::beginTransaction();
             if ($barangRequest->file('foto')) {
-                Storage::delete($barang->foto);
+                Storage::delete($dummyBarang->foto);
                 $foto = $barangRequest->file('foto');
                 $fotoUrl = $foto->storeAs('barang', date('dmy') . '-' . $barangRequest->kode_barang . '.' . $foto->extension());
             } else {
-                $fotoUrl = $barang->foto;
+                $fotoUrl = $dummyBarang->foto;
             }
 
-            $barang->update([
+            $barang = Barang::create([
+                'rfid' => request('rfid'),
                 'kode_barang' => $barangRequest->kode_barang,
                 'nama_barang' => $barangRequest->nama_barang,
                 'satuan' => $barangRequest->satuan,
@@ -96,31 +95,28 @@ class BarangController extends Controller
                 'foto' => $fotoUrl
             ]);
 
+            $dummyBarang->delete();
+
             DB::commit();
 
-            return redirect()->route('barang.index')->with('success', 'Barang berhasil diupdate');
+            return redirect()->route('dummy-barang.index')->with('success', 'Dummy barang berhasil ditambahkan');
         } catch (\Throwable $th) {
             DB::commit();
             return back()->with('error', $th->getMessage());
         }
     }
 
-    public function import(Request $request)
+    public function destroy(DummyBarang $dummyBarang)
     {
-        $request->validate([
-            'file' => 'required|mimes:xls,xlsx'
-        ]);
-
         try {
             DB::beginTransaction();
 
-            Excel::import(new BarangImport, $request->file('file'));
+            $dummyBarang->delete();
 
             DB::commit();
 
-            return back()->with('success', "Data barang berhasil diimport");
+            return back()->with('success', 'Dummy barang berhasil dihapus');
         } catch (\Throwable $th) {
-            DB::rollBack();
             return back()->with('error', $th->getMessage());
         }
     }

@@ -31,7 +31,7 @@ class BarangRequest extends FormRequest
             'tipe' => 'required|numeric',
             'harga' => 'required|numeric',
             'berat' => 'required|numeric',
-            'foto' => 'nullable|mimes:jpg,jpeg,png'
+            // 'foto' => 'nullable|mimes:jpg,jpeg,png'
         ];
     }
 }

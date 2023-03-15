@@ -120,6 +120,9 @@
                                 <a href="{{ route('barang.index') }}" class="menu-link">
                                     <div class="menu-text">Data Barang</div>
                                 </a>
+                                <a href="{{ route('dummy-barang.index') }}" class="menu-link">
+                                    <div class="menu-text">Data Dummy Barang</div>
+                                </a>
                             </div>
                         </div>
                     </div>
