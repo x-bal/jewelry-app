@@ -81,7 +81,7 @@
         serverSide: true,
         responsive: true,
         ajax: {
-            url: "{{ route('report.penarikan.list') }}",
+            url: "{{ route('report.penjualan.list') }}",
             type: "GET",
             data: {
                 "from": from,

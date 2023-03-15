@@ -33,7 +33,9 @@ class ReportController extends Controller
     public function listOpname(Request $request)
     {
         if ($request->ajax()) {
-            $opnameId = StokOpname::with('barangs')->whereBetween('created_at', [$request->from, $request->to])->pluck('id');
+            $to = Carbon::parse($request->to)->addDay(1)->format('Y-m-d');
+
+            $opnameId = StokOpname::with('barangs')->whereBetween('created_at', [$request->from, $to])->pluck('id');
 
             $data = DB::table('barang_stok_opname')->whereIn('stok_opname_id', $opnameId)->get();
 
@@ -76,7 +78,9 @@ class ReportController extends Controller
     public function listLoss(Request $request)
     {
         if ($request->ajax()) {
-            $lossId = LostStok::with('barangs')->whereBetween('created_at', [$request->from, $request->to])->pluck('id');
+            $to = Carbon::parse($request->to)->addDay(1)->format('Y-m-d');
+
+            $lossId = LostStok::with('barangs')->whereBetween('created_at', [$request->from, $to])->pluck('id');
 
             $data = DB::table('barang_lost_stok')->whereIn('lost_stok_id', $lossId)->get();
 
@@ -119,7 +123,9 @@ class ReportController extends Controller
     public function listPenarikan(Request $request)
     {
         if ($request->ajax()) {
-            $penarikan = Penarikan::with('barangs')->whereBetween('created_at', [$request->from, $request->to])->pluck('id');
+            $to = Carbon::parse($request->to)->addDay(1)->format('Y-m-d');
+
+            $penarikan = Penarikan::with('barangs')->whereBetween('created_at', [$request->from, $to])->pluck('id');
 
             $data = DB::table('barang_penarikan')->whereIn('penarikan_id', $penarikan)->get();
 
@@ -165,7 +171,8 @@ class ReportController extends Controller
     public function listPenjualan(Request $request)
     {
         if ($request->ajax()) {
-            $penjualan = Penjualan::with('barangs')->whereBetween('created_at', [$request->from, $request->to])->pluck('id');
+            $to = Carbon::parse($request->to)->addDay(1)->format('Y-m-d');
+            $penjualan = Penjualan::with('barangs')->whereBetween('created_at', [$request->from, $to])->pluck('id');
 
             $data = DB::table('barang_penjualan')->whereIn('penjualan_id', $penjualan)->get();
 
