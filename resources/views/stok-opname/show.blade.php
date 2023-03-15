@@ -90,6 +90,17 @@
 <script>
     var interv = null;
 
+    let statusOpname = "{{ $stokOpname->status }}";
+
+    if (statusOpname == 1) {
+        interv = setInterval(function() {
+            list()
+            listNo()
+        }, 2000)
+    } else {
+        clearInterval(interv)
+    }
+
     $("#switch").on('click', function() {
         let id = "{{ $stokOpname->id }}";
         let status = 0;

@@ -149,13 +149,12 @@ class StokOpnameController extends Controller
             $locator = Locator::find($stokOpname->locator_id);
             $stokBarang = array_column($stokOpname->barangs()->get()->toArray(), 'id');
 
-
             $barang = $locator->barangs()->whereNotIn('id', $stokBarang)->get();
 
             return DataTables::of($barang)
                 ->addIndexColumn()
                 ->addColumn('rfid', function ($row) {
-                    return $row->rfid;
+                    return $row->rfid != null ? $row->rfid : $row->old_rfid;
                 })
                 ->addColumn('barang', function ($row) {
                     return $row->nama_barang ?? '';
@@ -216,7 +215,7 @@ class StokOpnameController extends Controller
                         'old_rfid' => $barang->rfid,
                     ]);
 
-                    $barang->update(['rfid' => null,]);
+                    $barang->update(['rfid' => null]);
 
                     DB::table('barang_lost_stok')->updateOrInsert(
                         [
