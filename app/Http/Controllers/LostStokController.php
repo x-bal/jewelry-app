@@ -166,12 +166,15 @@ class LostStokController extends Controller
 
             foreach ($request->barang as $key => $val) {
                 $barang = Barang::find($request->barang[$key]);
-                $barang->update([
-                    'status' => 'Loss',
-                    'old_rfid' => $barang->rfid,
-                ]);
 
-                $barang->update(['rfid' => null]);
+                if ($barang->rfid != null) {
+                    $barang->update([
+                        'status' => 'Loss',
+                        'old_rfid' => $barang->rfid,
+                    ]);
+
+                    $barang->update(['rfid' => null]);
+                }
             }
 
             DB::commit();

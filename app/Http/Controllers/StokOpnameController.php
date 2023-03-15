@@ -186,12 +186,14 @@ class StokOpnameController extends Controller
                 ]);
 
                 foreach ($barangs as $barang) {
-                    $barang->update([
-                        'status' => 'Loss',
-                        'old_rfid' => $barang->rfid,
-                    ]);
+                    if ($barang->rfid != null) {
+                        $barang->update([
+                            'status' => 'Loss',
+                            'old_rfid' => $barang->rfid,
+                        ]);
 
-                    $barang->update(['rfid' => null,]);
+                        $barang->update(['rfid' => null,]);
+                    }
 
                     DB::table('barang_lost_stok')->updateOrInsert(
                         [
@@ -210,12 +212,14 @@ class StokOpnameController extends Controller
                 ])->first();
 
                 foreach ($barangs as $barang) {
-                    $barang->update([
-                        'status' => 'Loss',
-                        'old_rfid' => $barang->rfid,
-                    ]);
+                    if ($barang->rfid != null) {
+                        $barang->update([
+                            'status' => 'Loss',
+                            'old_rfid' => $barang->rfid,
+                        ]);
 
-                    $barang->update(['rfid' => null]);
+                        $barang->update(['rfid' => null,]);
+                    }
 
                     DB::table('barang_lost_stok')->updateOrInsert(
                         [

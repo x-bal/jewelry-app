@@ -106,14 +106,16 @@ class PenjualanController extends Controller
             DB::beginTransaction();
 
             foreach ($penjualan->barangs as $barang) {
-                $barang->update([
-                    'status' => 'Tersedia',
-                    'rfid' => $barang->old_rfid
-                ]);
+                if ($barang->rfid != null) {
+                    $barang->update([
+                        'status' => 'Tersedia',
+                        'rfid' => $barang->old_rfid
+                    ]);
 
-                $barang->update([
-                    'old_rfid' => null
-                ]);
+                    $barang->update([
+                        'old_rfid' => null
+                    ]);
+                }
             }
             $penjualan->barangs()->detach();
 
