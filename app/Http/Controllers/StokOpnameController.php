@@ -199,7 +199,32 @@ class StokOpnameController extends Controller
                             'lost_stok_id' => $lost->id
                         ],
                         [
-                            'barang_id' => $barang->id
+                            'barang_id' => $barang->id,
+                            'ket' => 'Loss'
+                        ]
+                    );
+                }
+            } else {
+                $lost = LostStok::where([
+                    'tanggal' => $stokOpname->tanggal,
+                    'locator_id' => $stokOpname->locator_id
+                ])->first();
+
+                foreach ($barangs as $barang) {
+                    $barang->update([
+                        'status' => 'Loss',
+                        'old_rfid' => $barang->rfid,
+                    ]);
+
+                    $barang->update(['rfid' => null,]);
+
+                    DB::table('barang_lost_stok')->updateOrInsert(
+                        [
+                            'lost_stok_id' => $lost->id
+                        ],
+                        [
+                            'barang_id' => $barang->id,
+                            'ket' => 'Loss'
                         ]
                     );
                 }
