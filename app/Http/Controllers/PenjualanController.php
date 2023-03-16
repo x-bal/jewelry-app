@@ -26,8 +26,13 @@ class PenjualanController extends Controller
 
     public function get(Request $request)
     {
+        $role = auth()->user()->roles()->first()->name;
         if ($request->ajax()) {
-            $data = Penjualan::get();
+            if ($role == 'Admin' || $role == 'Owner') {
+                $data = Penjualan::get();
+            } else {
+                $data = Penjualan::where('user_id', auth()->user()->id);
+            }
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -153,7 +158,7 @@ class PenjualanController extends Controller
                     return 'Rp. ' . number_format($row->harga, 0, ',', '.');
                 })
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<button type="button" data-route="' . route('detail-penjualan.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Delete</button>';
+                    $actionBtn = '<button type="button" data-route="' . route('detail-penjualan.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Remove</button>';
                     return $actionBtn;
                 })
                 ->rawColumns(['rfid', 'kode_barang', 'nama_barang', 'harga', 'berat', 'action'])
@@ -173,6 +178,7 @@ class PenjualanController extends Controller
                 'status' => 'Tersedia',
                 'rfid' => $barang->old_rfid,
             ]);
+
             $barang->update(['old_rfid' => null]);
 
             DB::commit();

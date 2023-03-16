@@ -175,7 +175,7 @@ class ApiController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'berhasil' => 'Barang success dijual'
+                'message' => 'Barang success di keranjang jual'
             ], 200);
         } catch (\Throwable $th) {
             DB::rollBack();

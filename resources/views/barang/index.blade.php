@@ -19,7 +19,7 @@
 
     <div class="panel-body">
         <a href="#modal-import" class="btn btn-success mb-3" data-bs-toggle="modal"><i class="ion-ios-cloud-upload"></i> Import Barang</a>
-        <a href="" class="btn btn-primary mb-3"><i class="ion-ios-cloud-download"></i> Download Template</a>
+        <a href="{{ route('barang.download') }}" class="btn btn-primary mb-3"><i class="ion-ios-cloud-download"></i> Download Template</a>
 
         <table id="datatable" class="table table-striped table-bordered align-middle">
             <thead>

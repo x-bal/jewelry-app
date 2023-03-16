@@ -10,6 +10,7 @@ use App\Models\Satuan;
 use App\Models\TipeBarang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
@@ -122,6 +123,17 @@ class BarangController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with('error', $th->getMessage());
+        }
+    }
+
+    public function download()
+    {
+        try {
+            $file = public_path('/example-import.xlsx');
+
+            return Response::download($file);
+        } catch (\Throwable $th) {
+            return $th->getMessage();
         }
     }
 }

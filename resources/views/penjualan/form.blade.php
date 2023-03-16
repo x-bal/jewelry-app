@@ -54,9 +54,7 @@
                             <th class="text-nowrap">Nama Barang</th>
                             <th class="text-nowrap">Berat</th>
                             <th class="text-nowrap">Harga</th>
-                            @if($type != 'Add')
                             <th class="text-nowrap">Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -115,6 +113,10 @@
                 {
                     data: 'harga',
                     name: 'harga'
+                },
+                {
+                    data: 'action',
+                    name: 'action'
                 },
             ]
         });
@@ -184,8 +186,8 @@
         $("#form-delete").attr('action', route)
 
         swal({
-            title: 'Hapus data barang?',
-            text: 'Menghapus barang dari penjualan.',
+            title: 'Remove data barang?',
+            text: 'Remove barang dari detail penjualan.',
             icon: 'error',
             buttons: {
                 cancel: {

@@ -59,6 +59,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('barang/get', [BarangController::class, 'get'])->name('barang.list');
     Route::post('barang/import', [BarangController::class, 'import'])->name('barang.import');
+    Route::get('barang/download', [BarangController::class, 'download'])->name('barang.download');
     Route::resource('barang', BarangController::class);
 
     Route::get('dummy-barang/get', [DummyBarangController::class, 'get'])->name('dummy-barang.list');
