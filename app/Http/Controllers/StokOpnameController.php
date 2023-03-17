@@ -223,10 +223,10 @@ class StokOpnameController extends Controller
 
                     DB::table('barang_lost_stok')->updateOrInsert(
                         [
-                            'lost_stok_id' => $lost->id
+                            'lost_stok_id' => $lost->id,
+                            'barang_id' => $barang->id,
                         ],
                         [
-                            'barang_id' => $barang->id,
                             'ket' => 'Loss'
                         ]
                     );
