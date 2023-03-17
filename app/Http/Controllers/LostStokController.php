@@ -145,7 +145,10 @@ class LostStokController extends Controller
                     $actionBtn = '<button type="button" data-route="' . route('detail-lost.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Delete</button>';
                     return $actionBtn;
                 })
-                ->rawColumns(['nama_barang', 'rfid', 'kode_barang', 'action'])
+                ->addColumn('foto', function ($row) {
+                    return $row->foto != null ? '<div class="menu-profile-image"><img src="' . asset('/storage/' . $row->foto) . '" alt="" width="35" class="rounded-circle"></div>' : '<div class="menu-profile-image"><img src="' . asset('/img/perhiasan.jpeg') . '" alt="" width="35" class="rounded-circle"></div>';
+                })
+                ->rawColumns(['nama_barang', 'rfid', 'kode_barang', 'action', 'foto'])
                 ->make(true);
         }
     }

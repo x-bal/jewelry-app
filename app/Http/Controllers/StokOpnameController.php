@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StokOpnameRequest;
+use App\Models\Barang;
 use App\Models\DetailLostStok;
 use App\Models\Locator;
 use App\Models\LostStok;
@@ -10,6 +11,7 @@ use App\Models\StokOpname;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
 
 class StokOpnameController extends Controller
@@ -153,14 +155,59 @@ class StokOpnameController extends Controller
 
             return DataTables::of($barang)
                 ->addIndexColumn()
+                ->addColumn('action', function ($row) use ($stokOpname) {
+                    $actionBtn = '<a href="' . route('stok-opname.add', $row->id) . '?stokopname=' . $stokOpname->id . '" id="' . $row->id . '" class="btn btn-xs btn-primary btn-add"><i class="ion-ios-add"></i></a> <a href="#modal-detail" id="' . $row->id . '" class="btn btn-xs btn-info btn-show" data-bs-toggle="modal"><i class="ion-ios-eye"></i></a>';
+                    return $actionBtn;
+                })
                 ->addColumn('rfid', function ($row) {
-                    return $row->rfid != null ? $row->rfid : $row->old_rfid;
+                    return $row->rfid != null ? Str::limit($row->rfid, 8) : Str::limit($row->old_rfid, 8);
                 })
                 ->addColumn('barang', function ($row) {
                     return $row->nama_barang ?? '';
                 })
-                ->rawColumns(['barang', 'rfid'])
+                ->rawColumns(['barang', 'rfid', 'action'])
                 ->make(true);
+        }
+    }
+
+    public function add(Request $request, Barang $barang)
+    {
+        try {
+            DB::beginTransaction();
+
+            $stokOpname = StokOpname::find($request->stokopname);
+
+            $lost = DB::table('barang_lost_stok')->where('barang_id', $barang->id)->first();
+            $lostStok = LostStok::find($lost->lost_stok_id);
+            $lostStok->barangs()->detach($barang->id);
+
+            if ($barang->rfid != null) {
+                $barang->update([
+                    'status' => 'Tersedia',
+                    'rfid' => $barang->rfid,
+                ]);
+
+                $barang->update(['old_rfid' => null]);
+            } else {
+                $barang->update([
+                    'status' => 'Tersedia',
+                    'rfid' => $barang->old_rfid,
+                ]);
+
+                $barang->update(['old_rfid' => null]);
+            }
+
+            DB::table('barang_stok_opname')->updateOrInsert([
+                'stok_opname_id' => $stokOpname->id,
+                'barang_id' => $barang->id
+            ]);
+
+            DB::commit();
+
+            return back()->with('success', "Barang berhasil ditambahkan ke stok");
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with('error', $th->getMessage());
         }
     }
 

@@ -43,6 +43,7 @@
                     <thead>
                         <tr>
                             <th class="text-nowrap">No</th>
+                            <th class="text-nowrap">Foto</th>
                             <th class="text-nowrap">Tag</th>
                             <th class="text-nowrap">Kode Barang</th>
                             <th class="text-nowrap">Nama Barang</th>
@@ -175,6 +176,10 @@
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex'
+                },
+                {
+                    data: 'foto',
+                    name: 'foto'
                 },
                 {
                     data: 'rfid',

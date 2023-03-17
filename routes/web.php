@@ -69,6 +69,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('stok-opname/{stokOpname:id}/find', [StokOpnameController::class, 'find'])->name('stok-opname.find');
     Route::get('stok-opname/change', [StokOpnameController::class, 'change'])->name('stok-opname.change');
     Route::get('stok-opname/{stokOpname:id}/save', [StokOpnameController::class, 'save'])->name('stok-opname.save');
+    Route::get('stok-opname/add/{barang:id}', [StokOpnameController::class, 'add'])->name('stok-opname.add');
     Route::resource('stok-opname', StokOpnameController::class);
 
     Route::get('lost-stok/get', [LostStokController::class, 'get'])->name('lost-stok.list');

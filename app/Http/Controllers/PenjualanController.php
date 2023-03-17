@@ -161,7 +161,10 @@ class PenjualanController extends Controller
                     $actionBtn = '<button type="button" data-route="' . route('detail-penjualan.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Remove</button>';
                     return $actionBtn;
                 })
-                ->rawColumns(['rfid', 'kode_barang', 'nama_barang', 'harga', 'berat', 'action'])
+                ->addColumn('foto', function ($row) {
+                    return $row->foto != null ? '<div class="menu-profile-image"><img src="' . asset('/storage/' . $row->foto) . '" alt="" width="35" class="rounded-circle"></div>' : '<div class="menu-profile-image"><img src="' . asset('/img/perhiasan.jpeg') . '" alt="" width="35" class="rounded-circle"></div>';
+                })
+                ->rawColumns(['rfid', 'kode_barang', 'nama_barang', 'harga', 'berat', 'action', 'foto'])
                 ->make(true);
         }
     }

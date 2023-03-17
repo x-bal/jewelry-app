@@ -70,7 +70,9 @@ class BarangController extends Controller
     {
         return response()->json([
             'status' => 'success',
-            'barang' => $barang
+            'barang' => $barang,
+            'locator' => $barang->locator->nama_locator,
+            'tipe' => $barang->tipeBarang->nama_tipe,
         ], 200);
     }
 
