@@ -3,6 +3,7 @@
 @push('style')
 <link href="{{ asset('/') }}plugins/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
 <link href="{{ asset('/') }}plugins/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+<link href="{{ asset('/') }}plugins/select2/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
 
 @section('content')
@@ -33,13 +34,13 @@
                     <input type="text" name="invoice" id="invoice" class="form-control" value="{{ $penjualan->invoice  }}" readonly>
                 </div>
             </div>
-            @if($type == 'Add')
             <div class="col-md-6">
                 <div class="form-group mt-3">
                     <button type="submit" class="btn mt-1 btn-sm btn-primary">Submit</button>
+                    <a href="#modal-dialog" id="btn-add" class="btn btn-sm btn-primary mt-1" data-route="{{ route('penjualan.addbarang') }}" data-bs-toggle="modal"><i class="ion-ios-add"></i> Add Barang</a>
+
                 </div>
             </div>
-            @endif
         </form>
 
         <div class="row mt-3">
@@ -65,6 +66,42 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Form Penjualan Barang</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <form action="" method="post" id="form-penjualan">
+                @csrf
+
+                <div class="modal-body">
+                    <input type="hidden" name="penjualan_id" value="{{ $penjualan->id }}">
+
+                    <div class="form-group mb-3">
+                        <label for="barang">Barang</label>
+                        <select name="barang[]" id="barang" class="form-control multiple-select2" multiple>
+                            @foreach($barangs as $barang)
+                            <option value="{{ $barang->id }}">{{ $barang->rfid }} - {{ $barang->nama_barang }}</option>
+                            @endforeach
+                        </select>
+
+                        @error('barang')
+                        <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <a href="javascript:;" id="btn-close" class="btn btn-white" data-bs-dismiss="modal">Close</a>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <form action="" class="d-none" id="form-delete" method="post">
     <input type="hidden" name="penjualan_id" value="{{ $penjualan->id }}">
     @csrf
@@ -78,8 +115,15 @@
 <script src="{{ asset('/') }}plugins/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
 <script src="{{ asset('/') }}plugins/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 <script src="{{ asset('/') }}plugins/sweetalert/dist/sweetalert.min.js"></script>
+<script src="{{ asset('/') }}plugins/select2/dist/js/select2.min.js"></script>
 
 <script>
+    $(".multiple-select2").select2({
+        dropdownParent: $('#modal-dialog'),
+        placeholder: "Pilih Barang",
+        allowClear: true
+    })
+
     let route = "{{ route('penjualan.get', $penjualan->id) }}";
 
     function list(route) {

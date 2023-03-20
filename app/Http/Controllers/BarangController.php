@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
-use Yajra\DataTables\DataTables;
+use Yajra\DataTables\Facades\DataTables;;
 
 class BarangController extends Controller
 {
@@ -35,9 +35,9 @@ class BarangController extends Controller
     public function get(Request $request)
     {
         if ($request->ajax()) {
-            $data = Barang::where('status', 'Tersedia')->get();
+            $data = Barang::where('status', 'Tersedia');
 
-            return DataTables::of($data)
+            return DataTables::eloquent($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $actionBtn = '<a href="#modal-dialog" id="' . $row->id . '" class="btn btn-sm btn-success btn-edit" data-route="' . route('barang.update', $row->id) . '" data-bs-toggle="modal">Edit</a> <button type="button" data-route="' . route('barang.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Delete</button>';

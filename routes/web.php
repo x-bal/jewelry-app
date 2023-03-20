@@ -70,6 +70,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('stok-opname/change', [StokOpnameController::class, 'change'])->name('stok-opname.change');
     Route::get('stok-opname/{stokOpname:id}/save', [StokOpnameController::class, 'save'])->name('stok-opname.save');
     Route::get('stok-opname/add/{barang:id}', [StokOpnameController::class, 'add'])->name('stok-opname.add');
+    Route::get('stok-opname/remove/{barang:id}', [StokOpnameController::class, 'remove'])->name('stok-opname.remove');
+    Route::post('stok-opname/addBarang', [StokOpnameController::class, 'addBarang'])->name('stok-opname.addbarang');
     Route::resource('stok-opname', StokOpnameController::class);
 
     Route::get('lost-stok/get', [LostStokController::class, 'get'])->name('lost-stok.list');
@@ -80,6 +82,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('penjualan/get', [PenjualanController::class, 'get'])->name('penjualan.list');
     Route::get('penjualan/get-list/{penjualan:id}', [PenjualanController::class, 'getList'])->name('penjualan.get');
+    Route::post('penjualan/add-barang', [PenjualanController::class, 'addBarang'])->name('penjualan.addbarang');
     Route::delete('detail-penjualan/{barang:id}/delete', [PenjualanController::class, 'deleteBarang'])->name('detail-penjualan.destroy');
     Route::resource('penjualan', PenjualanController::class);
 

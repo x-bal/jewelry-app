@@ -70,7 +70,10 @@ class PenjualanController extends Controller
             ]);
         }
 
-        return view('penjualan.form', compact('title', 'breadcrumbs', 'penjualan', 'type'));
+        $barangId = $penjualan->barangs()->pluck('id');
+        $barangs = Barang::whereNotIn('id', $barangId)->where('status', 'Tersedia')->get();
+
+        return view('penjualan.form', compact('title', 'breadcrumbs', 'penjualan', 'type', 'barangs'));
     }
 
     public function store(Request $request)
@@ -101,8 +104,10 @@ class PenjualanController extends Controller
         $title = 'Edit Penjualan';
         $breadcrumbs = ['Penjualan', 'Edit Penjualan'];
         $type = 'Edit';
+        $barangId = $penjualan->barangs()->pluck('id');
+        $barangs = Barang::whereNotIn('id', $barangId)->where('status', 'Tersedia')->get();
 
-        return view('penjualan.form', compact('title', 'breadcrumbs', 'penjualan', 'type'));
+        return view('penjualan.form', compact('title', 'breadcrumbs', 'penjualan', 'type', 'barangs'));
     }
 
     public function destroy(Penjualan $penjualan)
@@ -166,6 +171,41 @@ class PenjualanController extends Controller
                 })
                 ->rawColumns(['rfid', 'kode_barang', 'nama_barang', 'harga', 'berat', 'action', 'foto'])
                 ->make(true);
+        }
+    }
+
+    public function addBarang(Request $request)
+    {
+        $request->validate([
+            'barang' => 'required|array',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $penjualan = Penjualan::find($request->penjualan_id);
+
+            $penjualan->barangs()->attach($request->barang);
+
+            foreach ($request->barang as $key => $val) {
+                $barang = Barang::find($request->barang[$key]);
+
+                if ($barang->rfid != null) {
+                    $barang->update([
+                        'status' => 'Terjual',
+                        'old_rfid' => $barang->rfid,
+                    ]);
+
+                    $barang->update(['rfid' => null]);
+                }
+            }
+
+            DB::commit();
+
+            return back()->with('success', "Barang berhasil ditambahkan ke penjualan");
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with('error', $th->getMessage());
         }
     }
 
