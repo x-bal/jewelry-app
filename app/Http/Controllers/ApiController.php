@@ -40,7 +40,7 @@ class ApiController extends Controller
     public function getMaster()
     {
         $response = [
-            'tipe' => TipeBarang::get(),
+            'tipe' => TipeBarang::with('subs')->get(),
             'locator' => Locator::get(),
         ];
 

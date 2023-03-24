@@ -18,7 +18,21 @@
     </div>
 
     <div class="panel-body">
-        <a href="#modal-dialog" id="btn-add" class="btn btn-primary mb-3" data-route="{{ route('sub-tipe-barang.store') }}" data-bs-toggle="modal"><i class="ion-ios-add"></i> Add Sub Tipe Barang</a>
+        <div class="form-group row mb-3">
+            <div class="col-md-3">
+                <label for="">Nama Tipe</label>
+                <input type="text" name="" id="" class="form-control" value="{{ $tipeBarang->nama_tipe }}" disabled>
+            </div>
+
+            <div class="col-md-3">
+                <label for="">Kode Tipe</label>
+                <input type="text" name="" id="" class="form-control" value="{{ $tipeBarang->kode }}" disabled>
+            </div>
+
+            <div class="col-md-3">
+                <a href="#modal-dialog" id="btn-add" class="btn btn-primary mt-3" data-route="{{ route('sub-tipe-barang.store') }}" data-bs-toggle="modal"><i class="ion-ios-add"></i> Add Sub Tipe Barang</a>
+            </div>
+        </div>
 
         <table id="datatable" class="table table-striped table-bordered align-middle">
             <thead>
