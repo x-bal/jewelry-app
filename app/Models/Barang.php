@@ -12,7 +12,7 @@ class Barang extends Model
 
     public function tipeBarang()
     {
-        return $this->belongsTo(TipeBarang::class);
+        return $this->belongsTo(SubTipeBarang::class);
     }
 
     public function locator()

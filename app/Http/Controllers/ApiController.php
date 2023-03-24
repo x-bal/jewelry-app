@@ -87,7 +87,7 @@ class ApiController extends Controller
                 'harga' => $request->harga,
                 'berat' => $request->berat,
                 'satuan' => 'Gram',
-                'tipe_barang_id' => $request->tipe,
+                'sub_tipe_barang_id' => $request->subtipe,
                 'locator_id' => $request->locator,
                 'foto' => $fotoUrl
             ]);

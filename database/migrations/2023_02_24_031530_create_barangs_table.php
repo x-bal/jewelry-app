@@ -15,7 +15,7 @@ class CreateBarangsTable extends Migration
     {
         Schema::create('barangs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tipe_barang_id')->constrained('tipe_barangs')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('sub_tipe_barang_id')->constrained('sub_tipe_barangs')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('locator_id')->constrained('locators')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('rfid')->unique('rfid')->nullable();
             $table->string('nama_barang');

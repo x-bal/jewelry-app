@@ -44,7 +44,7 @@ class BarangController extends Controller
                     return $actionBtn;
                 })
                 ->addColumn('tipe', function ($row) {
-                    return $row->tipeBarang->nama_tipe;
+                    return $row->tipeBarang->nama;
                 })
                 ->addColumn('kode_tipe', function ($row) {
                     return $row->tipeBarang->kode;
@@ -72,7 +72,7 @@ class BarangController extends Controller
             'status' => 'success',
             'barang' => $barang,
             'locator' => $barang->locator->nama_locator,
-            'tipe' => $barang->tipeBarang->nama_tipe,
+            'tipe' => $barang->tipeBarang->nama,
         ], 200);
     }
 

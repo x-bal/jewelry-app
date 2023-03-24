@@ -30,22 +30,6 @@ class SubTipeBarangController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(TipeBarangRequest $tipeBarangRequest)
     {
         try {
@@ -101,6 +85,17 @@ class SubTipeBarangController extends Controller
 
     public function destroy(SubTipeBarang $subTipeBarang)
     {
-        //
+        try {
+            DB::beginTransaction();
+
+            $subTipeBarang->delete();
+
+            DB::commit();
+
+            return back()->with('success', "{$subTipeBarang->nama} berhasil dihapus");
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with('error', $th->getMessage());
+        }
     }
 }
