@@ -26,6 +26,7 @@
                     <th class="text-nowrap">No</th>
                     <th class="text-nowrap">Nama Tipe Barang</th>
                     <th class="text-nowrap">Kode Tipe Barang</th>
+                    <th class="text-nowrap">Total Sub</th>
                     <th class="text-nowrap">Action</th>
                 </tr>
             </thead>
@@ -104,6 +105,10 @@
                 {
                     data: 'kode',
                     name: 'kode'
+                },
+                {
+                    data: 'count',
+                    name: 'count'
                 },
                 {
                     data: 'action',

@@ -13,6 +13,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StokOpnameController;
+use App\Http\Controllers\SubTipeBarangController;
 use App\Http\Controllers\TipeBarangController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Artisan;
@@ -55,7 +56,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('locators', LocatorController::class);
 
     Route::get('tipe-barang/get', [TipeBarangController::class, 'get'])->name('tipe-barang.list');
+    Route::get('tipe-barang/{tipeBarang:id}detail', [TipeBarangController::class, 'detail'])->name('tipe-barang.detail');
     Route::resource('tipe-barang', TipeBarangController::class);
+    Route::resource('sub-tipe-barang', SubTipeBarangController::class);
 
     Route::get('barang/get', [BarangController::class, 'get'])->name('barang.list');
     Route::post('barang/import', [BarangController::class, 'import'])->name('barang.import');

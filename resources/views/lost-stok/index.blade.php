@@ -59,7 +59,7 @@
                     <div class="modal-body">
                         <div class="form-group mb-3">
                             <label for="tanggal">Tanggal</label>
-                            <input type="date" name="tanggal" id="tanggal" class="form-control" value="">
+                            <input type="date" name="tanggal" id="tanggal" class="form-control" value="{{ Carbon\Carbon::now()->format('Y-m-d') }}">
 
                             @error('tanggal')
                             <small class="text-danger">{{ $message }}</small>

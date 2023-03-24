@@ -3,7 +3,6 @@
 @push('style')
 <link href="{{ asset('/') }}plugins/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
 <link href="{{ asset('/') }}plugins/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" />
-<link href="{{ asset('/') }}plugins/select2/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
 
 @section('content')
@@ -19,25 +18,14 @@
     </div>
 
     <div class="panel-body">
-        <form action="" class="form-inline row mb-3">
-            <div class="form-group col-md-3">
-                <label for="tanggal">Tanggal</label>
-                <input type="date" name="tanggal" id="tanggal" class="form-control" value="{{ request('tanggal') ?? Carbon\Carbon::now()->format('Y-m-d') }}">
-            </div>
-
-            <div class="form-group col-md-6 mt-3">
-                <button type="submit" class="btn btn-secondary mt-1"><i class="ion-ios-funnel"></i> Filter</button>
-                <a href="#modal-dialog" id="btn-add" class="btn btn-primary mt-1" data-route="{{ route('penarikan.store') }}" data-bs-toggle="modal"><i class="ion-ios-add"></i> Add Penarikan</a>
-            </div>
-        </form>
+        <a href="#modal-dialog" id="btn-add" class="btn btn-primary mb-3" data-route="{{ route('sub-tipe-barang.store') }}" data-bs-toggle="modal"><i class="ion-ios-add"></i> Add Sub Tipe Barang</a>
 
         <table id="datatable" class="table table-striped table-bordered align-middle">
             <thead>
                 <tr>
                     <th class="text-nowrap">No</th>
-                    <th class="text-nowrap">Tanggal</th>
-                    <th class="text-nowrap">Locator</th>
-                    <th class="text-nowrap">Total Barang</th>
+                    <th class="text-nowrap">Nama Sub Tipe Barang</th>
+                    <th class="text-nowrap">Kode Sub Tipe Barang</th>
                     <th class="text-nowrap">Action</th>
                 </tr>
             </thead>
@@ -49,37 +37,33 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Form Penarikan</h4>
+                    <h4 class="modal-title">Form Tipe Barang</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                 </div>
-                <form action="" method="post" id="form-penarikan">
+                <form action="" method="post" id="form-tipe">
                     @csrf
 
                     <div class="modal-body">
                         <div class="form-group mb-3">
-                            <label for="tanggal">Tanggal</label>
-                            <input type="date" name="tanggal" id="tanggal" class="form-control" value="{{ Carbon\Carbon::now()->format('Y-m-d') }}">
+                            <input type="hidden" name="tipe_barang" value="{{ $tipeBarang->id }}">
 
-                            @error('tanggal')
+                            <label for="nama_tipe">Nama Tipe Barang</label>
+                            <input type="text" name="nama_tipe" id="nama_tipe" class="form-control" value="">
+
+                            @error('nama_tipe')
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="locator">Locator</label>
-                            <select name="locator" id="locator" class="form-control">
-                                <option disabled selected>-- Pilih Locator --</option>
-                                @foreach($locators as $locator)
-                                <option value="{{ $locator->id }}">{{ $locator->nama_locator }}</option>
-                                @endforeach
-                            </select>
+                            <label for="kode">Kode Barang</label>
+                            <input type="text" name="kode" id="kode" class="form-control" value="">
 
-                            @error('locator')
+                            @error('kode')
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
                     </div>
-
 
                     <div class="modal-footer">
                         <a href="javascript:;" id="btn-close" class="btn btn-white" data-bs-dismiss="modal">Close</a>
@@ -102,29 +86,15 @@
     <script src="{{ asset('/') }}plugins/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
     <script src="{{ asset('/') }}plugins/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
     <script src="{{ asset('/') }}plugins/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="{{ asset('/') }}plugins/select2/dist/js/select2.min.js"></script>
-
 
     <script>
-        let tanggal = $("#tanggal").val();
-
-        $(".multiple-select2").select2({
-            dropdownParent: $('#modal-dialog'),
-            placeholder: "Pilih Barang",
-            allowClear: true
-        });
+        let id = "{{ $tipeBarang->id }}";
 
         var table = $('#datatable').DataTable({
             processing: true,
             serverSide: true,
             responsive: true,
-            ajax: {
-                url: "{{ route('penarikan.list') }}",
-                type: "GET",
-                data: {
-                    "tanggal": tanggal
-                }
-            },
+            ajax: "{{ route('sub-tipe-barang.index') }}?id=" + id,
             deferRender: true,
             pagination: true,
             columns: [{
@@ -132,16 +102,12 @@
                     name: 'DT_RowIndex'
                 },
                 {
-                    data: 'tanggal',
-                    name: 'tanggal'
+                    data: 'nama',
+                    name: 'nama'
                 },
                 {
-                    data: 'locator',
-                    name: 'locator'
-                },
-                {
-                    data: 'total',
-                    name: 'total'
+                    data: 'kode',
+                    name: 'kode'
                 },
                 {
                     data: 'action',
@@ -152,28 +118,29 @@
 
         $("#btn-add").on('click', function() {
             let route = $(this).attr('data-route')
-            $("#form-penarikan").attr('action', route)
+            $("#form-tipe").attr('action', route)
         })
 
         $("#btn-close").on('click', function() {
-            $("#form-penarikan").removeAttr('action')
+            $("#form-tipe").removeAttr('action')
         })
 
         $("#datatable").on('click', '.btn-edit', function() {
             let route = $(this).attr('data-route')
             let id = $(this).attr('id')
 
-            $("#form-penarikan").attr('action', route)
-            $("#form-penarikan").append(`<input type="hidden" name="_method" value="PUT">`);
+            $("#form-tipe").attr('action', route)
+            $("#form-tipe").append(`<input type="hidden" name="_method" value="PUT">`);
 
             $.ajax({
-                url: "/penarikan/" + id,
+                url: "/sub-tipe-barang/" + id,
                 type: 'GET',
                 method: 'GET',
                 success: function(response) {
-                    let penarikan = response.penarikan;
+                    let tipe = response.tipeBarang;
 
-                    $("#nama_penarikan").val(penarikan.nama_penarikan)
+                    $("#nama_tipe").val(tipe.nama)
+                    $("#kode").val(tipe.kode)
                 }
             })
         })
@@ -184,8 +151,8 @@
             $("#form-delete").attr('action', route)
 
             swal({
-                title: 'Hapus data penarikan?',
-                text: 'Menghapus penarikan bersifat permanen.',
+                title: 'Hapus sub data tipe?',
+                text: 'Menghapus tipe bersifat permanen.',
                 icon: 'error',
                 buttons: {
                     cancel: {

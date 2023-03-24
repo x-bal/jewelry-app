@@ -31,8 +31,11 @@ class TipeBarangController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<a href="#modal-dialog" id="' . $row->id . '" class="btn btn-sm btn-success btn-edit" data-route="' . route('tipe-barang.update', $row->id) . '" data-bs-toggle="modal">Edit</a> <button type="button" data-route="' . route('tipe-barang.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Delete</button>';
+                    $actionBtn = '<a href="' . route('tipe-barang.detail', $row->id) . '" id="' . $row->id . '" class="btn btn-sm btn-info">Detail</a> <a href="#modal-dialog" id="' . $row->id . '" class="btn btn-sm btn-success btn-edit" data-route="' . route('tipe-barang.update', $row->id) . '" data-bs-toggle="modal">Edit</a> <button type="button" data-route="' . route('tipe-barang.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Delete</button>';
                     return $actionBtn;
+                })
+                ->editColumn('count', function ($row) {
+                    return $row->subs()->count() . ' Sub';
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -61,6 +64,14 @@ class TipeBarangController extends Controller
             'status' => 'success',
             'tipeBarang' => $tipeBarang
         ]);
+    }
+
+    public function detail(TipeBarang $tipeBarang)
+    {
+        $title = 'Detail Tipe Barang';
+        $breadcrumbs = ['Master', 'Data Tipe Barang', 'Detail'];
+
+        return view('tipe-barang.show', compact('tipeBarang', 'breadcrumbs', 'title'));
     }
 
     public function update(TipeBarangRequest $tipeBarangRequest, TipeBarang $tipeBarang)

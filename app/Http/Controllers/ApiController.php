@@ -13,6 +13,7 @@ use App\Models\Setting;
 use App\Models\StokOpname;
 use App\Models\TipeBarang;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -46,6 +47,16 @@ class ApiController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => $response
+        ]);
+    }
+
+    public function sub(Request $request)
+    {
+        $tipeBarang = TipeBarang::find($request->id);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $tipeBarang->subs
         ]);
     }
 
@@ -176,6 +187,53 @@ class ApiController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Barang success di keranjang jual'
+            ], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 200);
+        }
+    }
+
+    public function remove(Request $request)
+    {
+        $request->validate([
+            'tag' => 'required|array'
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $now = Carbon::now()->format('Y-m-d');
+
+            foreach ($request->tag as $key => $val) {
+                $barang = Barang::where(['rfid' => $val, 'status' => 'Tersedia'])->first();
+
+                if ($barang) {
+                    $penarikan = Penarikan::where(['tanggal' => $now, 'locator_id' => $barang->locator_id])->first();
+
+                    DB::table('barang_penarikan')->updateOrInsert([
+                        'barang_id' => $barang->id,
+                        'penarikan_id' => $penarikan->id,
+                        'ket' => 'Barang Lama'
+                    ]);
+
+                    $barang->update([
+                        'status' => 'Ditarik',
+                        'old_rfid' => $barang->rfid,
+                    ]);
+
+                    $barang->update(['rfid' => null]);
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Barang success ditarik'
             ], 200);
         } catch (\Throwable $th) {
             DB::rollBack();

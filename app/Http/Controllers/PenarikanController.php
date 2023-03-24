@@ -111,7 +111,7 @@ class PenarikanController extends Controller
                     return $row->pivot->ket ?? '-';
                 })
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<button type="button" data-route="' . route('detail-penarikan.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Delete</button>';
+                    $actionBtn = '<a href="#modal-detail" id="' . $row->id . '" class="btn btn-sm btn-info btn-show" data-bs-toggle="modal"><i class="ion-ios-eye"></i></a> <button type="button" data-route="' . route('detail-penarikan.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Delete</button>';
                     return $actionBtn;
                 })
                 ->addColumn('foto', function ($row) {

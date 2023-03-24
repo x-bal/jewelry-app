@@ -24,8 +24,10 @@ Route::get('stok-opname/{stokOpname:id}/stok', [StokOpnameController::class, 'st
 Route::get('stok-opname/{stokOpname:id}/unstock', [StokOpnameController::class, 'unstock'])->name('stok-opname.unstock');
 Route::get('/last-id', [ApiController::class, 'lastBarang']);
 Route::get('/master', [ApiController::class, 'getMaster']);
+Route::get('/sub', [ApiController::class, 'sub']);
 Route::post('/cek-tag', [ApiController::class, 'cekTag']);
 Route::post('/create', [ApiController::class, 'create']);
 Route::post('/input-stok', [ApiController::class, 'stok']);
 Route::post('/sale', [ApiController::class, 'sale']);
+Route::post('/remove', [ApiController::class, 'remove']);
 Route::post('receive-sync', [ApiController::class, 'receiveSync']);
