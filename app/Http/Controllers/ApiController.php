@@ -117,11 +117,11 @@ class ApiController extends Controller
 
     public function sub(Request $request)
     {
-        $tipeBarang = Barang::where(['sub_tipe_barang_id' => $request->id])->latest()->first();
+        $tipeBarang = Barang::where(['sub_tipe_barang_id' => $request->id])->count();
 
         return response()->json([
             'status' => 'success',
-            'last_id' => $tipeBarang->id ?? 0
+            'last_id' => $tipeBarang ?? 0
         ]);
     }
 
