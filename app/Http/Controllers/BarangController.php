@@ -6,7 +6,7 @@ use App\Http\Requests\BarangRequest;
 use App\Imports\BarangImport;
 use App\Models\Barang;
 use App\Models\Locator;
-use App\Models\Satuan;
+use App\Models\SubTipeBarang;
 use App\Models\TipeBarang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -27,9 +27,10 @@ class BarangController extends Controller
         $title = 'Data Barang';
         $breadcrumbs = ['Master', 'Data Barang'];
         $tipe = TipeBarang::get();
+        $subtipe = SubTipeBarang::get();
         $locator = Locator::get();
 
-        return view('barang.index', compact('title', 'breadcrumbs', 'tipe', 'locator'));
+        return view('barang.index', compact('title', 'breadcrumbs', 'tipe', 'subtipe', 'locator'));
     }
 
     public function get(Request $request)
@@ -47,7 +48,7 @@ class BarangController extends Controller
                     return $row->tipeBarang->nama;
                 })
                 ->addColumn('kode_tipe', function ($row) {
-                    return $row->tipeBarang->kode;
+                    return $row->tipeBarang->tipe->kode;
                 })
                 ->addColumn('locator', function ($row) {
                     return $row->locator->nama_locator;
@@ -71,8 +72,7 @@ class BarangController extends Controller
         return response()->json([
             'status' => 'success',
             'barang' => $barang,
-            'locator' => $barang->locator->nama_locator,
-            'tipe' => $barang->tipeBarang->nama,
+            'tipe' => $barang->tipeBarang->tipe->id
         ], 200);
     }
 
@@ -88,12 +88,14 @@ class BarangController extends Controller
                 $fotoUrl = $barang->foto;
             }
 
+            $sub = SubTipeBarang::find($barangRequest->tipe);
+
             $barang->update([
-                'kode_barang' => $barangRequest->kode_barang,
+                'kode_barang' => $sub->kode,
                 'nama_barang' => $barangRequest->nama_barang,
                 'satuan' => $barangRequest->satuan,
                 'locator_id' => $barangRequest->locator,
-                'tipe_barang_id' => $barangRequest->tipe,
+                'sub_tipe_barang_id' => $barangRequest->subtipe,
                 'harga' => $barangRequest->harga,
                 'berat' => $barangRequest->berat,
                 'foto' => $fotoUrl

@@ -55,7 +55,7 @@
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="kode">Kode Barang</label>
+                            <label for="kode">Kode Tipe Barang</label>
                             <input type="text" name="kode" id="kode" class="form-control" value="">
 
                             @error('kode')

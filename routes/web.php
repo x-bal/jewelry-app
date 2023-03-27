@@ -57,6 +57,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('tipe-barang/get', [TipeBarangController::class, 'get'])->name('tipe-barang.list');
     Route::get('tipe-barang/{tipeBarang:id}detail', [TipeBarangController::class, 'detail'])->name('tipe-barang.detail');
+    Route::get('/tipe-barang/sub', [TipeBarangController::class, 'sub'])->name('tipe-barang.sub');
     Route::resource('tipe-barang', TipeBarangController::class);
     Route::resource('sub-tipe-barang', SubTipeBarangController::class);
 

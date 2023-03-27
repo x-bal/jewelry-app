@@ -12,6 +12,6 @@ class SubTipeBarang extends Model
 
     public function tipe()
     {
-        return $this->belongsTo(TipeBarang::class);
+        return $this->belongsTo(TipeBarang::class, 'tipe_barang_id');
     }
 }

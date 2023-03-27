@@ -105,4 +105,22 @@ class TipeBarangController extends Controller
             return back()->with('error', $th->getMessage());
         }
     }
+
+    public function sub(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $tipe = TipeBarang::find($request->id);
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'subs' => $tipe->subs
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
 }

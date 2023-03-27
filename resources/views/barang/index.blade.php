@@ -27,11 +27,10 @@
                     <th class="text-nowrap">No</th>
                     <th class="text-nowrap">Foto</th>
                     <th class="text-nowrap">Tag Barang</th>
-                    <th class="text-nowrap">Kode Tipe Barang</th>
-                    <th class="text-nowrap">Kode Barang</th>
+                    <th class="text-nowrap">Tipe Barang</th>
+                    <th class="text-nowrap">Sub Tipe</th>
                     <th class="text-nowrap">Nama Barang</th>
                     <th class="text-nowrap">Locator</th>
-                    <th class="text-nowrap">Tipe</th>
                     <th class="text-nowrap">Berat</th>
                     <th class="text-nowrap">Harga</th>
                     <th class="text-nowrap">Action</th>
@@ -94,6 +93,20 @@
                         </div>
 
                         <div class="form-group mb-3">
+                            <label for="subtipe">Sub Tipe Barang</label>
+                            <select name="subtipe" id="subtipe" class="form-control">
+                                <option disabled selected>-- Pilih Sub Tipe --</option>
+                                @foreach($subtipe as $sub)
+                                <option value="{{ $sub->id }}">{{ $sub->nama }}</option>
+                                @endforeach
+                            </select>
+
+                            @error('subtipe')
+                            <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
                             <label for="locator">Locator</label>
                             <select name="locator" id="locator" class="form-control">
                                 <option disabled selected>-- Pilih Locator --</option>
@@ -118,7 +131,7 @@
 
                         <div class="form-group mb-3">
                             <label for="satuan">Satuan</label>
-                            <input type="number" step=any name="satuan" id="satuan" class="form-control" value="Gram">
+                            <input type="text" step=any name="satuan" id="satuan" class="form-control" value="Gram">
 
                             @error('satuan')
                             <small class="text-danger">{{ $message }}</small>
@@ -235,10 +248,6 @@
                     name: 'locator'
                 },
                 {
-                    data: 'tipe',
-                    name: 'tipe'
-                },
-                {
                     data: 'berat',
                     name: 'berat'
                 },
@@ -278,7 +287,13 @@
                     let barang = response.barang;
 
                     $.each($("#tipe option"), function() {
-                        if ($(this).val() == barang.tipe_barang_id) {
+                        if ($(this).val() == response.tipe) {
+                            $(this).attr("selected", "selected");
+                        }
+                    });
+
+                    $.each($("#subtipe option"), function() {
+                        if ($(this).val() == barang.sub_tipe_barang_id) {
                             $(this).attr("selected", "selected");
                         }
                     });
@@ -296,6 +311,28 @@
                     $("#satuan").val()
                     $("#satuan").val(barang.satuan)
                     $("#harga").val(barang.harga)
+                }
+            })
+        })
+
+        $("#tipe").on('change', function() {
+            let id = $(this).val();
+
+            $.ajax({
+                url: '{{ route("tipe-barang.sub") }}',
+                type: 'GET',
+                method: 'GET',
+                data: {
+                    id: id
+                },
+                success: function(response) {
+                    let subs = response.subs;
+                    $("#subtipe").empty();
+                    $("#subtipe").append(`<option disabled selected>-- Pilih Sub Tipe --</option>`);
+
+                    $.each(subs, function(i, data) {
+                        $("#subtipe").append(`<option value="` + data.id + `">` + data.nama + `</option>`)
+                    })
                 }
             })
         })

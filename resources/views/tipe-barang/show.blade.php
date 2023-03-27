@@ -61,7 +61,7 @@
                         <div class="form-group mb-3">
                             <input type="hidden" name="tipe_barang" value="{{ $tipeBarang->id }}">
 
-                            <label for="nama_tipe">Nama Tipe Barang</label>
+                            <label for="nama_tipe">Nama Sub Tipe</label>
                             <input type="text" name="nama_tipe" id="nama_tipe" class="form-control" value="">
 
                             @error('nama_tipe')
@@ -70,7 +70,7 @@
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="kode">Kode Barang</label>
+                            <label for="kode">Kode Sub Tipe</label>
                             <input type="text" name="kode" id="kode" class="form-control" value="">
 
                             @error('kode')

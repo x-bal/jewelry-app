@@ -29,6 +29,7 @@ class BarangRequest extends FormRequest
             'locator' => 'required|numeric',
             'satuan' => 'required|string',
             'tipe' => 'required|numeric',
+            'subtipe' => 'required|numeric',
             'harga' => 'required|numeric',
             'berat' => 'required|numeric',
             // 'foto' => 'nullable|mimes:jpg,jpeg,png'
