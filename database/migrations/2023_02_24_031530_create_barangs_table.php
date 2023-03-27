@@ -17,7 +17,7 @@ class CreateBarangsTable extends Migration
             $table->id();
             $table->foreignId('sub_tipe_barang_id')->constrained('sub_tipe_barangs')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('locator_id')->constrained('locators')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->string('rfid')->unique('rfid')->nullable();
+            $table->string('rfid')->nullable();
             $table->string('nama_barang');
             $table->float('berat');
             $table->string('satuan')->default('Gram');

@@ -80,296 +80,65 @@ class SettingController extends Controller
         }
     }
 
-    public function sendSync(Request $request)
+    public function export(Request $request)
     {
-        try {
-            DB::beginTransaction();
+        //ENTER THE RELEVANT INFO BELOW
+        $mysqlHostName      = env('DB_HOST');
+        $mysqlUserName      = env('DB_USERNAME');
+        $mysqlPassword      = env('DB_PASSWORD');
+        $DbName             = env('DB_DATABASE');
+        $file_name = 'databasebackup.sql';
 
-            $setting = Setting::where('name', 'url')->first()->val;
-            $url = $setting . '/api/receive-sync';
+        $tables = ['devices', 'dummy_barangs', 'failed_jobs', 'locators', 'lost_stoks', 'migrations', 'penarikans', 'permissions', 'personal_access_tokens', 'roles', 'settings', 'stok_opnames', 'tipe_barangs', 'sub_tipe_barangs', 'users', 'penjualans', 'barangs', 'barang_lost_stok', 'barang_penarikan', 'barang_penjualan', 'barang_stok_opname', 'device_user', 'model_has_permissions', 'model_has_roles', 'password_resets', 'role_has_permissions'];
 
-            $send = $this->sendDataSync($url);
+        $connect = new \PDO("mysql:host=$mysqlHostName;dbname=$DbName;charset=utf8", "$mysqlUserName", "$mysqlPassword", array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+        $get_all_table_query = "SHOW TABLES";
+        $statement = $connect->prepare($get_all_table_query);
+        $statement->execute();
+        $result = $statement->fetchAll();
+        $output = '';
+        foreach ($tables as $table) {
+            $show_table_query = "SHOW CREATE TABLE " . $table . "";
+            $statement = $connect->prepare($show_table_query);
+            $statement->execute();
+            $show_table_result = $statement->fetchAll();
 
-            DB::commit();
-
-            if ($send == 200) {
-                return back()->with('success', "Sinkronisasi database berhasil");
+            foreach ($show_table_result as $show_table_row) {
+                $output .= "\n\n" . $show_table_row["Create Table"] . ";\n\n";
             }
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            return $th->getMessage();
+            $select_query = "SELECT * FROM " . $table . "";
+            $statement = $connect->prepare($select_query);
+            $statement->execute();
+            $total_row = $statement->rowCount();
+
+            for ($count = 0; $count < $total_row; $count++) {
+                $single_result = $statement->fetch(\PDO::FETCH_ASSOC);
+                $table_column_array = array_keys($single_result);
+                $table_value_array = array_values($single_result);
+                $output .= "\nINSERT INTO $table (";
+                $output .= "" . implode(", ", $table_column_array) . ") VALUES (";
+                $output .= "'" . implode("','", $table_value_array) . "');\n";
+            }
         }
-    }
 
-    public function sendDataSync($url)
-    {
-        try {
-            DB::beginTransaction();
+        $file_handle = fopen($file_name, 'w+');
+        fwrite($file_handle, $output);
+        fclose($file_handle);
 
-            // Data User
-            $users = User::where('is_sync', 0)->get();
-            $username = User::where('is_sync', 0)->pluck('username');
-            $name = User::where('is_sync', 0)->pluck('name');
-            $password = User::where('is_sync', 0)->pluck('password');
+        $sqlfile = file_get_contents($file_name);
 
-            // Data Locator
-            $locators = Locator::where('is_sync', 0)->get();
-            $nama_locator = Locator::where('is_sync', 0)->pluck('nama_locator');
+        $setting = Setting::where('name', 'url')->first()->val;
+        $url = $setting . '/api/import';
 
-            // Data Satuan
-            $satuans = Satuan::where('is_sync', 0)->get();
-            $nama_satuan = Satuan::where('is_sync', 0)->pluck('nama_satuan');
+        $send = Http::attach('sqlfile', file_get_contents($file_name), 'sqlfile.sql')
+            ->post($url, [
+                'sqlfile' => $sqlfile
+            ]);
 
-            // Data Tipe
-            $types = TipeBarang::where('is_sync', 0)->get();
-            $nama_tipe = TipeBarang::where('is_sync', 0)->pluck('nama_tipe');
-            $kode_tipe = TipeBarang::where('is_sync', 0)->pluck('kode');
-
-            // Data Device
-            $devices = Device::where('is_sync', 0)->get();
-            $nama_device = Device::where('is_sync', 0)->pluck('nama_device');
-
-            // Data Barang
-            $barangs = Barang::where('is_sync', 0)->get();
-            $nama_barang = Barang::where('is_sync', 0)->pluck('nama_barang');
-            $satuan_id = Barang::where('is_sync', 0)->pluck('satuan_id');
-            $tipe_barang_id = Barang::where('is_sync', 0)->pluck('tipe_barang_id');
-            $locator_id = Barang::where('is_sync', 0)->pluck('locator_id');
-            $rfid = Barang::where('is_sync', 0)->pluck('rfid');
-            $kode_barang = Barang::where('is_sync', 0)->pluck('kode_barang');
-            $berat = Barang::where('is_sync', 0)->pluck('berat');
-            $harga = Barang::where('is_sync', 0)->pluck('harga');
-            $status = Barang::where('is_sync', 0)->pluck('status');
-            $old_rfid = Barang::where('is_sync', 0)->pluck('old_rfid');
-
-            // Data Stok Opname
-            $opnames = StokOpname::where('is_sync', 0)->get();
-            $opname_locator = StokOpname::where('is_sync', 0)->pluck('locator_id');
-            $opname_tanggal = StokOpname::where('is_sync', 0)->pluck('tanggal');
-            $opname_status = StokOpname::where('is_sync', 0)->pluck('status');
-
-            // Data Loss Stok
-            $loss = LostStok::where('is_sync', 0)->get();
-            $loss_locator = LostStok::where('is_sync', 0)->pluck('locator_id');
-            $loss_tanggal = LostStok::where('is_sync', 0)->pluck('tanggal');
-
-            // Data Penarikan
-            $penarikans = Penarikan::where('is_sync', 0)->get();
-            $penarikan_locator = Penarikan::where('is_sync', 0)->pluck('locator_id');
-            $penarikan_tanggal = Penarikan::where('is_sync', 0)->pluck('tanggal');
-
-            // Data Penjualan
-            $penjualans = Penjualan::where('is_sync', 0)->get();
-            $penjualan_user = Penjualan::where('is_sync', 0)->pluck('user_id');
-            $penjualan_invoice = Penjualan::where('is_sync', 0)->pluck('invoice');
-            $penjualan_tanggal = Penjualan::where('is_sync', 0)->pluck('tanggal');
-            $penjualan_status = Penjualan::where('is_sync', 0)->pluck('status');
-
-            // Barang Stok Opname
-            $barangOpnames = DB::table('barang_stok_opname')->where('is_sync', 0)->get();
-            $opname_brg = DB::table('barang_stok_opname')->where('is_sync', 0)->pluck('barang_id');
-            $opname_id = DB::table('barang_stok_opname')->where('is_sync', 0)->pluck('stok_opname_id');
-
-            // Barang Loss Stok
-            $barangLoss = DB::table('barang_lost_stok')->where('is_sync', 0)->get();
-            $loss_brg = DB::table('barang_lost_stok')->where('is_sync', 0)->pluck('barang_id');
-            $loss_id = DB::table('barang_lost_stok')->where('is_sync', 0)->pluck('lost_stok_id');
-            $loss_ket = DB::table('barang_lost_stok')->where('is_sync', 0)->pluck('ket');
-
-            // Barang Penarikan
-            $barangPenarikan = DB::table('barang_penarikan')->where('is_sync', 0)->get();
-            $penarikan_brg = DB::table('barang_penarikan')->where('is_sync', 0)->pluck('barang_id');
-            $penarikan_id = DB::table('barang_penarikan')->where('is_sync', 0)->pluck('penarikan_id');
-            $penarikan_ket = DB::table('barang_penarikan')->where('is_sync', 0)->pluck('ket');
-
-            // Barang Stok Opname
-            $barangPenjualan = DB::table('barang_penjualan')->where('is_sync', 0)->get();
-            $penjualan_brg = DB::table('barang_penjualan')->where('is_sync', 0)->pluck('barang_id');
-            $penjualan_id = DB::table('barang_penjualan')->where('is_sync', 0)->pluck('penjualan_id');
-
-            // Device User
-            $deviceUser = DB::table('device_user')->where('is_sync', 0)->get();
-            $device_id = DB::table('device_user')->where('is_sync', 0)->pluck('device_id');
-            $device_user = DB::table('device_user')->where('is_sync', 0)->pluck('user_id');
-
-            // Setting
-            $settings = Setting::get();
-            $setting_name = Setting::pluck('name');
-            $setting_val = Setting::pluck('val');
-
-            $dataSend = [
-                // User
-                'username' => $username,
-                'name' => $name,
-                'password' => $password,
-                // Locator
-                'nama_locator' => $nama_locator,
-                // Satuan
-                'nama_satuan' => $nama_satuan,
-                // Tipe
-                'nama_tipe' => $nama_tipe,
-                'kode_tipe' => $kode_tipe,
-                // Device
-                'nama_device' => $nama_device,
-                // Barang
-                'satuan_id' => $satuan_id,
-                'tipe_barang_id' => $tipe_barang_id,
-                'locator_id' => $locator_id,
-                'rfid' => $rfid,
-                'kode_barang' => $kode_barang,
-                'nama_barang' => $nama_barang,
-                'berat' => $berat,
-                'harga' => $harga,
-                'status' => $status,
-                'old_rfid' => $old_rfid,
-                // Stok Opname
-                'opname_locator' => $opname_locator,
-                'opname_tanggal' => $opname_tanggal,
-                'opname_status' => $opname_status,
-                // Loss
-                'loss_locator' => $loss_locator,
-                'loss_tanggal' => $loss_tanggal,
-                // Penarikan
-                'penarikan_locator' => $penarikan_locator,
-                'penarikan_tanggal' => $penarikan_tanggal,
-                // Penjualan
-                'penjualan_user' => $penjualan_user,
-                'penjualan_invoice' => $penjualan_invoice,
-                'penjualan_tanggal' => $penjualan_tanggal,
-                'penjualan_status' => $penjualan_status,
-                // Barang Opname
-                'opname_brg' => $opname_brg,
-                'opname_id' => $opname_id,
-                // Barang Loss
-                'loss_brg' => $loss_brg,
-                'loss_id' => $loss_id,
-                'loss_ket' => $loss_ket,
-                // Barang Penarikan
-                'penarikan_brg' => $penarikan_brg,
-                'penarikan_id' => $penarikan_id,
-                'penarikan_ket' => $penarikan_ket,
-                // Barang Penjualan
-                'penjualan_brg' => $penjualan_brg,
-                'penjualan_id' => $penjualan_id,
-                // Device
-                'device_id' => $device_id,
-                'user_id' => $device_user,
-                // Setting
-                'setting_name' => $setting_name,
-                'setting_val' => $setting_val,
-            ];
-
-            $send = Http::post($url, $dataSend);
-
-
-            if ($send->status() == 200) {
-                foreach ($users as $user) {
-                    $user->update([
-                        'is_sync' => 1
-                    ]);
-                }
-
-                foreach ($locators as $locator) {
-                    $locator->update([
-                        'is_sync' => 1
-                    ]);
-                }
-
-                foreach ($satuans as $satuan) {
-                    $satuan->update([
-                        'is_sync' => 1
-                    ]);
-                }
-
-                foreach ($types as $type) {
-                    $type->update([
-                        'is_sync' => 1
-                    ]);
-                }
-
-                foreach ($devices as $device) {
-                    $device->update([
-                        'is_sync' => 1
-                    ]);
-                }
-
-                foreach ($barangs as $barang) {
-                    $barang->update([
-                        'is_sync' => 1
-                    ]);
-                }
-
-                foreach ($opnames as $opname) {
-                    $opname->update([
-                        'is_sync' => 1
-                    ]);
-                }
-
-                foreach ($loss as $los) {
-                    $los->update([
-                        'is_sync' => 1
-                    ]);
-                }
-
-                foreach ($penarikans as $penarikan) {
-                    $penarikan->update([
-                        'is_sync' => 1
-                    ]);
-                }
-
-                foreach ($penjualans as $penjualan) {
-                    $penjualan->update([
-                        'is_sync' => 1
-                    ]);
-                }
-
-                foreach ($barangOpnames as $brgOp) {
-                    $brgOp->update([
-                        'is_sync' => 1
-                    ]);
-                }
-
-                foreach ($barangLoss as $brgloss) {
-                    $brgloss->update([
-                        'is_sync' => 1
-                    ]);
-                }
-
-                foreach ($barangPenarikan as $brgpnrk) {
-                    $brgpnrk->update([
-                        'is_sync' => 1
-                    ]);
-                }
-
-                foreach ($barangPenjualan as $brgpnj) {
-                    $brgpnj->update([
-                        'is_sync' => 1
-                    ]);
-                }
-
-                foreach ($deviceUser as $devuser) {
-                    $devuser->update([
-                        'is_sync' => 1
-                    ]);
-                }
-
-                foreach ($settings as $setting) {
-                    $setting->update([
-                        'is_sync' => 1
-                    ]);
-                }
-
-                DB::commit();
-
-                return $send->status();
-            } else {
-                return $send->body();
-            }
-
-            return $send->status();
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            return back()->with('error', $th->getMessage());
+        if ($send->status() == 200) {
+            return back()->with('success', 'Sync database berhasil');
+        } else {
+            return back()->with('error', $send->body());
         }
     }
 }

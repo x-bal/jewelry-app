@@ -31,3 +31,4 @@ Route::post('/input-stok', [ApiController::class, 'stok']);
 Route::post('/sale', [ApiController::class, 'sale']);
 Route::post('/remove', [ApiController::class, 'remove']);
 Route::post('receive-sync', [ApiController::class, 'receiveSync']);
+Route::post('import', [ApiController::class, 'import']);

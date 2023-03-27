@@ -83,7 +83,7 @@
                             <select name="tipe" id="tipe" class="form-control">
                                 <option disabled selected>-- Pilih Tipe --</option>
                                 @foreach($tipe as $tip)
-                                <option value="{{ $tip->id }}">{{ $tip->nama_tipe }}</option>
+                                <option value="{{ $tip->id }}">({{ $tip->kode }}) - {{ $tip->nama_tipe }}</option>
                                 @endforeach
                             </select>
 
@@ -97,7 +97,7 @@
                             <select name="subtipe" id="subtipe" class="form-control">
                                 <option disabled selected>-- Pilih Sub Tipe --</option>
                                 @foreach($subtipe as $sub)
-                                <option value="{{ $sub->id }}">{{ $sub->nama }}</option>
+                                <option value="{{ $sub->id }}">({{ $sub->kode }}) - {{ $sub->nama }}</option>
                                 @endforeach
                             </select>
 
@@ -331,7 +331,7 @@
                     $("#subtipe").append(`<option disabled selected>-- Pilih Sub Tipe --</option>`);
 
                     $.each(subs, function(i, data) {
-                        $("#subtipe").append(`<option value="` + data.id + `">` + data.nama + `</option>`)
+                        $("#subtipe").append(`<option value="` + data.id + `">(` + data.kode + `) - ` + data.nama + `</option>`)
                     })
                 }
             })

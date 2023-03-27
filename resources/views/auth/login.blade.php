@@ -28,7 +28,7 @@
         <div class="login login-with-news-feed">
             <!-- BEGIN news-feed -->
             <div class="news-feed">
-                <div class="news-image" style="background-image: url({{ asset('/') }}img/login-bg/login-bg-11.jpg)"></div>
+                <div class="news-image" style="background-image: url({{ asset('/storage/' .App\Models\Setting::where('name', 'bg')->first()->val)}})"></div>
                 <div class="news-caption">
                     <h4 class="caption-title"><b>{{ App\Models\Setting::first()->val ?? config('app.name') }}</b></h4>
                     <p>

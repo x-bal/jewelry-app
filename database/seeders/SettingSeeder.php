@@ -28,5 +28,10 @@ class SettingSeeder extends Seeder
             'name' => 'url',
             'val' => 'http://127.0.0.1:8002'
         ]);
+
+        Setting::create([
+            'name' => 'bg',
+            'val' => 'background/login-bg.jpg'
+        ]);
     }
 }

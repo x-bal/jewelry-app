@@ -186,6 +186,40 @@ class PenarikanController extends Controller
         }
     }
 
+    public function change(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $penarikan = Penarikan::find($request->id);
+
+            $penarikan = Penarikan::where('id', '!=', $penarikan->id)->get();
+
+            foreach ($penarikan as $pena) {
+                $pena->update(['status' => 0]);
+            }
+
+            $penarikan->update(['status' => $request->status]);
+
+            if ($penarikan->status == 1) {
+                $status = 'On';
+            } else {
+                $status = 'Off';
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'status' => $status
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
     public function deleteBarang(Barang $barang)
     {
         try {

@@ -96,13 +96,14 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('penarikan/get', [PenarikanController::class, 'get'])->name('penarikan.list');
     Route::get('penarikan/{penarikan:id}/get', [PenarikanController::class, 'getBarang'])->name('penarikan.get');
+    Route::get('penarikan/change', [PenarikanController::class, 'change'])->name('penarikan.change');
     Route::post('detail-penarikan/add-barang', [PenarikanController::class, 'addBarang'])->name('detail-penarikan.add');
     Route::delete('detail-penarikan/{barang:id}/delete', [PenarikanController::class, 'deleteBarang'])->name('detail-penarikan.destroy');
     Route::resource('penarikan', PenarikanController::class);
 
     Route::get('setting', [SettingController::class, 'index'])->name('setting.index');
     Route::post('setting', [SettingController::class, 'update'])->name('setting.update');
-    Route::get('send-sync', [SettingController::class, 'sendSync'])->name('syncdb');
+    Route::get('send-sync', [SettingController::class, 'export'])->name('syncdb');
 
     Route::get('report/stok-opname', [ReportController::class, 'opname'])->name('report.opname');
     Route::get('report/list-opname', [ReportController::class, 'listOpname'])->name('report.opname.list');
@@ -115,6 +116,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/exec', function () {
+    shell_exec('composer update');
     Artisan::call('key:generate');
     Artisan::call('migrate:fresh');
     Artisan::call('db:seed');

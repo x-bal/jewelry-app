@@ -133,15 +133,6 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="kode_barang">Kode Barang</label>
-                        <input type="text" name="kode_barang" id="kode_barang" class="form-control" value="" disabled>
-
-                        @error('kode_barang')
-                        <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-
-                    <div class="form-group mb-3">
                         <label for="nama_barang">Nama Barang</label>
                         <input type="text" name="nama_barang" id="nama_barang" class="form-control" value="" disabled>
 
@@ -155,6 +146,15 @@
                         <input type="text" name="tipe_barang" id="tipe_barang" class="form-control" value="" disabled>
 
                         @error('tipe')
+                        <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="kode_barang">Sub Tipe</label>
+                        <input type="text" name="kode_barang" id="kode_barang" class="form-control" value="" disabled>
+
+                        @error('kode_barang')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
@@ -319,10 +319,10 @@
                     $("#rfid").val(barang.rfid)
                 }
                 let img = "{{ asset('/storage') }}/" + barang.foto;
-                console.log(img)
+
                 $(".img-barang").attr('src', img)
                 $("#kode_barang").val(barang.kode_barang)
-                $("#tipe_barang").val(response.tipe)
+                $("#tipe_barang").val(response.kodetipe)
                 $("#nama_locator").val(response.locator)
                 $("#nama_barang").val(barang.nama_barang)
                 $("#berat").val(barang.berat)
