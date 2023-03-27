@@ -11,6 +11,7 @@ use App\Models\Penjualan;
 use App\Models\Satuan;
 use App\Models\Setting;
 use App\Models\StokOpname;
+use App\Models\SubTipeBarang;
 use App\Models\TipeBarang;
 use App\Models\User;
 use Carbon\Carbon;
@@ -52,11 +53,11 @@ class ApiController extends Controller
 
     public function sub(Request $request)
     {
-        $tipeBarang = TipeBarang::find($request->id);
+        $tipeBarang = Barang::where(['sub_tipe_barang_id' => $request->id])->latest()->first();
 
         return response()->json([
             'status' => 'success',
-            'data' => $tipeBarang->subs
+            'last_id' => $tipeBarang->id ?? 0
         ]);
     }
 
@@ -80,9 +81,11 @@ class ApiController extends Controller
                 $fotoUrl = null;
             }
 
+            $sub = SubTipeBarang::find($request->subtipe);
+
             $barang = Barang::create([
                 'rfid' => $request->tag,
-                'kode_barang' => $request->kode_barang,
+                'kode_barang' => $sub->kode,
                 'nama_barang' => $request->nama_barang,
                 'harga' => $request->harga,
                 'berat' => $request->berat,
