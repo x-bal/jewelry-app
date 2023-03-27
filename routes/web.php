@@ -116,9 +116,9 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/exec', function () {
-    shell_exec('composer update');
+    // shell_exec('composer update');
     Artisan::call('key:generate');
     Artisan::call('migrate:fresh');
     Artisan::call('db:seed');
-    Artisan::call('storage:link');
+    // Artisan::call('storage:link');
 });
