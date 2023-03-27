@@ -138,6 +138,7 @@ class SettingController extends Controller
         if ($send->status() == 200) {
             return back()->with('success', 'Sync database berhasil');
         } else {
+            return $send->body();
             return back()->with('error', $send->body());
         }
     }

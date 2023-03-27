@@ -40,6 +40,68 @@ class ApiController extends Controller
         }
     }
 
+    public function cekrfid(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $barang = Barang::where(['rfid' => $request->rfid, 'status' => 'Tersedia'])->first();
+
+            if ($barang) {
+                return response()->json([
+                    'status' => 'success',
+                    'barang' => $barang,
+                    'locators' => Locator::get()
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Barang tidak ditemukan'
+                ]);
+            }
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+    public function updateBarang(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $barang = Barang::where(['id' => $request->idbarang, 'status' => 'Tersedia'])->first();
+
+            if ($barang) {
+                $barang->update([
+                    'rfid' => $request->rfid,
+                    'locator_id' => $request->locator
+                ]);
+
+                DB::commit();
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Barang berhasil diupdate'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Barang tidak ditemukan'
+                ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
     public function getMaster()
     {
         $response = [
