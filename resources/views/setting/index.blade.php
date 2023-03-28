@@ -30,6 +30,11 @@
                     <label for="tagline">Tagline</label>
                     <input type="text" name="tagline" id="tagline" class="form-control" value="{{ $tagline->val }}">
                 </div>
+
+                <div class="form-group mb-3">
+                    <label for="alert">Sound Alert</label>
+                    <input type="file" name="alert" id="alert" class="form-control" value="">
+                </div>
             </div>
 
             <div class="col-md-6">

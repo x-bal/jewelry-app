@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Alarm;
 use App\Models\Barang;
 use App\Models\Locator;
 use App\Models\LostStok;
@@ -204,6 +205,38 @@ class ReportController extends Controller
                     return 'Rp. ' . number_format(Barang::find($row->barang_id)->harga, 0, ',', '.') ?? '-';
                 })
                 ->rawColumns(['tanggal', 'locator'])
+                ->make(true);
+        }
+    }
+
+    public function lossing(Request $request)
+    {
+        $date = $request->from ? Carbon::parse($request->from)->format('d/m/Y') . ' s.d ' . Carbon::parse($request->to)->format('d/m/Y') : Carbon::now()->format('d/m/Y');
+
+        $title = 'Report Barang Hilang ' . $date;
+        $breadcrumbs = ['Report', 'Barang Hilang'];
+
+        return view('report.lossing', compact('title', 'breadcrumbs'));
+    }
+
+    public function listLossing(Request $request)
+    {
+        if ($request->ajax()) {
+            $to = Carbon::parse($request->to)->addDay(1)->format('Y-m-d');
+            $data = Alarm::whereBetween('created_at', [$request->from, $to])->get();
+
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->editColumn('tanggal', function ($row) {
+                    return Carbon::parse($row->created_at)->format('d/m/Y');
+                })
+                ->editColumn('nama_barang', function ($row) {
+                    return $row->barang->nama_barang;
+                })
+                ->editColumn('rfid', function ($row) {
+                    return $row->barang->rfid != null ? $row->barang->rfid : $row->barang->old_rfid;
+                })
+                ->rawColumns(['action'])
                 ->make(true);
         }
     }

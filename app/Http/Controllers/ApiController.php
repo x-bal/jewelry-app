@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Alarm;
 use App\Models\Barang;
 use App\Models\Device;
 use App\Models\Locator;
@@ -337,5 +338,57 @@ class ApiController extends Controller
         } catch (\Throwable $th) {
             return $th->getMessage();
         }
+    }
+
+    public function alarm(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            foreach ($request->tag as $key => $val) {
+                $barang = Barang::where(['rfid' => $val, 'status' => 'Tersedia'])->first();
+
+                if ($barang) {
+                    Alarm::updateOrCreate([
+                        'barang_id' => $barang->id
+                    ]);
+
+                    $barang->update([
+                        'status' => 'Hilang',
+                        'old_rfid' => $barang->rfid,
+                    ]);
+
+                    $barang->update(['rfid' => null]);
+
+                    DB::commit();
+
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'Barang berhasil didetect'
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Barang tidak ditemukan'
+                    ]);
+                }
+            }
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+    public function alert(Request $request)
+    {
+        $lossing = Alarm::count();
+
+        return response()->json([
+            'status' => 'success',
+            'lossing' => $lossing
+        ]);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AlarmController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\StokOpnameController;
 use App\Http\Controllers\SubTipeBarangController;
 use App\Http\Controllers\TipeBarangController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ViewController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -101,6 +103,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('detail-penarikan/{barang:id}/delete', [PenarikanController::class, 'deleteBarang'])->name('detail-penarikan.destroy');
     Route::resource('penarikan', PenarikanController::class);
 
+    Route::get('loss/get', [AlarmController::class, 'get'])->name('loss.list');
+    Route::resource('loss', AlarmController::class);
+
     Route::get('setting', [SettingController::class, 'index'])->name('setting.index');
     Route::post('setting', [SettingController::class, 'update'])->name('setting.update');
     Route::get('send-sync', [SettingController::class, 'export'])->name('syncdb');
@@ -113,7 +118,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('report/list-penarikan', [ReportController::class, 'listPenarikan'])->name('report.penarikan.list');
     Route::get('report/penjualan', [ReportController::class, 'penjualan'])->name('report.penjualan');
     Route::get('report/list-penjualan', [ReportController::class, 'listPenjualan'])->name('report.penjualan.list');
+    Route::get('report/lossing', [ReportController::class, 'lossing'])->name('report.lossing');
+    Route::get('report/list-lossing', [ReportController::class, 'listLossing'])->name('report.lossing.list');
 });
+
+Route::get('/view', ViewController::class);
 
 Route::get('/exec', function () {
     // shell_exec('composer update');

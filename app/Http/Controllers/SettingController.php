@@ -71,6 +71,18 @@ class SettingController extends Controller
 
             $bg->update(['val' => $fotoUrl]);
 
+            $alert = Setting::where('name', 'alert')->first();
+
+            if ($request->file('alert')) {
+                $alert ? Storage::delete($alert->val) : '';
+                $alrt = $request->file('alert');
+                $alertUrl = $alrt->storeAs('alert', 'alert.' . $alrt->extension());
+            } else {
+                $alertUrl = $alert->val;
+            }
+
+            $alert->update(['val' => $alertUrl]);
+
             DB::commit();
 
             return back()->with('success', 'Setting berhasil diupdate');
@@ -89,7 +101,7 @@ class SettingController extends Controller
         $DbName             = env('DB_DATABASE');
         $file_name = 'databasebackup.sql';
 
-        $tables = ['devices', 'dummy_barangs', 'failed_jobs', 'locators', 'lost_stoks', 'migrations', 'penarikans', 'permissions', 'personal_access_tokens', 'roles', 'settings', 'stok_opnames', 'tipe_barangs', 'sub_tipe_barangs', 'users', 'penjualans', 'barangs', 'barang_lost_stok', 'barang_penarikan', 'barang_penjualan', 'barang_stok_opname', 'device_user', 'model_has_permissions', 'model_has_roles', 'password_resets', 'role_has_permissions'];
+        $tables = ['devices', 'dummy_barangs', 'failed_jobs', 'locators', 'lost_stoks', 'migrations', 'penarikans', 'permissions', 'personal_access_tokens', 'roles', 'settings', 'stok_opnames', 'tipe_barangs', 'sub_tipe_barangs', 'users', 'penjualans', 'barangs', 'barang_lost_stok', 'barang_penarikan', 'barang_penjualan', 'barang_stok_opname', 'device_user', 'model_has_permissions', 'model_has_roles', 'password_resets', 'role_has_permissions', 'alarms'];
 
         $connect = new \PDO("mysql:host=$mysqlHostName;dbname=$DbName;charset=utf8", "$mysqlUserName", "$mysqlPassword", array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
         $get_all_table_query = "SHOW TABLES";

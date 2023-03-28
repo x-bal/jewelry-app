@@ -167,6 +167,9 @@
                                 <a href="{{ route('penarikan.index') }}" class="menu-link">
                                     <div class="menu-text">Penarikan Barang</div>
                                 </a>
+                                <a href="{{ route('loss.index') }}" class="menu-link">
+                                    <div class="menu-text">Barang Hilang</div>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -205,6 +208,9 @@
                                 </a>
                                 <a href="{{ route('report.penjualan') }}" class="menu-link">
                                     <div class="menu-text">Penjualan</div>
+                                </a>
+                                <a href="{{ route('report.lossing') }}" class="menu-link">
+                                    <div class="menu-text">Barang Hilang</div>
                                 </a>
                             </div>
                         </div>
