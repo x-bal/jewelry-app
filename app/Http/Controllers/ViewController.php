@@ -18,7 +18,8 @@ class ViewController extends Controller
     {
         $last = Alarm::count();
         $alert = Setting::where(['name' => 'alert'])->first();
+        $sound  = asset('/storage/' . $alert->val) ?? asset('/alert.mp3');
 
-        return view('viewer', compact('last', 'alert'));
+        return view('viewer', compact('last', 'alert', 'sound'));
     }
 }

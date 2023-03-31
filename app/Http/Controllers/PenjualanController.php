@@ -7,7 +7,7 @@ use App\Models\Penjualan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Yajra\DataTables\DataTables;
+use Yajra\DataTables\Facades\DataTables;
 
 class PenjualanController extends Controller
 {
@@ -27,6 +27,7 @@ class PenjualanController extends Controller
     public function get(Request $request)
     {
         $role = auth()->user()->roles()->first()->name;
+
         if ($request->ajax()) {
             if ($role == 'Admin' || $role == 'Owner') {
                 $data = Penjualan::get();

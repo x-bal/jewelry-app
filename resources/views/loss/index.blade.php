@@ -38,6 +38,11 @@
         @method('DELETE')
     </form>
 
+    <form action="" class="d-none" id="form-add" method="post">
+        @csrf
+        <input type="hidden" id="alarm_id" name="alarm_id" value="">
+    </form>
+
     <div class="modal fade" id="modal-detail">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -247,6 +252,42 @@
                 $("#form-delete").submit()
             } else {
                 $("#form-delete").attr('action', '')
+            }
+        });
+    })
+
+    $("#datatable").on('click', '.btn-add', function(e) {
+        e.preventDefault();
+        let route = $(this).attr('data-route')
+        $("#form-add").attr('action', route)
+        let id = $(this).attr('id')
+        $("#alarm_id").val(id)
+
+        swal({
+            title: 'Pindahkan barang ke loss stok?',
+            text: 'Memindahkan barang ke data loss stok.',
+            icon: 'warning',
+            buttons: {
+                cancel: {
+                    text: 'Cancel',
+                    value: null,
+                    visible: true,
+                    className: 'btn btn-default',
+                    closeModal: true,
+                },
+                confirm: {
+                    text: 'Yes',
+                    value: true,
+                    visible: true,
+                    className: 'btn btn-danger',
+                    closeModal: true
+                }
+            }
+        }).then((result) => {
+            if (result) {
+                $("#form-add").submit()
+            } else {
+                $("#form-add").attr('action', '')
             }
         });
     })

@@ -141,7 +141,7 @@ class ApiController extends Controller
 
             if ($request->file('foto')) {
                 $foto = $request->file('foto');
-                $fotoUrl = $foto->storeAs('barang', date('dmy') . '-' . $request->kode_barang . '.' . $foto->extension());
+                $fotoUrl = $foto->storeAs('barang', date('dmy') . '-' . $request->tag . '.' . $foto->extension());
             } else {
                 $fotoUrl = null;
             }

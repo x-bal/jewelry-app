@@ -104,6 +104,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('penarikan', PenarikanController::class);
 
     Route::get('loss/get', [AlarmController::class, 'get'])->name('loss.list');
+    // Route::post('loss/add/{alarm:id}', [AlarmController::class, 'add'])->name('loss.add');
     Route::resource('loss', AlarmController::class);
 
     Route::get('setting', [SettingController::class, 'index'])->name('setting.index');

@@ -217,14 +217,16 @@ CREATE TABLE `settings` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 INSERT INTO settings (id, name, val, is_sync, created_at, updated_at) VALUES ('1','title','Jewelry','0','2023-03-26 19:57:49','2023-03-26 19:57:49');
 
 INSERT INTO settings (id, name, val, is_sync, created_at, updated_at) VALUES ('2','tagline','Toko Perhiasan Hade Putra Ciwidey','0','2023-03-26 19:57:49','2023-03-26 19:57:49');
 
-INSERT INTO settings (id, name, val, is_sync, created_at, updated_at) VALUES ('3','url','http://127.0.0.1:8002','0','2023-03-26 19:57:49','2023-03-26 19:57:49');
+INSERT INTO settings (id, name, val, is_sync, created_at, updated_at) VALUES ('3','url','https://hadetigasaudara-ciwidey.com','0','2023-03-26 19:57:49','2023-03-27 14:25:52');
+
+INSERT INTO settings (id, name, val, is_sync, created_at, updated_at) VALUES ('4','bg','background/login-bg.jpg','0','2023-03-27 14:09:17','2023-03-27 14:10:18');
 
 
 CREATE TABLE `stok_opnames` (
@@ -289,7 +291,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-INSERT INTO users (id, name, username, password, foto, is_sync, created_at, updated_at) VALUES ('1','Developer','developer','$2y$10$gjVLBwPYHdIiVjSn2hRaTuFNdiZnqiK1idP5iFtMi4/b/RxLhNXmO','','0','2023-03-26 19:57:49','2023-03-27 09:03:28');
+INSERT INTO users (id, name, username, password, foto, is_sync, created_at, updated_at) VALUES ('1','Developer','developer','$2y$10$yGpq82dT5wyaIWAoMT3PFO.jkMYE2aj7VlQmWpiEC1ZEQGEJn.49q','','0','2023-03-26 19:57:49','2023-03-27 14:25:36');
 
 
 CREATE TABLE `penjualans` (
@@ -329,12 +331,14 @@ CREATE TABLE `barangs` (
   KEY `barangs_locator_id_foreign` (`locator_id`),
   CONSTRAINT `barangs_locator_id_foreign` FOREIGN KEY (`locator_id`) REFERENCES `locators` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `barangs_sub_tipe_barang_id_foreign` FOREIGN KEY (`sub_tipe_barang_id`) REFERENCES `sub_tipe_barangs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 INSERT INTO barangs (id, sub_tipe_barang_id, locator_id, rfid, kode_barang, nama_barang, berat, satuan, harga, status, old_rfid, foto, is_sync, created_at, updated_at) VALUES ('1','1','1','','CA','Cincin 5','1.2','Gram','1000000','Ditarik','CN1002','barang/260323-CB.jpg','0','2023-03-26 20:01:53','2023-03-27 09:49:56');
 
 INSERT INTO barangs (id, sub_tipe_barang_id, locator_id, rfid, kode_barang, nama_barang, berat, satuan, harga, status, old_rfid, foto, is_sync, created_at, updated_at) VALUES ('2','1','1','','CA','Cincin New','1.2','Gram','1000000','Ditarik','CN1001','barang/270323-.png','0','2023-03-27 09:01:39','2023-03-27 09:49:56');
+
+INSERT INTO barangs (id, sub_tipe_barang_id, locator_id, rfid, kode_barang, nama_barang, berat, satuan, harga, status, old_rfid, foto, is_sync, created_at, updated_at) VALUES ('3','1','1','CN1001','CA','Cincin New','1.2','Gram','1000000','Tersedia','','barang/270323-.png','0','2023-03-27 14:23:23','2023-03-27 14:23:23');
 
 
 CREATE TABLE `barang_lost_stok` (

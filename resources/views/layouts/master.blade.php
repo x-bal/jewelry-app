@@ -210,7 +210,7 @@
                                     <div class="menu-text">Penjualan</div>
                                 </a>
                                 <a href="{{ route('report.lossing') }}" class="menu-link">
-                                    <div class="menu-text">Barang Hilang</div>
+                                    <div class="menu-text">Pencurian Barang</div>
                                 </a>
                             </div>
                         </div>

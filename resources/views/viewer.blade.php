@@ -70,6 +70,7 @@
         $(document).ready(function() {
             let lossing = 0;
             let last = "{{ $last }}"
+            let status = 0;
 
             setInterval(function() {
                 $.ajax({
@@ -79,14 +80,20 @@
                     success: function(response) {
                         lossing = response.lossing;
                         $(".loss").empty().append(`<br><br> <h2>Total Barang Hilang : ` + lossing + `</h2>`)
+
+                        if (lossing > 0) {
+                            status = 1;
+                        } else {
+                            status = 0;
+                        }
+
+                        if (status == 1) {
+                            $("#myAudio")[0].play();
+                        } else {
+                            $("#myAudio")[0].pause();
+                        }
                     }
                 })
-            }, 1000)
-
-            setInterval(function() {
-                if (lossing > last) {
-                    $("#myAudio")[0].play();
-                }
             }, 1000)
         })
     </script>

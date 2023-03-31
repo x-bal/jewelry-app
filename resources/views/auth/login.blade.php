@@ -84,6 +84,7 @@
                         </div>
                         <hr class="bg-gray-600 opacity-2" />
                         <div class="text-gray-600 text-center text-gray-500-darker mb-0">
+                            <a href="/view" target="_blank">Alert Page </a> <br><br>
                             &copy; Jewelry-App All Right Reserved 2023
                         </div>
                     </form>

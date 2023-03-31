@@ -106,7 +106,9 @@
             pagination: true,
             columns: [{
                     data: 'DT_RowIndex',
-                    name: 'DT_RowIndex'
+                    name: 'DT_RowIndex',
+                    searchable: false,
+                    orderable: false
                 },
                 {
                     data: 'invoice',
