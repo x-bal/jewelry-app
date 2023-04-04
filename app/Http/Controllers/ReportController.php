@@ -47,7 +47,7 @@ class ReportController extends Controller
                     return Carbon::parse(StokOpname::find($row->stok_opname_id)->first()->tanggal)->format('d/m/Y') ?? '-';
                 })
                 ->editColumn('locator', function ($row) {
-                    return Locator::find(StokOpname::find($row->stok_opname_id)->first()->locator_id)->nama_locator ?? '-';
+                    return Barang::find($row->barang_id)->locator->nama_locator ?? '-';
                 })
                 ->editColumn('kode', function ($row) {
                     return Barang::find($row->barang_id)->kode_barang ?? '-';
@@ -56,7 +56,7 @@ class ReportController extends Controller
                     return Barang::find($row->barang_id)->nama_barang ?? '-';
                 })
                 ->editColumn('berat', function ($row) {
-                    return Barang::find($row->barang_id)->berat . Barang::find($row->barang_id)->satuan ?? '-';
+                    return Barang::find($row->barang_id)->berat ?? '-';
                 })
                 ->editColumn('harga', function ($row) {
                     return 'Rp. ' . number_format(Barang::find($row->barang_id)->harga, 0, ',', '.') ?? '-';
@@ -92,7 +92,7 @@ class ReportController extends Controller
                     return Carbon::parse(LostStok::find($row->lost_stok_id)->first()->tanggal)->format('d/m/Y') ?? '-';
                 })
                 ->editColumn('locator', function ($row) {
-                    return Locator::find(LostStok::find($row->lost_stok_id)->first()->locator_id)->nama_locator ?? '-';
+                    return Barang::find($row->barang_id)->locator->nama_locator ?? '-';
                 })
                 ->editColumn('kode', function ($row) {
                     return Barang::find($row->barang_id)->kode_barang ?? '-';
@@ -101,7 +101,7 @@ class ReportController extends Controller
                     return Barang::find($row->barang_id)->nama_barang ?? '-';
                 })
                 ->editColumn('berat', function ($row) {
-                    return Barang::find($row->barang_id)->berat . Barang::find($row->barang_id)->satuan ?? '-';
+                    return Barang::find($row->barang_id)->berat ?? '-';
                 })
                 ->editColumn('harga', function ($row) {
                     return 'Rp. ' . number_format(Barang::find($row->barang_id)->harga, 0, ',', '.') ?? '-';
@@ -137,7 +137,7 @@ class ReportController extends Controller
                     return Carbon::parse(LostStok::find($row->penarikan_id)->first()->tanggal)->format('d/m/Y') ?? '-';
                 })
                 ->editColumn('locator', function ($row) {
-                    return Locator::find(LostStok::find($row->penarikan_id)->first()->locator_id)->nama_locator ?? '-';
+                    return Barang::find($row->barang_id)->locator->nama_locator ?? '-';
                 })
                 ->editColumn('kode', function ($row) {
                     return Barang::find($row->barang_id)->kode_barang ?? '-';
@@ -149,7 +149,7 @@ class ReportController extends Controller
                     return $row->ket ?? '-';
                 })
                 ->editColumn('berat', function ($row) {
-                    return Barang::find($row->barang_id)->berat . Barang::find($row->barang_id)->satuan ?? '-';
+                    return Barang::find($row->barang_id)->berat ?? '-';
                 })
                 ->editColumn('harga', function ($row) {
                     return 'Rp. ' . number_format(Barang::find($row->barang_id)->harga, 0, ',', '.') ?? '-';
@@ -187,7 +187,7 @@ class ReportController extends Controller
                     return Penjualan::find($row->penjualan_id)->first()->invoice ?? '-';
                 })
                 ->editColumn('locator', function ($row) {
-                    return Locator::find(Barang::find($row->barang_id)->locator_id)->nama_locator ?? '-';
+                    return Barang::find($row->barang_id)->locator->nama_locator ?? '-';
                 })
                 ->editColumn('kode', function ($row) {
                     return Barang::find($row->barang_id)->kode_barang ?? '-';
@@ -199,7 +199,7 @@ class ReportController extends Controller
                     return $row->ket ?? '-';
                 })
                 ->editColumn('berat', function ($row) {
-                    return Barang::find($row->barang_id)->berat . Barang::find($row->barang_id)->satuan ?? '-';
+                    return Barang::find($row->barang_id)->berat ?? '-';
                 })
                 ->editColumn('harga', function ($row) {
                     return 'Rp. ' . number_format(Barang::find($row->barang_id)->harga, 0, ',', '.') ?? '-';
@@ -213,8 +213,8 @@ class ReportController extends Controller
     {
         $date = $request->from ? Carbon::parse($request->from)->format('d/m/Y') . ' s.d ' . Carbon::parse($request->to)->format('d/m/Y') : Carbon::now()->format('d/m/Y');
 
-        $title = 'Report Barang Hilang ' . $date;
-        $breadcrumbs = ['Report', 'Barang Hilang'];
+        $title = 'Report Pencurian Barang ' . $date;
+        $breadcrumbs = ['Report', 'Pencurian Barang'];
 
         return view('report.lossing', compact('title', 'breadcrumbs'));
     }

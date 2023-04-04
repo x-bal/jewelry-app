@@ -224,6 +224,34 @@
 
     let route = "{{ route('penjualan.get', $penjualan->id) }}";
 
+    let barangs = null;
+
+    setInterval(function() {
+        $.ajax({
+            url: '{{ route("penjualan.view", $penjualan->id) }}',
+            method: "GET",
+            type: "GET",
+            success: function(response) {
+                let brg = response.barang;
+                barangs = JSON.parse(localStorage.getItem("barangs"));
+
+                for (var i = 0; i < brg.length; i++) {
+
+                    if ($.inArray(brg[i], barangs) > -1) {
+                        // console.log(brg[i]);
+                    } else {
+                        list(route)
+                    }
+                }
+
+                localStorage.setItem("barangs", JSON.stringify(brg))
+
+
+
+            }
+        })
+    }, 2000)
+
     function list(route) {
         $('#datatable').DataTable({
             processing: true,
@@ -314,13 +342,7 @@
         });
     }
 
-    if ("{{ $type }}" == 'Add') {
-        setInterval(function() {
-            list(route)
-        }, 3000)
-    } else {
-        listEdit(route)
-    }
+    list(route)
 
     $("#btn-add").on('click', function() {
         let route = $(this).attr('data-route')

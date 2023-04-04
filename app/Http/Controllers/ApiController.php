@@ -385,10 +385,14 @@ class ApiController extends Controller
     public function alert(Request $request)
     {
         $lossing = Alarm::count();
+        $barang = Alarm::with('barang')->get();
+        $total = Alarm::pluck('id');
 
         return response()->json([
             'status' => 'success',
-            'lossing' => $lossing
+            'lossing' => $lossing,
+            'barang' => $barang,
+            'total' => $total
         ]);
     }
 }

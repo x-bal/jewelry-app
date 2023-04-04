@@ -168,7 +168,7 @@
                                     <div class="menu-text">Penarikan Barang</div>
                                 </a>
                                 <a href="{{ route('loss.index') }}" class="menu-link">
-                                    <div class="menu-text">Barang Hilang</div>
+                                    <div class="menu-text">Pencurian Barang</div>
                                 </a>
                             </div>
                         </div>

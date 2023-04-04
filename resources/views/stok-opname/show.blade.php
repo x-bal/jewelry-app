@@ -226,8 +226,27 @@
 
     if (statusOpname == 1) {
         interv = setInterval(function() {
-            list()
-            listNo()
+            $.ajax({
+                url: '{{ route("stok-opname.view", $stokOpname->id) }}',
+                method: "GET",
+                type: "GET",
+                success: function(response) {
+                    let brg = response.barang;
+                    barangs = JSON.parse(localStorage.getItem("barangs"));
+
+                    for (var i = 0; i < brg.length; i++) {
+
+                        if ($.inArray(brg[i], barangs) > -1) {
+                            // console.log(brg[i]);
+                        } else {
+                            list()
+                            listNo()
+                        }
+                    }
+
+                    localStorage.setItem("barangs", JSON.stringify(brg))
+                }
+            })
         }, 2000)
     } else {
         clearInterval(interv)
@@ -240,8 +259,27 @@
         if ($(this).is(":checked")) {
             status = 1;
             interv = setInterval(function() {
-                list()
-                listNo()
+                $.ajax({
+                    url: '{{ route("penarikan.view", $penarikan->id) }}',
+                    method: "GET",
+                    type: "GET",
+                    success: function(response) {
+                        let brg = response.barang;
+                        barangs = JSON.parse(localStorage.getItem("barangs"));
+
+                        for (var i = 0; i < brg.length; i++) {
+
+                            if ($.inArray(brg[i], barangs) > -1) {
+                                // console.log(brg[i]);
+                            } else {
+                                list()
+                                listNo()
+                            }
+                        }
+
+                        localStorage.setItem("barangs", JSON.stringify(brg))
+                    }
+                })
             }, 2000)
         } else {
             status = 0;
@@ -321,6 +359,9 @@
             ]
         });
     }
+
+    list()
+    listNo()
 
     $("#datatable-unstock").on('click', '.btn-add', function(e) {
         e.preventDefault();

@@ -242,4 +242,22 @@ class PenarikanController extends Controller
             return back()->with('error', $th->getMessage());
         }
     }
+
+    public function view(Penarikan $penarikan)
+    {
+        try {
+            DB::beginTransaction();
+
+            $barangs = $penarikan->barangs()->pluck('id');
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'barang' => $barangs
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
 }

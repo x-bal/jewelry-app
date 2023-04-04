@@ -20,8 +20,8 @@ class AlarmController extends Controller
 
     public function index()
     {
-        $title = 'Data Barang Hilang';
-        $breadcrumbs = ['Barang Hilang', 'List Barang Hilang'];
+        $title = 'Data Pencurian Barang';
+        $breadcrumbs = ['Pencurian Barang', 'List Pencurian Barang'];
 
         return view('loss.index', compact('title', 'breadcrumbs',));
     }
@@ -43,7 +43,7 @@ class AlarmController extends Controller
                     return $row->barang->rfid != null ? $row->barang->rfid : $row->barang->old_rfid;
                 })
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<a href="#modal-detail" id="' . $row->barang->id . '" class="btn btn-sm btn-info btn-show" data-bs-toggle="modal"><i class="ion-ios-eye"></i></a> <button type="button" id="' . $row->id . '" data-route="' . route('loss.store') . '" class="btn btn-primary btn-add btn-sm"><i class="ion-ios-add"></i></a></button> <button type="button" data-route="' . route('loss.destroy', $row->id) . '" class="btn btn-danger btn-delete btn-sm"><i class="ion-ios-close"></i></a></button>';
+                    $actionBtn = '<a href="#modal-detail" id="' . $row->barang->id . '" class="btn btn-sm btn-info btn-show" data-bs-toggle="modal"><i class="ion-ios-eye"></i></a> <button type="button" id="' . $row->id . '" data-route="' . route('loss.store') . '" class="btn btn-primary btn-add btn-sm"><i class="ion-ios-add"></i> Add to loss</a></button> <button type="button" data-route="' . route('loss.destroy', $row->id) . '" class="btn btn-danger btn-delete btn-sm"><i class="ion-ios-close"></i></a> Restore</button>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
@@ -69,7 +69,7 @@ class AlarmController extends Controller
 
             DB::commit();
 
-            return back()->with('success', "Barang berhasil diremove");
+            return back()->with('success', "Barang berhasil direstore");
         } catch (\Throwable $th) {
             DB::rollBack();
             return back()->with('error', $th->getMessage());

@@ -73,6 +73,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('stok-opname/get', [StokOpnameController::class, 'get'])->name('stok-opname.list');
     Route::get('stok-opname/{stokOpname:id}/find', [StokOpnameController::class, 'find'])->name('stok-opname.find');
+    Route::get('stok-opname/{stokOpname:id}/view', [StokOpnameController::class, 'view'])->name('stok-opname.view');
     Route::get('stok-opname/change', [StokOpnameController::class, 'change'])->name('stok-opname.change');
     Route::get('stok-opname/{stokOpname:id}/save', [StokOpnameController::class, 'save'])->name('stok-opname.save');
     Route::get('stok-opname/add/{barang:id}', [StokOpnameController::class, 'add'])->name('stok-opname.add');
@@ -88,6 +89,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('penjualan/get', [PenjualanController::class, 'get'])->name('penjualan.list');
     Route::get('penjualan/get-list/{penjualan:id}', [PenjualanController::class, 'getList'])->name('penjualan.get');
+    Route::get('penjualan/view/{penjualan:id}', [PenjualanController::class, 'view'])->name('penjualan.view');
     Route::post('penjualan/add-barang', [PenjualanController::class, 'addBarang'])->name('penjualan.addbarang');
     Route::delete('detail-penjualan/{barang:id}/delete', [PenjualanController::class, 'deleteBarang'])->name('detail-penjualan.destroy');
     Route::resource('penjualan', PenjualanController::class);
@@ -98,6 +100,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('penarikan/get', [PenarikanController::class, 'get'])->name('penarikan.list');
     Route::get('penarikan/{penarikan:id}/get', [PenarikanController::class, 'getBarang'])->name('penarikan.get');
+    Route::get('penarikan/{penarikan:id}/view', [PenarikanController::class, 'view'])->name('penarikan.view');
     Route::get('penarikan/change', [PenarikanController::class, 'change'])->name('penarikan.change');
     Route::post('detail-penarikan/add-barang', [PenarikanController::class, 'addBarang'])->name('detail-penarikan.add');
     Route::delete('detail-penarikan/{barang:id}/delete', [PenarikanController::class, 'deleteBarang'])->name('detail-penarikan.destroy');

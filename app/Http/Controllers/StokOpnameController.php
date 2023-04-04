@@ -96,6 +96,35 @@ class StokOpnameController extends Controller
         ], 200);
     }
 
+    public function update(Request $request, StokOpname $stokOpname)
+    {
+        try {
+            DB::beginTransaction();
+
+            foreach ($stokOpname->barangs as $barang) {
+                $barang->update([
+                    'rfid' => $barang->old_rfid,
+                    'status' => 'Tersedia'
+                ]);
+
+                $barang->update([
+                    'old_rfid' => null
+                ]);
+            }
+
+            $stokOpname->update([
+                'tanggal' => $request->tanggal,
+                'locator_id' => $request->locator,
+            ]);
+
+            DB::commit();
+
+            return back()->with('success', "Stok opname berhasil diupdate");
+        } catch (\Throwable $th) {
+            return back()->with('error', $th->getMessage());
+        }
+    }
+
     public function change(Request $request)
     {
         try {
@@ -332,6 +361,51 @@ class StokOpnameController extends Controller
             DB::rollBack();
             return $th->getMessage();
             return back()->with('error', $th->getMessage());
+        }
+    }
+
+    public function destroy(StokOpname $stokOpname)
+    {
+        try {
+            DB::beginTransaction();
+            foreach ($stokOpname->barangs as $barang) {
+                $barang->update([
+                    'rfid' => $barang->old_rfid,
+                    'status' => 'Tersedia'
+                ]);
+
+                $barang->update([
+                    'old_rfid' => null
+                ]);
+            }
+
+            $stokOpname->barangs()->detach();
+
+            $stokOpname->delete();
+
+            DB::commit();
+
+            return back()->with('success', "Stok opname berhasil didelete");
+        } catch (\Throwable $th) {
+            return back()->with('error', $th->getMessage());
+        }
+    }
+
+    public function view(StokOpname $stokOpname)
+    {
+        try {
+            DB::beginTransaction();
+
+            $barangs = $stokOpname->barangs()->pluck('id');
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'barang' => $barangs
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
         }
     }
 }

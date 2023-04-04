@@ -228,8 +228,8 @@
         $("#form-delete").attr('action', route)
 
         swal({
-            title: 'Remove barang?',
-            text: 'Remove barang akan mengembalikan status barang menjadi tersedia.',
+            title: 'Restore barang?',
+            text: 'Restore barang akan mengembalikan status barang menjadi tersedia.',
             icon: 'error',
             buttons: {
                 cancel: {

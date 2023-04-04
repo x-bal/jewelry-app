@@ -233,4 +233,22 @@ class PenjualanController extends Controller
             return back()->with('error', $th->getMessage());
         }
     }
+
+    public function view(Penjualan $penjualan)
+    {
+        try {
+            DB::beginTransaction();
+
+            $barangs = $penjualan->barangs()->pluck('id');
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'barang' => $barangs
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
 }

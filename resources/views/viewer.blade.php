@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Color Admin | Coming Soon Page</title>
+    <title>{{ config('app.name') }} | Alert Page</title>
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
     <meta content="" name="description" />
     <meta content="" name="author" />
@@ -50,6 +50,8 @@
                         <source src="{{ asset('/storage/' . $alert->val) ?? asset('/alert.mp3') }}" type="audio/mp3">
                     </audio>
                 </div>
+
+                <div class="barang row"></div>
             </div>
         </div>
     </div>
@@ -79,13 +81,29 @@
                     type: "GET",
                     success: function(response) {
                         lossing = response.lossing;
-                        $(".loss").empty().append(`<br><br> <h2>Total Barang Hilang : ` + lossing + `</h2>`)
+                        let barang = response.barang;
+                        let brg = response.total;
 
-                        if (lossing > 0) {
-                            status = 1;
+                        if (brg.length != 0) {
+                            status = 1
                         } else {
                             status = 0;
                         }
+
+                        barangs = JSON.parse(localStorage.getItem("barangs"));
+
+                        for (var i = 0; i < brg.length; i++) {
+
+                            if ($.inArray(brg[i], barangs) > -1) {
+                                // console.log(brg[i]);
+                            } else {
+                                list()
+                            }
+                        }
+
+                        localStorage.setItem("barangs", JSON.stringify(brg))
+
+                        $(".loss").empty().append(`<br><br> <h2>Total Barang Hilang : ` + lossing + `</h2>`)
 
                         if (status == 1) {
                             $("#myAudio")[0].play();
@@ -95,6 +113,33 @@
                     }
                 })
             }, 1000)
+
+            function list() {
+                $(".barang").empty()
+
+                $.ajax({
+                    url: '/api/alert',
+                    method: "GET",
+                    type: "GET",
+                    success: function(response) {
+                        lossing = response.lossing;
+                        let barang = response.barang;
+                        let brg = response.total;
+
+                        let asset = "{{ asset('/') }}";
+
+                        $.each(barang, function(i, data) {
+                            $(".barang").append(`<div class="col-md-3 mb-3" data-index="` + data.barang.old_rfid + `"><div class="card">
+                                    <div class="h-250px rounded-top" style="background-image: url(` + asset + `storage/` + data.barang.foto + `); background-position: center; background-size: cover; background-repeat: no-repeat;"></div>
+                                    <div class="card-body">
+                                        <h4 class="card-title">` + data.barang.nama_barang + `</h4>
+                                        <p class="card-text">` + data.barang.old_rfid + `</p>
+                                    </div>
+                                </div></div>`)
+                        })
+                    }
+                })
+            }
         })
     </script>
 </body>
